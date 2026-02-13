@@ -1,0 +1,685 @@
+/* @import url(https://fonts.googleapis.com/css?family=Lato" rel="stylesheet);
+@import url('https://fonts.googleapis.com/css?family=Lato|Roboto'); */
+/******************* Layout **********************************/
+
+/* hr {
+    border: 0;
+    border-top: 1px solid #424242;
+    width: 60%;
+    padding-bottom: 5rem;
+} */
+
+.section {
+  margin-bottom: 8rem;
+}
+
+/******************* Layout end **********************************/
+
+/******************* Typography **********************************/
+body {
+  font-size: 1.6rem;
+}
+
+body, h1, h2, h3, h4, p, a {
+  font-family: 'Lato', sans-serif;
+}
+
+body h1, h2, h3, h4, p, a {
+  color: #2D2926;
+}
+
+h1  {
+  font-weight: 600;
+}
+
+body,h2,h3 {
+  margin-top: 4rem;
+}
+
+p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  max-width: 98%;
+  line-height: 2.2rem;
+  padding-bottom: 0.8rem;
+}
+
+p.first-header-paragraph {
+
+  margin-bottom: 6rem;
+}
+
+img {
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+a {
+  color: #0085AD;
+  font-weight: 400;
+}
+
+a:hover {
+  color: #0085AD;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #0085AD;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 1.6rem;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+.highlight, span {
+  font-size: 1.6rem;
+}
+
+b, strong {
+    font-weight: 700;
+}
+
+ul {
+  margin-bottom: 2rem;
+}
+
+/******************* Typography end ******************************/
+
+/******************* Sidebar ******************************/
+
+@media screen and (min-width: 992px) {
+  .bs-sidenav.affix-top {
+    width: 213px;
+  }
+
+  .bs-sidenav.affix-top {
+    position: fixed; /* Undo the static from mobile first approach */
+  }
+}
+@media screen and (min-width: 1200px) {
+  /* Widen the fixed sidenav again */
+  .bs-sidenav.affix-top {
+    width: 263px;
+  }
+}
+
+.bs-sidenav {
+  margin-top: 0;
+  margin-bottom: 30px;
+  text-shadow: none;
+  background-color: transparent;
+  border-radius: unset;
+  padding-top: 0;
+}
+
+.bs-sidenav .nav > li > a {
+  padding: 8px 0;
+  padding-left: 5px;
+}
+
+.bs-sidenav .nav > li > a {
+    color: #424242;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.bs-sidenav .nav > li > a:hover {
+    background-color: #023667;
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.bs-sidenav ul.nav.nav-list {
+ /*   margin-bottom: 3rem; */
+}
+
+.bs-sidenav ul.nav.nav-list li.toctree-l1 {
+    display: none;
+}
+
+.bs-sidenav ul.nav.nav-list li.current {
+    display: block;
+}
+
+.bs-sidenav ul.nav.nav-list li.current>a ,
+.bs-sidenav ul.nav.nav-list li.current>a.current.nav-header {
+    display: block;
+    color: #9e9e9e;
+
+}
+
+.bs-sidenav ul.nav.nav-list li.current>a.current {
+    display: block;
+}
+
+.bs-sidenav .nav .nav > li > a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1.6rem;
+    padding-left: 0;
+    padding-left: 15px;
+    border-right: 0;
+}
+
+#sidebar ul li ul li.toctree-l2.current a.current {
+  background-color: #023667;
+  color: #fafafa;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+
+/******************* Sidebar End ******************************/
+
+
+/******************* Navbar **********************************/
+
+#QiSDK-logo {
+  max-width: 80%;
+  margin-top: 0.4rem;
+}
+
+.navbar-brand img {
+    width: auto;
+    height: auto;
+}
+
+figcaption .navbar-brand {
+    padding: 5px 0;
+    height: 0;
+    text-decoration: none;
+    margin-top: 0.45rem;
+}
+
+#topbar-menu {
+  margin-left: 2.8rem;
+}
+
+.navbar {
+    min-height: 72px;
+}
+
+.navbar-inverse {
+    background-color: #023667;
+    border: none;
+}
+
+.nav>li.dropdown {
+    display: none;
+}
+
+/* #navbar .navbar-inverse .nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    background-color: #eeeeee;
+} */
+
+/* #navbar ul.nav.navbar-nav li a:hover{
+  background-color: #fafafa;
+  color: #7186c7;
+} */
+
+/* .active {
+  background-color: red;
+  color: #7186c7;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:active, .navbar-inverse .navbar-nav>li>a:focus {
+    color: #7186c7;
+    background-color: #fafafa;
+} */
+
+/* .navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+    color: #ffffff;
+    background-color: #3e152b;
+} */
+
+.navbar-inverse .navbar-nav>li>a {
+  /* 1st state */
+  color: #fafafa;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover {
+  /* hover state */
+  color: #023667;
+  background-color: #fafafa;
+}
+
+.navbar-inverse .navbar-nav>li>a:active ,
+.navbar-inverse .navbar-nav>li>a:focus {
+  /* click state */
+  color: #023667;
+  background-color: #fafafa;
+}
+
+.navbar-inverse .navbar-nav>li>a.active {
+  /* after click state */
+  color: #023667;
+  background-color: #fafafa;
+}
+
+.navbar-collapse {
+    margin-top: 1rem;
+}
+
+
+/******************* Searchbar and Search page ******************************/
+.form-control {
+    display: block;
+    width: 100%;
+    height: 38px;
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    background-color: #ffffff;
+    border: 1px solid #fafafa;
+    border-radius: 18px;
+}
+
+#search-results {
+    margin-bottom: 7rem;
+    margin-top: 4rem;
+}
+
+ul.search {
+    margin: 10px 0 0 0px;
+    list-style-type: none;
+}
+
+ul.search li a {
+    color:#0085AD;;
+}
+
+ul.search li a:hover {
+    text-decoration: underline;
+}
+
+.btn-default {
+    color: #fafafa;
+    background-color: #023667;
+    border-color: #023667;
+    margin-left: 1rem;
+}
+
+.btn-default:hover {
+    background-color: #fafafa;
+    color: #023667;
+}
+
+
+
+/******************* Searchbar and Search page End ******************************/
+
+/******************* Navbar End ******************************/
+
+
+/******************* Pagination **********************************/
+
+.pagination {
+  text-decoration: none;
+}
+
+/* .pagination {
+  font-size: 18px;
+  font-weight: 700;
+} */
+
+.pagination-label {
+  font-weight: 200;
+  margin-bottom: 1rem;
+}
+
+.left .pagination-icon {
+  float: left;
+  top: 37px;
+  position: relative;
+  margin-right: 2rem;
+}
+
+.left .pagination-text {
+  float:left;
+}
+
+.right .pagination-icon {
+  float: right;
+  top: 32px;
+  position: relative;
+  margin-left: 1rem;
+}
+
+.right .pagination-text {
+  float:right;
+}
+
+/******************* Pagination end **********************************/
+
+
+/******************* Footer **********************************/
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body > .container {
+  padding: 0rem 0rem 10rem;
+}
+
+.footer {
+  background-color: #023667;
+  border-top: none;
+  padding:0;
+  position: static;
+  bottom: 0;
+}
+
+@media screen and (min-width: 992px) {
+  .footer {
+    position: absolute;
+  }
+}
+
+.footer ul#footer-menu {
+  margin-top: 1.2rem;
+}
+
+.footer ul#footer-menu li {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.footer a {
+  color: #fafafa;
+  text-decoration: none;
+}
+
+.footer a:hover, .footer a:focus {
+  color: #023667;
+}
+
+.footer a:visited, .footer a:active {
+  color: none;
+}
+
+.footer #logo {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  max-height: 48px;
+  width:auto;
+}
+
+/******************* Footer End ******************************/
+
+/******************* Contents ******************************/
+.content {
+  margin-bottom: 2rem;
+}
+
+.alert-warning {
+    background-color: #FFE0B2;
+    border-color: none;
+    color: none;
+}
+
+.highlight .c1 {
+  font-weight: 400;
+}
+
+#robot-emulator div.toctree-wrapper.compound {
+  display: none;
+}
+
+a.reference.external:after {
+  /* font-family: 'FontAwesome'; */
+  content: url(external-link-alt.png);
+  padding-left: 6px;
+  position: relative;
+  top: 1.3px;
+  /* background-image: url("external-link-alt.png"); */
+}
+
+a.image-reference {
+  pointer-events: none;
+}
+
+div.section:after {
+  border-bottom: 1px solid back;
+}
+
+/******************* Action on Pepper ******************************/
+#running-actions-on-pepper, div.figure  {
+  margin:0;
+  padding:0;
+  margin-top: 2rem;
+}
+
+.action-icon {
+  float: left;
+  text-align: center;
+}
+
+.action-icon > p.caption {
+  width: 95%;
+  padding-top: 1rem;
+  font-weight: 400;
+}
+
+.action-icon, div.figure p.caption {
+  padding: 0;
+  padding-top: 1.5rem;
+}
+
+.action-icon, #id9{
+  padding-right: 10rem;
+  margin-top: 5rem;
+}
+
+.action-icon, #id10{
+  padding-right: 11rem;
+  margin-top: 5rem;
+}
+
+.action-icon, #id10>img {
+  padding-left: 2.15rem;
+}
+
+.action-icon, #id11{
+  padding-right: 8rem;
+  margin-top: 5rem;
+}
+
+.action-icon, #id12 {
+  padding-right: 6rem;
+  margin-top: 5rem;
+}
+
+.action-icon, #id14 {
+  padding-right: 9rem;
+}
+
+.action-icon, #id15 {
+  padding-right: 3rem;
+}
+
+.action-icon, #id16 {
+  padding-right: 5rem;
+}
+
+.action-icon, #id16>img {
+  padding-right: 2rem;
+}
+
+
+#id10 > p {
+  padding-top: 2rem;
+}
+
+#id12 > p {
+  padding-top: 2rem;
+}
+
+#id15 > p {
+  padding-top: 2.5rem;
+}
+
+#id17 ~ p {
+  clear: both;
+}
+
+/******************* Action on Pepper end ******************************/
+
+/******************* Tables style ******************************/
+.table {
+    width: 90%;
+    height: 220px;
+}
+
+/* .table>tbody>tr>td, .table>tfoot>tr>td {
+    border-top: none;
+}
+
+.table>thead>tr>th {
+    border-bottom: none;
+} */
+
+/* .table, .row-even {
+  margin-bottom: 2rem;
+} */
+
+table.table>tbody>tr>td, .table>tfoot>tr>td {
+    line-height: 1.42857143;
+    vertical-align: middle;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: none;
+}
+
+/* .step-table, .section, table>tbody>tr>td>p.first {
+  padding-top: 0.9rem;
+}
+
+
+.step-table, .table>tbody>tr>td, .table>tfoot>tr>td {
+  padding-top: 0.9rem;
+} */
+
+/****************** Step Table ********************/
+
+.step-table, table {
+  margin-top: 3rem;
+}
+
+.step-table, table>tbody>tr.row-even {
+  margin-bottom: 2rem;
+}
+
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    font-size: 2rem;
+}
+
+.step-table>.table>thead>tr>th.head {
+
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.step-table>.table>tbody>tr>td, .table>tfoot>tr>td {
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    vertical-align: text-top;
+}
+
+ol.arabic {
+    font-size: 2.5rem;
+    color: #003865;
+    font-weight: 900;
+    font-family: "Open sans";
+}
+
+ol {
+    margin-bottom: 0;
+}
+
+/* .step-table>.table>thead>tr>th.head {
+    font-size: 1.6rem;
+    padding-left: 0;
+    padding-right: 3rem;
+    color: #003865;
+    font-weight: 900;
+} */
+
+.step-table>table>tbody>tr>td>p {
+  width: 80%;
+}
+
+.step-table>table>tbody>tr>td>a>img {
+  margin-top: 2rem;
+}
+
+/****************** Step Table end ********************/
+
+/******************* Tables style end ******************************/
+
+/******************* Contents End ******************************/
+
+/******************* MediaQueries ******************************/
+/* @media (min-width: 992px)
+.col-md-9 {
+    width: 65%;
+} */
+/******************* MediaQueries End ******************************/
+
+
+/******************* Compatibility fixes Sphinx tabs / bootstrap Begin ******************************/
+
+.container.item, .ui.top.attached.tabular.container {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.item.container {
+  width: 100px;
+}
+
+.sphinx-tabs {
+  width: initial;
+  padding: 0px;
+}
+
+/******************* Compatibility fixes Sphinx tabs / bootstrap End ******************************/

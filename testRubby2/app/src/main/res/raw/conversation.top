@@ -1,0 +1,9 @@
+topic: ~conversation()
+
+concept:(hello) [Ahoj Čau "Dobrý den" Nazdar]
+concept:(who_are_you) ["Kdo jsi" "Jak se jmenuješ" "Představ se"]
+concept:(dance) [Tanči Zatancuj Tancuj "Ukaž tanec"]
+
+u:(~hello) Ahoj! Jsem Pepper a rád tě vidím.
+u:(~who_are_you) Jsem humanoidní robot Pepper.
+u:(~dance) %dance Dobře, podívej se na můj tanec!

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Creating a robot application — QiSDK</title>
+    <link rel="stylesheet" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/bootstrap-sphinx.css" type="text/css">
+    <link rel="stylesheet" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/pygments.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/segment.min.css">
+    <link rel="stylesheet" type="text/css" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/menu.min.css">
+    <link rel="stylesheet" type="text/css" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/tab.min.css">
+    <link rel="stylesheet" type="text/css" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/tabs.css">
+    <link rel="stylesheet" type="text/css" href="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/style.css">
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/documentation_options.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/jquery.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/underscore.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/doctools.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/language_data.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/tab.min.js"></script>
+    <script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/tabs.js"></script>
+    <script async="async" type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/latest.js"></script>
+    <link rel="index" title="Index" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/genindex.html">
+    <link rel="search" title="Search" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/search.html">
+    <link rel="next" title="Running an application" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/running_application.html">
+    <link rel="prev" title="Installing the Pepper SDK plug-in" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/installation.html">
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/jquery-fix.js"></script>
+<script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/bootstrap.min.js"></script>
+<script type="text/javascript" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/bootstrap-sphinx.js"></script>
+
+
+  <script type="text/javascript" async="" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/MathJax.js"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head><body style=""><div id="MathJax_Message" style="display: none;"></div>
+
+
+<script>
+
+$(function(){
+
+  $(document).ready(function() {
+    $("a[href^='http']").attr('target','_blank');
+
+    // var divSection = getElementsById('check-compatibility');
+    // divSection.insertAdjacentHTML('afterend', '<hr/>');
+  });
+
+//   function myFunction() {
+//   var h = document.getElementById("installing-the-pepper-sdk-plug-in");
+//   h.insertAdjacentHTML("afterbegin", "<p>My new paragraph</p>");
+// }
+
+});
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/google-analytics_analytics.js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-115894784-5');
+</script>
+
+
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="navbar-brand" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/index.html">
+        <img id="QiSDK-logo" alt="QiSDK-logo" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/qisdk_logo.png">
+        <!-- <h1 id="QiSDK-logo" alt="QiSDK-logo">QiSDK</h1> -->
+      </a>
+      <!-- <div class="nav-logo">
+        <img id="QiSDK-logo" src="_static/QiSDK-logo.png" alt="QiSDK-logo">
+        <a class="navbar-brand" href="../index.html"><span><img src="../_static/qisdk_logo.png"></span>
+           </a>
+      </div> -->
+
+    </div>
+
+      <div class="collapse navbar-collapse nav-collapse">
+
+        <ul id="topbar-menu" class="nav navbar-nav">
+
+          <li><a class="active" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/installation.html">Getting Started</a></li>
+
+          <li><a href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/focus_lifecycle.html">Principles</a></li>
+
+          <li><a href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/tools.html">Tools</a></li>
+
+          <li><a href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/api.html">API</a></li>
+
+          <li><a href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/index_ux.html">Design</a></li>
+
+          
+            <li class="dropdown globaltoc-container">
+  <a role="button" id="dLabelGlobalToc" data-toggle="dropdown" data-target="#" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc" role="menu" aria-labelledby="dLabelGlobalToc"><li class="toctree-l1 current dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/getting_started.html" tabindex="-1">Getting Started</a><ul class="current unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/installation.html">Installing the Pepper SDK plug-in</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a robot application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/running_application.html">Running an application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/hello_human_tutorial.html">Hello human!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/next_step.html">Next steps</a></li>
+</ul>
+</li><li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/key_skills.html" tabindex="-1">Principles</a><ul class="unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/focus_lifecycle.html">Mastering Focus &amp; Robot lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/action_getting_started.html">Running Actions on Pepper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/sync_async.html">Synchronous or Asynchronous?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/futures.html">Chaining operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/autonomous_abilities_mgt.html">Managing Autonomous abilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/conversation_feedbacks.html">Managing Conversation Feedbacks</a></li>
+</ul>
+</li><li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/tools.html" tabindex="-1">Tools</a><ul class="unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/animation_browser.html">Animation Browser / Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/robot_viewer.html">Robot Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/animation_editor.html">Animation Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/trajectory_editor.html">Trajectory Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/dialog_editor.html">Chat Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/layout_editor.html">Layout Editor</a></li>
+</ul>
+</li><li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/api.html" tabindex="-1">API</a><ul class="unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/abilities/abilities_home.html">Autonomous Abilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/conversation/conversation_home.html">Conversation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/movement/motion_home.html">Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/perception/perception_home.html">Perceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/knowledge/knowledge_home.html">Knowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/samples.html">Samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/library/index_lib.html">Additional Libraries &amp; Apps</a></li>
+</ul>
+</li><li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html" tabindex="-1">What’s new</a><ul class="unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#qisdk">QiSDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#plugin">Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#documentation-improvements">Documentation improvements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#avd">AVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#animation-editor">Animation Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html#see-also">See also</a></li>
+</ul>
+</li><li class="toctree-l1 dropdown-submenu"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/index_ux.html" tabindex="-1">Design</a><ul class="unstyled dropdown-menu">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/chap1.html">Pepper is a humanoid-robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/chap2.html">Pepper is a character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/chap3.html">Pepper communicates mainly by voice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/chap4.html">Pepper is not just a tablet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/chap5.html">Pepper is easy to use</a></li>
+</ul>
+</li>
+</ul>
+</li>
+            
+          
+          
+        </ul>
+
+        
+          
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search">
+ </div>
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+        
+
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav affix" role="complementary"><!-- <ul class="globaltoc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="getting_started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installing the Pepper SDK plug-in</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a robot application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running_application.html">Running an application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_human_tutorial.html">Hello human!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="next_step.html">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ch2_principles/key_skills.html">Principles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/focus_lifecycle.html">Mastering Focus &amp; Robot lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/action_getting_started.html">Running Actions on Pepper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/sync_async.html">Synchronous or Asynchronous?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/futures.html">Chaining operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/autonomous_abilities_mgt.html">Managing Autonomous abilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch2_principles/conversation_feedbacks.html">Managing Conversation Feedbacks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ch3_tools/tools.html">Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/animation_browser.html">Animation Browser / Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/robot_viewer.html">Robot Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/animation_editor.html">Animation Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/trajectory_editor.html">Trajectory Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/dialog_editor.html">Chat Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch3_tools/layout_editor.html">Layout Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ch4_api/api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/abilities/abilities_home.html">Autonomous Abilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/conversation/conversation_home.html">Conversation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/movement/motion_home.html">Motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/perception/perception_home.html">Perceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/knowledge/knowledge_home.html">Knowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/samples.html">Samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch4_api/library/index_lib.html">Additional Libraries &amp; Apps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ch5_news/index_news.html">What’s new</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#qisdk">QiSDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#plugin">Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#documentation-improvements">Documentation improvements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#avd">AVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#animation-editor">Animation Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch5_news/index_news.html#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ch6_ux/index_ux.html">Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ch6_ux/chap1.html">Pepper is a humanoid-robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch6_ux/chap2.html">Pepper is a character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch6_ux/chap3.html">Pepper communicates mainly by voice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch6_ux/chap4.html">Pepper is not just a tablet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ch6_ux/chap5.html">Pepper is easy to use</a></li>
+</ul>
+</li>
+</ul>
+
+</ul> -->
+
+
+<ul class="current nav nav-list">
+<li class="toctree-l1 current"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/getting_started.html">Getting Started</a><ul class="current nav nav-list">
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/installation.html">Installing the Pepper SDK plug-in</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a robot application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/running_application.html">Running an application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/hello_human_tutorial.html">Hello human!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/next_step.html">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/key_skills.html">Principles</a></li>
+<li class="toctree-l1"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/tools.html">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch4_api/api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch5_news/index_news.html">What’s new</a></li>
+<li class="toctree-l1"><a class="reference internal nav-header" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch6_ux/index_ux.html">Design</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
+      
+  <div class="section" id="creating-a-robot-application">
+<span id="creating-robot-app"></span><h1>Creating a robot application<a class="headerlink" href="#creating-a-robot-application" title="Permalink to this headline">¶</a></h1>
+<div class="step-table section" id="creating-a-project">
+<h2>1. Creating a project<a class="headerlink" href="#creating-a-project" title="Permalink to this headline">¶</a></h2>
+<p>To create a robot application, we first create a standard Android project,
+then we will convert it to a robot application.</p>
+<table border="0" class="table">
+<colgroup>
+<col width="5%">
+<col width="95%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head">Action</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><ol class="first last arabic simple">
+<li></li>
+</ol>
+</td>
+<td><p class="first">From <strong>Android Studio</strong>, choose:
+<strong>File</strong> &gt; <strong>New</strong> &gt; <strong>New Project</strong>.</p>
+<img alt="../_images/project_wizard.png" class="last" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/project_wizard.png">
+</td>
+</tr>
+<tr class="row-odd"><td><ol class="first last arabic simple" start="2">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Click the <strong>Next</strong> button.</p>
+<img alt="../_images/project_wizard2.png" class="last" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/project_wizard2.png">
+</td>
+</tr>
+<tr class="row-even"><td><ol class="first last arabic simple" start="3">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Configure your project:</p>
+<ul class="last simple">
+<li>Give a name to your application.</li>
+<li>Choose the language you want to use, <strong>Kotlin</strong> or <strong>Java</strong>.</li>
+<li>Make sure the <strong>Minimum Api level</strong> selected is
+<strong>API 23: Android 6.0 (Marshmallow)</strong>.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><ol class="first last arabic simple" start="4">
+<li></li>
+</ol>
+</td>
+<td>Click the <strong>Finish</strong> button.</td>
+</tr>
+<tr class="row-even"><td><ol class="first last arabic simple" start="5">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Choose <strong>File</strong> &gt; <strong>Project Structure…</strong> &gt; <strong>Module</strong> and make sure
+<strong>Source Compatibility</strong> and <strong>Target Compatibility</strong> are set to
+<strong>1.8 (Java 8)</strong>.</p>
+<img alt="../_images/project_structure_java1.8.png" class="last" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/project_structure_java1.8.png">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="step-table section" id="id1">
+<h2>2. Creating a robot application<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Now that you have created the Android project, let’s convert it into a
+robot application:</p>
+<table border="0" class="table">
+<colgroup>
+<col width="5%">
+<col width="95%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head">Action</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><ol class="first last arabic simple">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Once the project is created,
+choose <strong>File</strong> &gt; <strong>New</strong> &gt; <strong>Robot Application</strong>.</p>
+<a class="last reference internal image-reference" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/_images/new_robot_app.png"><img alt="../_images/new_robot_app.png" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/new_robot_app.png" style="width: 530px; height: 414px;"></a>
+</td>
+</tr>
+<tr class="row-odd"><td><ol class="first last arabic simple" start="2">
+<li></li>
+</ol>
+</td>
+<td>Select the minimum Robot SDK version and the module to robotify.
+Then click <strong>OK</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Result</strong></p>
+<p>Your project is now a robot application!</p>
+<p>As a result, you should see the following changes:</p>
+<ul>
+<li><p class="first">The <code class="docutils literal notranslate"><span class="pre">robotsdk.xml</span></code> file has been added to the <code class="docutils literal notranslate"><span class="pre">assets/robot</span></code> directory.</p>
+<p>It contains the minimum Robot SDK version for your project
+(the one you have selected).</p>
+</li>
+<li><p class="first">New tools are available in <strong>Tools</strong> &gt; <strong>Pepper SDK</strong> and also in the toolbar:
+<a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/_images/emultor_btn.png"><img alt="emulator" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/emultor_btn.png" style="width: 25px; height: 26px;"></a> <strong>Emulator</strong> and <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/_images/connect_button.png"><img alt="connect" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/connect_button.png" style="width: 21px; height: 23px;"></a> <strong>Connect</strong>.</p>
+<p>Use <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/_images/emultor_btn.png"><img alt="emulator" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/emultor_btn.png" style="width: 25px; height: 26px;"></a> to start a new robot emulator and <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/_images/connect_button.png"><img alt="connect" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/connect_button.png" style="width: 21px; height: 23px;"></a> to connect to a real robot.</p>
+</li>
+<li><p class="first">The <strong>QiSDK</strong> dependency has been added to your module’s <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code> file.</p>
+<p>It provides you all the functionalities to interact  with <strong>Pepper</strong>.</p>
+</li>
+<li><p class="first">A <code class="docutils literal notranslate"><span class="pre">uses-feature</span></code> tag has been added to your <code class="docutils literal notranslate"><span class="pre">AndroidManifest.xml</span></code>.</p>
+<p>It states that your application uses <strong>Pepper</strong> and will
+only be available for the robot tablet.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="getting-ready-to-manage-pepper-s-screen-layout">
+<h2>3. Getting ready to manage Pepper’s screen layout<a class="headerlink" href="#getting-ready-to-manage-pepper-s-screen-layout" title="Permalink to this headline">¶</a></h2>
+<p>When using Android <strong>Layout Editor</strong>, to obtain an accurate display of your applications for Pepper,
+make sure to set the <strong>Device for Preview</strong> to <code class="docutils literal notranslate"><span class="pre">Pepper</span> <span class="pre">1.9</span> <span class="pre">(1280</span> <span class="pre">x</span> <span class="pre">800,</span> <span class="pre">tvdpi)</span></code>.</p>
+<p>For further details, see: <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch3_tools/layout_editor.html#layout-editor"><span class="std std-ref">Layout Editor</span></a>.</p>
+</div>
+<div class="section" id="implementing-qisdk-design-the-robot-life-cycle">
+<span id="implement-qisdk-design"></span><h2>4. Implementing QiSDK Design &amp; the Robot Life Cycle<a class="headerlink" href="#implementing-qisdk-design-the-robot-life-cycle" title="Permalink to this headline">¶</a></h2>
+<p>We have configured a robot application, now it is time to let our code take
+the control of Pepper’s body.</p>
+<div class="section" id="code-sample">
+<h3>Code Sample<a class="headerlink" href="#code-sample" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<a class="active item sphinx-data-tab-S290bGlu docutils container" data-tab="tab-S290bGlu">
+<div class="docutils container">
+Kotlin</div>
+</a>
+<a class="item sphinx-data-tab-SmF2YQ== docutils container" data-tab="tab-SmF2YQ==">
+<div class="docutils container">
+Java</div>
+</a>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment code-tab sphinx-data-tab-S290bGlu active docutils container" data-tab="tab-S290bGlu">
+<div class="highlight-kotlin notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">RobotActivity</span><span class="p">(),</span> <span class="n">RobotLifecycleCallbacks</span> <span class="p">{</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+        <span class="c1">// Register the RobotLifecycleCallbacks to this Activity.</span>
+        <span class="n">QiSDK</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onDestroy</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Unregister the RobotLifecycleCallbacks for this Activity.</span>
+        <span class="n">QiSDK</span><span class="p">.</span><span class="n">unregister</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">onDestroy</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onRobotFocusGained</span><span class="p">(</span><span class="n">qiContext</span><span class="p">:</span> <span class="n">QiContext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is gained.</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onRobotFocusLost</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is lost.</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onRobotFocusRefused</span><span class="p">(</span><span class="n">reason</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is refused.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment code-tab sphinx-data-tab-SmF2YQ== docutils container" data-tab="tab-SmF2YQ==">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">RobotActivity</span> <span class="kd">implements</span> <span class="n">RobotLifecycleCallbacks</span> <span class="p">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">);</span>
+        <span class="c1">// Register the RobotLifecycleCallbacks to this Activity.</span>
+        <span class="n">QiSDK</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDestroy</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Unregister the RobotLifecycleCallbacks for this Activity.</span>
+        <span class="n">QiSDK</span><span class="p">.</span><span class="na">unregister</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="kd">super</span><span class="p">.</span><span class="na">onDestroy</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRobotFocusGained</span><span class="p">(</span><span class="n">QiContext</span> <span class="n">qiContext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is gained.</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRobotFocusLost</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is lost.</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRobotFocusRefused</span><span class="p">(</span><span class="n">String</span> <span class="n">reason</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// The robot focus is refused.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="step-table section" id="step-by-step">
+<h3>Step by step<a class="headerlink" href="#step-by-step" title="Permalink to this headline">¶</a></h3>
+<table border="0" class="table">
+<colgroup>
+<col width="4%">
+<col width="96%">
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head">Action</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><ol class="first last arabic simple">
+<li></li>
+</ol>
+</td>
+<td>Register the <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> to the <strong>QiSDK</strong>.</td>
+</tr>
+<tr class="row-odd"><td><ol class="first last arabic simple" start="2">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Unregister the <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code>.</p>
+<p><strong>Tip:</strong> You could also use <code class="docutils literal notranslate"><span class="pre">QiSDK.unregister(this)</span></code> to unregister all the
+RobotLifecycleCallbacks for this Activity, just be careful not to inadvertently remove a
+callback that should stay registered.</p>
+<div class="last admonition important alert alert-info">
+<p class="first admonition-title">Important</p>
+<p>In this first example, we recommend to register and unregister in the
+<code class="docutils literal notranslate"><span class="pre">onCreate</span></code> and <code class="docutils literal notranslate"><span class="pre">onDestroy</span></code> methods.
+It is not the only option we have.</p>
+<p class="last">For further details, see: <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/focus_lifecycle.html#focus-lifecycle"><span class="std std-ref">Mastering Focus &amp; Robot lifecycle</span></a>.</p>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><ol class="first last arabic simple" start="3">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Make your <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> class extends <code class="docutils literal notranslate"><span class="pre">RobotActivity</span></code>.</p>
+<p><strong>Why?</strong> This activity, provided by The <strong>QiSDK Design</strong> library,
+brings visual feedbacks when a vocal communication is running.</p>
+<p class="last">For further details, see: <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/conversation_feedbacks.html#conversation-feedbacks"><span class="std std-ref">Managing Conversation Feedbacks</span></a>.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><ol class="first last arabic simple" start="4">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Make your <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> class implement the <code class="docutils literal notranslate"><span class="pre">RobotLifecycleCallbacks</span></code>
+interface.</p>
+<p><strong>Why?</strong> This interface allows the <code class="docutils literal notranslate"><span class="pre">RobotLifecycleCallbacks</span></code> to know when the
+<code class="docutils literal notranslate"><span class="pre">Activity</span></code> to which it has registered, gains or loses the robot focus.</p>
+<p class="last">For further details, see: <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch2_principles/focus_lifecycle.html#focus-lifecycle"><span class="std std-ref">Mastering Focus &amp; Robot lifecycle</span></a>.</p>
+</td>
+</tr>
+<tr class="row-even"><td><ol class="first last arabic simple" start="5">
+<li></li>
+</ol>
+</td>
+<td><p class="first">Override the <code class="docutils literal notranslate"><span class="pre">onRobotFocusGained</span></code>, <code class="docutils literal notranslate"><span class="pre">onRobotFocusLost</span></code> and
+<code class="docutils literal notranslate"><span class="pre">onRobotFocusRefused</span></code> methods.</p>
+<p><strong>Why?</strong> The <code class="docutils literal notranslate"><span class="pre">onRobotFocusGained</span></code> method is called when the related <code class="docutils literal notranslate"><span class="pre">Activity</span></code> gains the robot focus.
+When the focus is gained, we can, for instance, run various actions on the robot.</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">onRobotFocusLost</span></code> method is called, the related <code class="docutils literal notranslate"><span class="pre">Activity</span></code> lost the focus
+and actions cannot be run on Pepper.</p>
+<div class="last admonition important alert alert-info">
+<p class="first admonition-title">Important</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">onRobotFocusGained</span></code> and <code class="docutils literal notranslate"><span class="pre">onRobotFocusLost</span></code> methods are
+executed on a background thread, so the UI thread will not be
+blocked when we will use the QiSDK synchronously.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<table border="0" class="table">
+<colgroup>
+<col width="100%">
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><ul class="first last simple">
+<li>Register and unregister the <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> to the <strong>QiSDK</strong>.</li>
+<li>Make your <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> class extends <code class="docutils literal notranslate"><span class="pre">RobotActivity</span></code>.</li>
+<li>Make your <code class="docutils literal notranslate"><span class="pre">MainActivity</span></code> class implement the <code class="docutils literal notranslate"><span class="pre">RobotLifecycleCallbacks</span></code>
+interface.</li>
+<li>Override the <code class="docutils literal notranslate"><span class="pre">onRobotFocusGained</span></code>, <code class="docutils literal notranslate"><span class="pre">onRobotFocusLost</span></code> and
+<code class="docutils literal notranslate"><span class="pre">onRobotFocusRefused</span></code> methods.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="result">
+<h2>Result<a class="headerlink" href="#result" title="Permalink to this headline">¶</a></h2>
+<p>That’s it! You have created your first robot application.</p>
+<p>See now the next step: <a class="reference internal" href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/ch1_gettingstarted/running_application.html#running-application"><span class="std std-ref">Running an application</span></a>.</p>
+</div>
+</div>
+
+
+    </div>
+  </div>
+
+ <!-- Contents pagination -->
+  <!-- <div class="row">
+    
+
+    <div class="pag-btn col-md-4 col-md-offset-3">
+        <li class="pagination left">
+          <a href="installation.html" title="Previous Chapter: Installing the Pepper SDK plug-in">
+            <div class="pagination-icon"><span class="glyphicon glyphicon-chevron-left"></span></div>
+            <div class="pagination-text">
+              <span class="pagination-label" style="display:block;">Previous</span>
+              <span class="hidden-sm hidden-tablet">Installing the Pe...</span>
+            </div>
+          </a>
+        </li>
+    </div>
+
+    <div class="pag-btn col-md-4 col-md-offset-1">
+        <li class="pagination right" style="float: right;">
+          <a href="running_application.html" title="Next Chapter: Running an application">
+            <div class="pagination-icon"><span class="glyphicon glyphicon-chevron-right"></span></div>
+            <div class="pagination-text">
+              <span class="pagination-label" style="display:block; text-align:right;">Next</span>
+              <span class="hidden-sm hidden-tablet">Running an application</span>
+            </div>
+          </a>
+        </li>
+    </div>
+
+  </div> -->
+   <!-- Contents pagination end -->
+
+</div>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-10" style="padding-left:0;">
+        <ul id="footer-menu" class="nav navbar-nav">
+          <li>
+            <a href="https://account.aldebaran.com/support/" target="_blank">Support</a>
+          </li>
+          <li>
+            <a href="https://qisdk.softbankrobotics.com/sdk/doc/pepper-sdk/legal/notice.html">Legal notices</a>
+          </li>
+          <li>
+            <a href="https://www.softbankrobotics.com/emea/en/privacy-policy" target="_blank">Privacy policy</a>
+          </li>
+          <li>
+            <a href="https://www.softbankrobotics.com/emea/en/term-use?q=emea/fr/conditions-dutilisation" target="_blank">Term of use</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-2">
+        <a href="#">
+          <!-- <div id="logo"></div> -->
+          
+          <img id="logo" src="Creating%20a%20robot%20application%20%E2%80%94%20QiSDK_soubory/softbank-logo_white.png" alt="Logo">
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+
+  
+</body></html>

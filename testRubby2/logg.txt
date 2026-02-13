@@ -1,0 +1,355 @@
+2026-02-13 14:32:03.604 4733-4733/? I/art: Not late-enabling -Xcheck:jni (already on)
+2026-02-13 14:32:03.604 4733-4733/? I/art: Late-enabling JIT
+2026-02-13 14:32:03.606 4733-4733/? I/art: JIT created with code_cache_capacity=2MB compile_threshold=1000
+2026-02-13 14:32:03.734 4733-4733/cz.kubmak.testrubby2 W/art: Before Android 4.1, method android.graphics.PorterDuffColorFilter androidx.vectordrawable.graphics.drawable.VectorDrawableCompat.updateTintFilter(android.graphics.PorterDuffColorFilter, android.content.res.ColorStateList, android.graphics.PorterDuff$Mode) would have incorrectly overridden the package-private method in android.graphics.drawable.Drawable
+2026-02-13 14:32:04.055 4733-4752/cz.kubmak.testrubby2 D/OpenGLRenderer: Use EGL_SWAP_BEHAVIOR_PRESERVED: true
+2026-02-13 14:32:04.059 4733-4733/cz.kubmak.testrubby2 D/: HostConnection::get() New Host Connection established 0x9f3b45b0, tid 4733
+2026-02-13 14:32:04.064 4733-4733/cz.kubmak.testrubby2 W/qi.path.sdklayout: No Application was created, trying to deduce paths
+2026-02-13 14:32:04.064 4733-4733/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:04.064 4733-4733/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:04.114 4733-4752/cz.kubmak.testrubby2 D/: HostConnection::get() New Host Connection established 0x9e93f0b0, tid 4752
+2026-02-13 14:32:04.116 4733-4752/cz.kubmak.testrubby2 I/OpenGLRenderer: Initialized EGL, version 1.4
+2026-02-13 14:32:04.116 4733-4752/cz.kubmak.testrubby2 W/OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+2026-02-13 14:32:04.127 4733-4748/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:04.132 4733-4748/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:04.187 4733-4733/cz.kubmak.testrubby2 W/art: Before Android 4.1, method int androidx.appcompat.widget.DropDownListView.lookForSelectablePosition(int, boolean) would have incorrectly overridden the package-private method in android.widget.ListView
+2026-02-13 14:32:04.268 4733-4749/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:04.269 4733-4749/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:04.270 4733-4748/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:04.270 4733-4748/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:05.030 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Spawning 1 more thread. New size: 4 (min: 2, max: 8, size/min: 200%, size/max: 50%, growth ratio: 33% (2/6))
+2026-02-13 14:32:05.532 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Spawning 1 more thread. New size: 5 (min: 2, max: 8, size/min: 250%, size/max: 62%, growth ratio: 50% (3/6))
+2026-02-13 14:32:06.034 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Spawning 1 more thread. New size: 6 (min: 2, max: 8, size/min: 300%, size/max: 75%, growth ratio: 66% (4/6))
+2026-02-13 14:32:06.037 4733-4770/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:06.037 4733-4770/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:06.535 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Spawning 1 more thread. New size: 7 (min: 2, max: 8, size/min: 350%, size/max: 87%, growth ratio: 83% (5/6))
+2026-02-13 14:32:06.537 4733-4771/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:06.537 4733-4771/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:07.037 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Spawning 1 more thread. New size: 8 (min: 2, max: 8, size/min: 400%, size/max: 100%, growth ratio: 100% (6/6))
+2026-02-13 14:32:07.038 4733-4772/cz.kubmak.testrubby2 E/qi.path.sdklayout: Cannot create directory '"/mnt/sdcard/.config/qimessaging"' error was: boost::filesystem::create_directories: Permission denied: "/mnt/sdcard/.config"
+2026-02-13 14:32:07.038 4733-4772/cz.kubmak.testrubby2 E/qi.os: Unable to create file: ''
+2026-02-13 14:32:07.538 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (1 timeouts / 20 max, number of tasks: 28, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:08.039 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (2 timeouts / 20 max, number of tasks: 29, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:08.541 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (3 timeouts / 20 max, number of tasks: 30, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:09.042 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (4 timeouts / 20 max, number of tasks: 31, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:09.543 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (5 timeouts / 20 max, number of tasks: 32, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:10.045 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (6 timeouts / 20 max, number of tasks: 33, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:10.547 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (7 timeouts / 20 max, number of tasks: 34, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:11.049 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (8 timeouts / 20 max, number of tasks: 35, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:11.551 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (9 timeouts / 20 max, number of tasks: 36, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:12.052 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (10 timeouts / 20 max, number of tasks: 37, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:12.553 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (11 timeouts / 20 max, number of tasks: 38, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:13.055 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (12 timeouts / 20 max, number of tasks: 39, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:13.556 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (13 timeouts / 20 max, number of tasks: 40, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:14.057 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (14 timeouts / 20 max, number of tasks: 41, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:14.559 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (15 timeouts / 20 max, number of tasks: 42, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:15.061 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (16 timeouts / 20 max, number of tasks: 43, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:15.563 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (17 timeouts / 20 max, number of tasks: 44, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:16.065 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (18 timeouts / 20 max, number of tasks: 45, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:16.567 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (19 timeouts / 20 max, number of tasks: 46, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:17.068 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (20 timeouts / 20 max, number of tasks: 47, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:17.068 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:17.068 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:17.068 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:17.068 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:17.091 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:17.569 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (21 timeouts / 20 max, number of tasks: 48, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:17.570 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:17.570 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:17.570 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:17.570 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:17.574 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:17.579 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:17.581 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:17.583 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:17.584 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:17.590 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:17.593 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:18.071 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (22 timeouts / 20 max, number of tasks: 49, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:18.072 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:18.072 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:18.073 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:18.073 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:18.077 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:18.082 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:18.085 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:18.086 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:18.086 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:18.093 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:18.096 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:18.573 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (23 timeouts / 20 max, number of tasks: 50, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:18.573 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:18.574 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:18.574 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:18.574 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:18.579 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:18.583 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:18.586 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:18.588 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:18.588 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:18.595 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:18.597 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:19.075 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (24 timeouts / 20 max, number of tasks: 51, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:19.075 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:19.075 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:19.076 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:19.076 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:19.080 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:19.084 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:19.087 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:19.089 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:19.090 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:19.098 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:19.101 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:19.577 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (25 timeouts / 20 max, number of tasks: 52, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:19.577 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:19.577 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:19.577 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:19.577 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:19.582 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:19.586 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:19.589 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:19.591 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:19.592 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:19.599 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:19.602 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:20.079 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (26 timeouts / 20 max, number of tasks: 53, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:20.079 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:20.080 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:20.080 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:20.080 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:20.085 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:20.090 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:20.092 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:20.094 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:20.094 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:20.101 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:20.104 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:20.580 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (27 timeouts / 20 max, number of tasks: 54, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:20.580 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:20.581 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:20.581 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:20.581 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:20.586 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:20.590 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:20.592 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:20.594 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:20.594 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:20.601 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:20.604 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:21.083 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (28 timeouts / 20 max, number of tasks: 55, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:21.083 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:21.083 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:21.083 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:21.083 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:21.087 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:21.091 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:21.092 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:21.095 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:21.095 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:21.102 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:21.105 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:21.585 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (29 timeouts / 20 max, number of tasks: 56, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:21.585 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:21.585 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:21.585 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:21.585 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:21.589 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:21.593 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:21.595 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:21.598 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:21.598 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:21.605 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:21.607 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:22.088 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (30 timeouts / 20 max, number of tasks: 57, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:22.088 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:22.088 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:22.088 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:22.088 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:22.092 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:22.096 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:22.098 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:22.101 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:22.101 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:22.107 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:22.110 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:22.590 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (31 timeouts / 20 max, number of tasks: 58, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:22.590 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:22.591 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:22.591 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:22.591 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:22.595 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:22.599 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:22.601 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:22.603 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:22.604 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:22.609 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:22.612 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:23.092 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (32 timeouts / 20 max, number of tasks: 59, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:23.092 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:23.092 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:23.093 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:23.093 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:23.096 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:23.100 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:23.102 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:23.104 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:23.104 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:23.110 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:23.112 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:23.593 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (33 timeouts / 20 max, number of tasks: 60, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:23.593 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:23.594 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:23.594 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:23.594 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:23.599 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:23.603 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:23.604 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:23.606 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:23.607 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:23.612 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:23.616 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:24.096 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (34 timeouts / 20 max, number of tasks: 61, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:24.096 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:24.096 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:24.096 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:24.097 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:24.101 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:24.104 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:24.106 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:24.110 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:24.110 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:24.116 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:24.119 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:24.598 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (35 timeouts / 20 max, number of tasks: 62, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:24.598 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:24.598 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:24.599 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:24.599 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:24.603 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:24.607 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:24.609 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:24.612 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:24.612 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:24.618 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:24.621 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:25.100 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (36 timeouts / 20 max, number of tasks: 63, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:25.101 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:25.101 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:25.101 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:25.101 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:25.105 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:25.109 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:25.110 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:25.113 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:25.113 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:25.118 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:25.121 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:25.603 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (37 timeouts / 20 max, number of tasks: 64, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:25.604 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:25.604 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:25.604 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:25.604 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:25.609 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:25.613 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:25.615 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:25.617 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:25.617 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:25.624 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:25.626 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:26.106 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (38 timeouts / 20 max, number of tasks: 65, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:26.106 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:26.106 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:26.107 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:26.107 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:26.111 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:26.116 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:26.117 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:26.120 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:26.120 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:26.126 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:26.129 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:26.608 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (39 timeouts / 20 max, number of tasks: 66, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:26.608 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:26.608 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:26.609 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:26.609 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:26.613 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:26.618 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:26.620 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:26.622 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:26.623 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:26.629 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:26.632 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:27.110 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (40 timeouts / 20 max, number of tasks: 67, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:27.110 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:27.110 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:27.111 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:27.111 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:27.119 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:27.124 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:27.124 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:27.126 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:27.140 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:27.143 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:27.612 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (41 timeouts / 20 max, number of tasks: 68, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:27.612 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:27.612 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:27.612 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:27.612 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:27.618 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:27.622 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:27.625 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:27.627 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:27.627 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:27.635 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:27.638 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:28.115 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (42 timeouts / 20 max, number of tasks: 69, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:28.115 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:28.115 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:28.116 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:28.116 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:28.122 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:28.126 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:28.129 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:28.131 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:28.132 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:28.140 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:28.143 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:28.616 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (43 timeouts / 20 max, number of tasks: 70, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:28.616 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:28.616 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:28.617 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:28.617 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:28.623 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:28.628 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:28.631 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:28.633 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:28.633 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:28.640 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:28.642 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:28.944 4733-4752/cz.kubmak.testrubby2 E/Surface: getSlotFromBufferLocked: unknown buffer: 0x9e932150
+2026-02-13 14:32:29.119 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (44 timeouts / 20 max, number of tasks: 71, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:29.120 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:29.120 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:29.120 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:29.120 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:29.125 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:29.132 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:29.135 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:29.138 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:29.138 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:29.147 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:29.152 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
+2026-02-13 14:32:29.643 4733-4751/cz.kubmak.testrubby2 I/qi.eventloop: Threadpool MainEventLoop: Size limit reached (45 timeouts / 20 max, number of tasks: 72, number of active tasks: 8, number of threads: 8, maximum number of threads: 8)
+2026-02-13 14:32:29.643 4733-4751/cz.kubmak.testrubby2 E/qi.eventloop: Threadpool MainEventLoop: System seems to be deadlocked, sending emergency signal
+2026-02-13 14:32:29.644 4733-4751/cz.kubmak.testrubby2 A/qimessaging.jni: Emergency, aborting
+2026-02-13 14:32:29.645 4733-4739/cz.kubmak.testrubby2 I/art: Thread[3,tid=4739,WaitingInMainSignalCatcherLoop,Thread*=0xaafae700,peer=0x12c770a0,"Signal Catcher"]: reacting to signal 3
+2026-02-13 14:32:29.645 4733-4739/cz.kubmak.testrubby2 I/art: 
+2026-02-13 14:32:29.653 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: android.os.Message android.os.MessageQueue.next()
+2026-02-13 14:32:29.657 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: boolean java.lang.Daemons$FinalizerWatchdogDaemon.waitForObject()
+2026-02-13 14:32:29.661 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$HeapTaskDaemon.run()
+2026-02-13 14:32:29.664 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Daemons$ReferenceQueueDaemon.run()
+2026-02-13 14:32:29.664 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: java.lang.ref.Reference java.lang.ref.ReferenceQueue.remove(long)
+2026-02-13 14:32:29.672 4733-4739/cz.kubmak.testrubby2 W/art: Method processed more than once: void java.lang.Thread.parkFor$(long)
+2026-02-13 14:32:29.675 4733-4739/cz.kubmak.testrubby2 E/art: Unable to open stack trace file '/data/anr/traces.txt': No such file or directory
