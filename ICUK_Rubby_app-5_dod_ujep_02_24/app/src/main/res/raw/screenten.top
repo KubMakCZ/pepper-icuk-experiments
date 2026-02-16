@@ -1,0 +1,9 @@
+topic: ~screenten()
+
+proposal: %init Co dělá ICUK.
+Inovační centrum Ústeckého kraje podporuje podnikání, inovace a rozvoj našeho regionu.
+Pomáháme studentům, začínajícím podnikatelům i zavedeným firmám.
+Provozujeme inkubátory, pořádáme soutěže jako je Nejlepší podnikatelský záměr a propojujeme vědu s byznysem.
+Více najdete na icuk tečka cézet.
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

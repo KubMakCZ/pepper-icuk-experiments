@@ -1,0 +1,14 @@
+topic: ~screenthree()
+
+proposal: %init Ahoj,všichní!
+já jsem Rubby Pepper. Vaše zvídavá, chytrá a přátelská robotka z Ústeckého kraje.
+A nebojte, nevychloubám se. Teda možná jen trošku. Jestli tě zajímá ICUK, naše služby a programy pro studenty,
+nebo chceš vědět víc o tom, co všechno ti může nabídnout Ústecký kraj, stačí si vybrat v menu a já ti hned všechno povím.
+Budu se těšit, že se potkáme na některé z akcí.
+Tak klikni, nebo se zeptej buď mně nebo kolegů, kteří jsou tady se mnou.
+
+proposal: %say something
+
+u:(~restartik) ~confirmation ^execute(FragmentExecutor, frag_main)
+
+u:(~rozloucit) ~confirmation ^execute(FragmentExecutor, frag_main)

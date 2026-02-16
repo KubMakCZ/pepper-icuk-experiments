@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rubby_DenKariery_2025</string>
+    <string name="loading">Načítání</string>
+    <string name="isMainFragment">Klikni na tlačítko nebo řekni číslo:</string>
+    <string name="reset">Úvodní obrazovka</string>
+    <string name="fragmentTwo">Fragment 2</string>
+    <string name="fragmentOne">Fragment 1</string>
+
+    <!-- Hlavní nabídka -->
+    <string name="fragmentThree">1. Já jsem Rubby</string>
+    <string name="fragmentFour">2. Inovační centrum Ústeckého kraje</string>
+    <string name="fragmentFive">3. Ústecký kraj</string>
+    <string name="fragmentSix">4. UJEP </string>
+
+    <string name="fragmentSeven">5. ICUK pro vysokoškoláky</string>
+    <string name="fragmentEight">6. ICUK BOOTCAMP</string>
+    <string name="fragmentNine">7. Univerzitní inkubátor</string>
+    <string name="fragmentTen">8. Marketing prakticky</string>
+
+    <!-- Rozkliknute fragmenty -->
+    <string name="isFragmentThree">Ahoj! Já jsem Rubby</string>
+    <string name="isFragmentFour">Kliknul jsi na Inovační centrum Ústeckého kraje</string>
+    <string name="isFragmentFive">Kliknul jsi na ICUK pro vysokoškoláky</string>
+    <string name="isFragmentSix">Kliknul jsi UJEP</string>
+
+    <string name="isFragmentSeven">Kliknul jsi na ICUK pro vysokoškoláky</string>
+    <string name="isFragmentEight">Kliknul jsi na ICUK BOOTCAMP</string>
+    <string name="isFragmentNine">Kliknul jsi na Univerzitní inkubátor</string>
+    <string name="isFragmentTen">Kliknul jsi na Marketing prakticky</string>
+    <!-- fragment_two -->
+    <string name="saySomething">Opakovat řeč</string>
+    <string name="isFragmentOne">Totot jeFragment 1</string>
+    <string name="isFragmentTwo">Toto je fragment 2</string>
+</resources>

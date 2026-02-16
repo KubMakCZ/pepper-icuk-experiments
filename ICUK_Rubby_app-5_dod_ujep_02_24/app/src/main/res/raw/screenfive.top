@@ -1,0 +1,8 @@
+topic: ~screenfive()
+
+proposal: %init Coworking.
+Hledáte místo pro práci v centru Ústí? Náš coworking v Hradební je tu pro vás.
+Nabízíme sdílené pracovní stoly, rychlou wifinu a skvělou kávu. Je to místo, kde potkáte další kreativní lidi.
+Pro více informací napište kolegyni Soukupové na adresu soukupova zavináč icuk tečka cézet.
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

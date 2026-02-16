@@ -1,0 +1,21 @@
+topic: ~everything()
+
+# Global rules for fragment navigation based on poznamka.md
+
+u:(~ukazat "Má úvodní řeč") ~confirmation ^execute(FragmentExecutor, frag_screen_three)
+
+u:(~ukazat "Eventový sál") ~confirmation ^execute(FragmentExecutor, frag_screen_four)
+
+u:(~ukazat ["Coworking" "Koworking" "Kowrkin" "Kovrking"]) ~confirmation ^execute(FragmentExecutor, frag_screen_five)
+
+u:(~ukazat ["Kanceláře" "Kaceláře" "Kanceláře a zasedací místnosti k pronájmu"]) ~confirmation ^execute(FragmentExecutor, frag_screen_six)
+
+u:(~ukazat "Virtuální sídlo") ~confirmation ^execute(FragmentExecutor, frag_screen_seven)
+
+u:(~ukazat "Pod jednou střechou") ~confirmation ^execute(FragmentExecutor, frag_screen_eight)
+
+u:(~ukazat ["Co chystáme v Icuk Space Hradební" "Co chystáme v Icuk spejs Hradební"]) ~confirmation ^execute(FragmentExecutor, frag_screen_nine)
+
+u:(~ukazat "Co dělá ICUK") ~confirmation ^execute(FragmentExecutor, frag_screen_ten)
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

@@ -1,0 +1,8 @@
+topic: ~screenfour()
+
+proposal: %init Eventový sál.
+Náš eventový sál v ICUK Space Hradební je ideální pro vaše akce, workshopy nebo konference.
+Kapacita je až 60 lidí a máme tu veškeré technické vybavení, které byste mohli potřebovat.
+Pokud máte zájem o pronájem, napište mému kolegovi na adresu fronc zavináč icuk tečka cézet.
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

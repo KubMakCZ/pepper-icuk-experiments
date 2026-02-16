@@ -1,0 +1,45 @@
+<resources>
+
+    <!--app name-->
+    <string name="app_name">Rubby_DOD_DenKariery_0425</string>
+
+    <!-- fragment_loading -->
+    <string name="loading">Loading</string>
+
+    <!-- fragment_main -->
+    <string name="isMainFragment">This is the main fragment</string>
+    <string name="reset">\"Reset\"</string>
+    <string name="fragmentTwo">\"Fragment Two\"</string>
+    <string name="fragmentOne">\"Fragment One\"</string>
+
+    <!-- fragment_one -->
+    <string name="isFragmentOne">This is the fragment One</string>
+    <string name="saySomething">\"Say something\"</string>
+
+    <!-- fragment_two -->
+    <string name="isFragmentTwo">This is the fragment Two</string>
+    <string name="variableSetTo" translatable="false">The QiVariable is set to : </string>
+    <string name="placeholder" translatable="false">Placeholder</string>
+    <string name="setToA" translatable="false">Set to \"Pepper\"</string>
+    <string name="setToB" translatable="false">Set to \"Nao\"</string>
+    <string name="pepper" translatable="false">Pepper</string>
+    <string name="nao" translatable="false">Nao</string>
+    <string name="isFragmentThree">Toto je úvodní řeč</string>
+    <string name="fragmentThree">Má úvodní řeč</string>
+    <string name="fragmentFour">Eventový sál</string>
+    <string name="fragmentFive">Coworking</string>
+    <string name="fragmentSix">Kanceláře a zasedací místnosti</string>
+    <string name="fragmentSeven">Virtuální sídlo</string>
+    <string name="fragmentEight">Pod jednou střechou</string>
+    <string name="fragmentNine">Icuk Space Hradební</string>
+    <string name="fragmentTen">Co dělá ICUK</string>
+    <string name="isFragmentFour">Eventový sál - fronc@icuk.cz</string>
+    <string name="isFragmentFive">Coworking - soukupova@icuk.cz</string>
+    <string name="isFragmentSix">Kanceláře a zasedací místnosti - soukupova@icuk.cz</string>
+    <string name="isFragmentSeven">Virtuální sídlo - cavdarova@icuk.cz</string>
+    <string name="isFragmentEight">Pod jednou střechou</string>
+    <string name="isFragmentNine">Co chystáme v Icuk Space Hradební</string>
+    <string name="isFragmentTen">Co dělá ICUK - icuk.cz</string>
+
+
+</resources>

@@ -1,0 +1,8 @@
+topic: ~screensix()
+
+proposal: %init Kanceláře a zasedací místnosti.
+Potřebujete soukromou kancelář pro svůj tým nebo reprezentativní prostory pro jednání?
+V ICUK Space máme několik zasedaček různých velikostí a plně vybavené kanceláře k pronájmu.
+Vše vám ráda ukáže kolegyně Soukupová. Napište jí na soukupova zavináč icuk tečka cézet.
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

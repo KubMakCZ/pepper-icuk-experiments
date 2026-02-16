@@ -1,0 +1,8 @@
+topic: ~screeneight()
+
+proposal: %init Pod jednou střechou.
+V ICUK Space Hradební najdete vše pod jednou střechou. Podnikatelský inkubátor, coworking, kanceláře i komunitu.
+Pomáháme nápadům růst a propojujeme začínající podnikatele s experty z praxe.
+Přijďte se za námi podívat!
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)

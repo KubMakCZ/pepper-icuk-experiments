@@ -1,0 +1,25 @@
+topic: ~main()
+
+proposal: %init Ahoj! Jsem Rubby a ráda ti představím ICUK Space Hradební. Vyber si téma na mojí obrazovce nebo řekni číslo.
+
+u:(~pozdrav ) Zdravíčko! Vyberte si téma a klikněte na moji obrazovku nebo řekněte číslo od jedné do osmi.
+
+u:({~ukazat} ["1" "jedna" "jedničku" "Má úvodní řeč" "Úvodní slovo"]) ~confirmation ^execute(FragmentExecutor, frag_screen_three)
+
+u:({~ukazat} ["2" "dvě" "dvojku" "Eventový sál"]) ~confirmation ^execute(FragmentExecutor, frag_screen_four)
+
+u:({~ukazat} ["3" "tři" "trojku" "Coworking" "Koworking"]) ~confirmation ^execute(FragmentExecutor, frag_screen_five)
+
+u:({~ukazat} ["4" "čtyři" "čtyřku" "Kanceláře" "Zasedací místnosti"]) ~confirmation ^execute(FragmentExecutor, frag_screen_six)
+
+u:({~ukazat} ["5" "pět" "pětku" "Virtuální sídlo"]) ~confirmation ^execute(FragmentExecutor, frag_screen_seven)
+
+u:({~ukazat} ["6" "šest" "šestku" "Pod jednou střechou"]) ~confirmation ^execute(FragmentExecutor, frag_screen_eight)
+
+u:({~ukazat} ["7" "sedm" "sedmičku" "Co chystáme" "Icuk Space Hradební"]) ~confirmation ^execute(FragmentExecutor, frag_screen_nine)
+
+u:({~ukazat} ["8" "osm" "osmičku" "Co dělá ICUK"]) ~confirmation ^execute(FragmentExecutor, frag_screen_ten)
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)
+
+u:(["řekni vtip" "sranda" "ftip" "vtip"]) ^rand["A Bůh pravil: Noe, udělej zálohu. Budu formátovat!" "Víte, co dělá windows na měsíci? Padá 6 krát pomaleji." "Doktor mi říkal, že mám oslabený organismus. Nabídli mi beta karoten. Na to jim kašlu. Počkám si, až bude plná verze."] Ha. Ha. Ha.

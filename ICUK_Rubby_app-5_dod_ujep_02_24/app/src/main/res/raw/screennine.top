@@ -1,0 +1,8 @@
+topic: ~screennine()
+
+proposal: %init Co chystáme v Icuk Space Hradební.
+Stále se u nás něco děje! Chystáme pro vás nové workshopy, networkingové akce a přednášky zajímavých osobností.
+Sledujte náš web space tečka icuk tečka cézet, aby vám nic neuteklo.
+Těšíme se na vás na příští akci!
+
+u:([~restartik ~rozloucit]) ~confirmation ^execute(FragmentExecutor, frag_main)
