@@ -26,6 +26,7 @@ import com.softbankrobotics.pepperapptemplate.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -100,9 +101,14 @@ public class ChatData {
         }
 
         topicStatuses = new HashMap<>();
+        List<String> alwaysEnabledTopics = Arrays.asList("concepts", "everything");
         for (Topic t : qiChatbot.getTopics()) {
             TopicStatus tmpStat = qiChatbot.topicStatus(t);
-            tmpStat.setEnabled(false);
+            if (alwaysEnabledTopics.contains(t.getName())) {
+                tmpStat.setEnabled(true);
+            } else {
+                tmpStat.setEnabled(false);
+            }
             topicStatuses.put(t.getName(), tmpStat);
         }
 
@@ -297,14 +303,18 @@ public class ChatData {
      */
 
     public void goToBookmarkNewTopic(String bookmark, String topic) {
+        List<String> alwaysEnabledTopics = Arrays.asList("concepts", "everything");
         TopicStatus nextTopicStatus = topicStatuses.get(topic);
-        nextTopicStatus.async().setEnabled(true).andThenConsume(aVoid ->
-                goToBookmark(bookmark, topic));
-        if (currentTopicStatus != null && !currentTopicName.equals(topic)) {
-            currentTopicStatus.async().setEnabled(false);
-        }
-        currentTopicStatus = nextTopicStatus;
-        currentTopicName = topic;
+        nextTopicStatus.async().setEnabled(true).andThenConsume(aVoid -> {
+            // Disable previous topic only after new one is enabled (avoid race condition)
+            if (currentTopicStatus != null && !currentTopicName.equals(topic)
+                    && !alwaysEnabledTopics.contains(currentTopicName)) {
+                currentTopicStatus.async().setEnabled(false);
+            }
+            currentTopicStatus = nextTopicStatus;
+            currentTopicName = topic;
+            goToBookmark(bookmark, topic);
+        });
     }
 
     /**
