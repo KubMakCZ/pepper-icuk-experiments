@@ -1,0 +1,9 @@
+topic: ~wakeword()
+language: czc
+
+# Klicova slova pro probuzeni robota
+u:(Pepper) $activated=1
+u:(Rubby) $activated=1
+u:(Halo) $activated=1
+u:("Ahoj Pepper") $activated=1
+u:("Ahoj Rubby") $activated=1

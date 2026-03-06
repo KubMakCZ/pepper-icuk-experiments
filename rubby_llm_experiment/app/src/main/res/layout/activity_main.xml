@@ -1,18 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1a1a2e"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Spodni input area - posunuto extremne vysoko pro ucel testovani -->
+    <LinearLayout
+        android:id="@+id/inputArea"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:background="#0f0f23">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnMic"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="MIC"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:background="#0f3460" />
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Napis zpravu..."
+            android:textColorHint="#666680"
+            android:textColor="#e0e0e0"
+            android:textSize="16sp"
+            android:background="#16213e"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:inputType="text"
+            android:imeOptions="actionSend"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:text="ODESLAT"
+            android:textSize="14sp"
+            android:textColor="#ffffff"
+            android:background="#e94560"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+    </LinearLayout>
+
+    <!-- Horni status bar -->
+    <LinearLayout
+        android:id="@+id/statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="#0f0f23">
+
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:background="#4CAF50" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="Rubby - Pripravena"
+            android:textColor="#e0e0e0"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="SMAZAT CHAT"
+            android:textSize="11sp"
+            android:textColor="#aaaaaa"
+            android:background="#222244"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp" />
+    </LinearLayout>
+
+    <!-- Chat log - vyplni prostor mezi status barem a inputem -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/statusBar"
+        android:layout_above="@id/inputArea"
+        android:fillViewport="true"
+        android:background="#16213e"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvChatLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#c8d6e5"
+            android:textSize="17sp"
+            android:lineSpacingMultiplier="1.4" />
+    </ScrollView>
+
+</RelativeLayout>

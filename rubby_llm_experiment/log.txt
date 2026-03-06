@@ -1,0 +1,25 @@
+2026-03-06 15:40:00.558 3270-3270/cz.kubmak.rubby_llm_exp I/RubbyLLM: QiSDK registrace uspesna
+2026-03-06 15:40:00.761 3270-3270/cz.kubmak.rubby_llm_exp I/RubbyLLM: Android TTS pripraven
+2026-03-06 15:40:01.391 3270-3306/cz.kubmak.rubby_llm_exp I/RubbyLLM: Robot Focus GAINED
+2026-03-06 15:40:05.355 3270-3310/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba LLM: Gemini API chyba 404: {
+      "error": {
+        "code": 404,
+        "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+        "status": "NOT_FOUND"
+      }
+    }
+    
+    java.lang.Exception: Gemini API chyba 404: {
+      "error": {
+        "code": 404,
+        "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+        "status": "NOT_FOUND"
+      }
+    }
+    
+        at cz.kubmak.rubby_llm_exp.llm.GeminiService.generateResponse(GeminiService.java:87)
+        at cz.kubmak.rubby_llm_exp.MainActivity.lambda$processUserInput$8$cz-kubmak-rubby_llm_exp-MainActivity(MainActivity.java:322)
+        at cz.kubmak.rubby_llm_exp.MainActivity$$ExternalSyntheticLambda1.run(D8$$SyntheticClass)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
+        at java.lang.Thread.run(Thread.java:818)

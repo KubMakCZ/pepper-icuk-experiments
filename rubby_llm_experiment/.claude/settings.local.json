@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew assembleDebug:*)",
+      "Bash(java:*)",
+      "Read(//c/Program Files/Android/Android Studio/jbr/bin/**)",
+      "Bash(\"C:/Program Files/Android/Android Studio/jbr/bin/java.exe\" -version)",
+      "Bash(\"C:/Program Files/Android/Android Studio/jre/bin/java.exe\":*)",
+      "Bash(JAVA_HOME=\"C:/Program Files/Android/Android Studio/jre\" ./gradlew assembleDebug:*)",
+      "Bash(JAVA_HOME=\"C:/Program Files/Android/Android Studio/jre\" ./gradlew clean:*)",
+      "Bash(curl:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\gitprojekty\\ICUK_Rubby_app"
+    ]
+  }
+}
