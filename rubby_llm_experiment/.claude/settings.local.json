@@ -8,7 +8,9 @@
       "Bash(\"C:/Program Files/Android/Android Studio/jre/bin/java.exe\":*)",
       "Bash(JAVA_HOME=\"C:/Program Files/Android/Android Studio/jre\" ./gradlew assembleDebug:*)",
       "Bash(JAVA_HOME=\"C:/Program Files/Android/Android Studio/jre\" ./gradlew clean:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew compileDebugJavaWithJavac:*)"
     ],
     "additionalDirectories": [
       "C:\\gitprojekty\\ICUK_Rubby_app"

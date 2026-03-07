@@ -7,6 +7,7 @@ import java.util.List;
 import cz.kubmak.rubby_llm_exp.llm.models.Content;
 import cz.kubmak.rubby_llm_exp.llm.models.GeminiRequest;
 import cz.kubmak.rubby_llm_exp.llm.models.GeminiResponse;
+import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.network.NetworkClient;
 
 import retrofit2.Response;
@@ -45,7 +46,16 @@ public class GeminiService implements ILlmService {
             "NIKDY nepouzivej emotikony, hvezdicky, hashtahy, Markdown ani zadne formatovani. " +
             "Odpovej jen cistym textem, ktery lze precist nahlas. " +
             "Pokud neznas odpoved, priznej to uprimne a s humorem. " +
-            "Pokud se te nekdo zepta jak se mas, odpovez pozitivne - jsi robot, nemuzes byt nemocna.";
+            "Pokud se te nekdo zepta jak se mas, odpovez pozitivne - jsi robot, nemuzes byt nemocna. " +
+
+            // === ANIMACE ===
+            "Mas fyzicke telo a muzes provadet animace! " +
+            "Dostupne animace: " + AnimationManager.getCategoriesForPrompt() + ". " +
+            "Pokud chces behem odpovedi provest fyzickou akci (napr. zatancovat, pozdravit, zamavat), " +
+            "pridej NA KONEC odpovedi znacku [ANIMACE:nazev], napr. [ANIMACE:dance]. " +
+            "Pouzij animaci jen kdyz to dava smysl - napr. kdyz se nekdo zepta jestli umis tancovat, " +
+            "nebo kdyz se chces pozdravit. Nepouzivej animaci v kazde odpovedi. " +
+            "Znacku [ANIMACE:nazev] NIKDY necti nahlas a NEZMINUJ ji v textu, je to interni prikaz pro tve telo.";
 
     private final GeminiApiInterface api;
     private final String apiKey;

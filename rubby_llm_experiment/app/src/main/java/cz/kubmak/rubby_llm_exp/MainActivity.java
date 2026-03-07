@@ -40,6 +40,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.conversation.ChatHistoryManager;
 import cz.kubmak.rubby_llm_exp.conversation.ConversationState;
 import cz.kubmak.rubby_llm_exp.llm.GeminiService;
@@ -51,12 +52,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private static final String TAG = "RubbyLLM";
     private static final int PERMISSION_REQUEST_AUDIO = 1001;
 
-    // Animace z res/raw (tvoje .qianim soubory)
-    private static final int[] ANIMATION_RESOURCES = {
-            R.raw.hello_a001,
-            R.raw.hello_a002,
-            R.raw.waving_both_hands_b001
-    };
     private final Random random = new Random();
 
     // UI
@@ -329,13 +324,16 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         executor.execute(() -> {
             try {
                 String response = llmService.generateResponse(chatHistory.getHistory());
+
+                // Extrakce animacniho tagu pred cistenim textu
+                String animationCategory = TextCleaner.extractAnimationTag(response);
                 String cleanedResponse = TextCleaner.clean(response);
 
                 chatHistory.addModelMessage(cleanedResponse);
 
                 runOnUiThread(() -> {
                     appendToChat("Rubby", cleanedResponse);
-                    speakResponse(cleanedResponse);
+                    speakResponse(cleanedResponse, animationCategory);
                 });
 
             } catch (OutOfMemoryError e) {
@@ -359,7 +357,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     // ==================== TEXT-TO-SPEECH ====================
 
-    private void speakResponse(String text) {
+    private void speakResponse(String text, String animationCategory) {
         setState(ConversationState.SPEAKING);
         updateStatus("Rubby mluvi...", true);
 
@@ -367,8 +365,17 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             // Na Pepperovi: QiSDK TTS + animace
             executor.execute(() -> {
                 try {
+                    // Vyber animaci - specificka kategorie od LLM, nebo nahodna idle
+                    int animRes;
+                    if (animationCategory != null && AnimationManager.hasCategory(animationCategory)) {
+                        animRes = AnimationManager.getAnimation(animationCategory);
+                        Log.i(TAG, "LLM pozadala animaci: " + animationCategory);
+                    } else {
+                        animRes = AnimationManager.getIdleAnimation();
+                    }
+
                     // Spust animaci paralelne (async)
-                    runAnimationAsync();
+                    runAnimationAsync(animRes);
 
                     // Say synchronne - pocka az robot domluvi
                     Say say = SayBuilder.with(qiContext)
@@ -396,10 +403,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         }
     }
 
-    private void runAnimationAsync() {
+    private void runAnimationAsync(int animRes) {
         if (qiContext == null) return;
         try {
-            int animRes = ANIMATION_RESOURCES[random.nextInt(ANIMATION_RESOURCES.length)];
             Animation animation = AnimationBuilder.with(qiContext)
                     .withResources(animRes)
                     .build();
