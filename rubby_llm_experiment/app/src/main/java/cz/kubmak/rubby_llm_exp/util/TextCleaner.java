@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class TextCleaner {
 
     private static final Pattern ANIMATION_TAG_PATTERN =
-            Pattern.compile("\\[ANIMACE:(\\w+)\\]", Pattern.CASE_INSENSITIVE);
+            Pattern.compile("\\[ANIMACE:([^\\]]+)\\]", Pattern.CASE_INSENSITIVE);
 
     /**
      * Extrahuje nazev animacni kategorie z textu, nebo vrati null.

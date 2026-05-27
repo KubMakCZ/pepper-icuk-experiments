@@ -1,25 +1,349 @@
-2026-03-06 15:40:00.558 3270-3270/cz.kubmak.rubby_llm_exp I/RubbyLLM: QiSDK registrace uspesna
-2026-03-06 15:40:00.761 3270-3270/cz.kubmak.rubby_llm_exp I/RubbyLLM: Android TTS pripraven
-2026-03-06 15:40:01.391 3270-3306/cz.kubmak.rubby_llm_exp I/RubbyLLM: Robot Focus GAINED
-2026-03-06 15:40:05.355 3270-3310/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba LLM: Gemini API chyba 404: {
+2026-04-27 14:17:04.028 22947-22947/cz.kubmak.rubby_llm_exp I/RubbyLLM: QiSDK registrace uspesna
+2026-04-27 14:17:04.688 22947-22947/cz.kubmak.rubby_llm_exp I/RubbyLLM: Android TTS pripraven (Fallback)
+2026-04-27 14:17:05.649 22947-23002/cz.kubmak.rubby_llm_exp I/RubbyLLM: Robot Focus GAINED
+2026-04-27 14:17:06.499 22947-23002/cz.kubmak.rubby_llm_exp I/RubbyLLM: Wake word detekce spustena
+2026-04-27 14:17:51.563 22947-23002/cz.kubmak.rubby_llm_exp I/RubbyLLM: Wake word detekovan!
+2026-04-27 14:17:52.992 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: SpeechRecognizer pripraven a ceka na hlas
+2026-04-27 14:17:53.084 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.8000002
+2026-04-27 14:17:53.086 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.6400003
+2026-04-27 14:17:53.124 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.799999
+2026-04-27 14:17:53.126 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:17:53.163 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:17:53.324 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.88
+2026-04-27 14:17:53.324 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:17:53.523 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.16
+2026-04-27 14:17:53.524 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.12
+2026-04-27 14:17:53.563 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:17:53.564 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.24
+2026-04-27 14:17:53.603 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:17:53.824 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.3200002
+2026-04-27 14:17:53.863 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.92
+2026-04-27 14:17:53.864 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.3999996
+2026-04-27 14:17:53.883 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.04
+2026-04-27 14:17:53.903 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:17:53.928 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Zaznamenavam rec...
+2026-04-27 14:17:53.963 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:17:54.124 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:17:54.143 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.16
+2026-04-27 14:17:54.163 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.3999996
+2026-04-27 14:17:54.183 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:17:54.204 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:17:54.223 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.440001
+2026-04-27 14:17:54.243 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:17:54.504 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.04
+2026-04-27 14:17:54.523 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.799999
+2026-04-27 14:17:54.543 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:17:54.583 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.440001
+2026-04-27 14:17:54.603 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.24
+2026-04-27 14:17:54.623 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.8000002
+2026-04-27 14:17:54.683 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.6399999
+2026-04-27 14:17:54.703 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:17:54.723 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.6400003
+2026-04-27 14:17:54.743 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.799999
+2026-04-27 14:17:54.763 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:17:54.783 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.5199995
+2026-04-27 14:17:54.803 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.88
+2026-04-27 14:17:54.823 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.68
+2026-04-27 14:17:54.843 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:17:54.863 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.32
+2026-04-27 14:17:54.903 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.4800005
+2026-04-27 14:17:54.904 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.6000004
+2026-04-27 14:17:54.943 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.16
+2026-04-27 14:17:54.944 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.04
+2026-04-27 14:17:54.991 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.44
+2026-04-27 14:17:54.992 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.7599998
+2026-04-27 14:17:55.025 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.1999998
+2026-04-27 14:17:55.108 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.6000004
+2026-04-27 14:17:55.111 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:17:55.149 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.3999996
+2026-04-27 14:17:55.150 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.6400003
+2026-04-27 14:17:55.187 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.2799997
+2026-04-27 14:17:55.188 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.88
+2026-04-27 14:17:55.394 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:17:55.396 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.0
+2026-04-27 14:17:55.426 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.8000002
+2026-04-27 14:17:55.427 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:17:55.466 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.5199995
+2026-04-27 14:17:55.468 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.3599997
+2026-04-27 14:17:55.511 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.32
+2026-04-27 14:17:55.513 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:17:55.547 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.6399999
+2026-04-27 14:17:55.586 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.08
+2026-04-27 14:17:55.588 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.3200002
+2026-04-27 14:17:55.629 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.84
+2026-04-27 14:17:55.631 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.0
+2026-04-27 14:17:55.667 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.04
+2026-04-27 14:17:56.599 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Konec reci
+2026-04-27 14:17:56.770 22947-22947/cz.kubmak.rubby_llm_exp I/RubbyLLM: Rozpoznano: kdo jsi prosím tě
+2026-04-27 14:18:11.598 22947-23070/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba LLM: Gemini API chyba 503: {
       "error": {
-        "code": 404,
-        "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
-        "status": "NOT_FOUND"
+        "code": 503,
+        "message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+        "status": "UNAVAILABLE"
       }
     }
     
-    java.lang.Exception: Gemini API chyba 404: {
+    java.lang.Exception: Gemini API chyba 503: {
       "error": {
-        "code": 404,
-        "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
-        "status": "NOT_FOUND"
+        "code": 503,
+        "message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+        "status": "UNAVAILABLE"
       }
     }
     
-        at cz.kubmak.rubby_llm_exp.llm.GeminiService.generateResponse(GeminiService.java:87)
-        at cz.kubmak.rubby_llm_exp.MainActivity.lambda$processUserInput$8$cz-kubmak-rubby_llm_exp-MainActivity(MainActivity.java:322)
-        at cz.kubmak.rubby_llm_exp.MainActivity$$ExternalSyntheticLambda1.run(D8$$SyntheticClass)
+        at cz.kubmak.rubby_llm_exp.llm.GeminiService.generateResponse(GeminiService.java:127)
+        at cz.kubmak.rubby_llm_exp.MainActivity.lambda$processUserInput$8$cz-kubmak-rubby_llm_exp-MainActivity(MainActivity.java:341)
+        at cz.kubmak.rubby_llm_exp.MainActivity$$ExternalSyntheticLambda2.run(D8$$SyntheticClass)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
+        at java.lang.Thread.run(Thread.java:818)
+2026-04-27 14:18:18.950 22947-22947/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba inicializace Wake Wordu: null
+2026-04-27 14:18:42.109 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: SpeechRecognizer pripraven a ceka na hlas
+2026-04-27 14:18:42.292 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.1999998
+2026-04-27 14:18:42.330 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.12
+2026-04-27 14:18:42.331 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:18:42.370 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.7599998
+2026-04-27 14:18:42.371 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.08
+2026-04-27 14:18:42.411 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.8000002
+2026-04-27 14:18:42.411 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:18:42.450 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:42.571 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:18:42.591 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.84
+2026-04-27 14:18:42.632 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.3999996
+2026-04-27 14:18:42.635 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.24
+2026-04-27 14:18:42.673 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:18:42.814 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.44
+2026-04-27 14:18:42.932 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.3599997
+2026-04-27 14:18:42.952 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.2799997
+2026-04-27 14:18:42.972 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.08
+2026-04-27 14:18:43.132 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.08
+2026-04-27 14:18:43.411 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.3200002
+2026-04-27 14:18:43.510 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.7599998
+2026-04-27 14:18:43.550 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.5199995
+2026-04-27 14:18:43.551 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.2799997
+2026-04-27 14:18:43.590 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:18:43.591 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.7599998
+2026-04-27 14:18:43.630 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.6000004
+2026-04-27 14:18:43.632 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.52
+2026-04-27 14:18:43.670 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.84
+2026-04-27 14:18:43.671 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.5199995
+2026-04-27 14:18:43.710 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.32
+2026-04-27 14:18:43.711 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:18:43.750 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:43.797 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Zaznamenavam rec...
+2026-04-27 14:18:43.910 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:18:43.911 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.68
+2026-04-27 14:18:43.950 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.3599997
+2026-04-27 14:18:43.951 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.92
+2026-04-27 14:18:43.990 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.44
+2026-04-27 14:18:44.031 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:18:44.031 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.131 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.32
+2026-04-27 14:18:44.171 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:18:44.172 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.88
+2026-04-27 14:18:44.191 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.3999996
+2026-04-27 14:18:44.292 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.68
+2026-04-27 14:18:44.316 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.352 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.440001
+2026-04-27 14:18:44.372 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:18:44.392 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.32
+2026-04-27 14:18:44.412 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.559999
+2026-04-27 14:18:44.432 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.84
+2026-04-27 14:18:44.455 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:18:44.472 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.04
+2026-04-27 14:18:44.492 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.512 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.16
+2026-04-27 14:18:44.532 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.593 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:18:44.612 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.6000004
+2026-04-27 14:18:44.632 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.5199995
+2026-04-27 14:18:44.652 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:18:44.672 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:18:44.693 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.712 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.92
+2026-04-27 14:18:44.732 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.16
+2026-04-27 14:18:44.752 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.7200003
+2026-04-27 14:18:44.776 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.96
+2026-04-27 14:18:44.812 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.32
+2026-04-27 14:18:44.836 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.12
+2026-04-27 14:18:44.852 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.88
+2026-04-27 14:18:44.872 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.92
+2026-04-27 14:18:44.892 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:44.912 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.559999
+2026-04-27 14:18:44.932 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:18:44.956 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.4800005
+2026-04-27 14:18:44.974 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.68
+2026-04-27 14:18:44.993 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.88
+2026-04-27 14:18:45.016 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.12
+2026-04-27 14:18:45.032 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.1999998
+2026-04-27 14:18:45.112 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.96
+2026-04-27 14:18:45.132 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:45.172 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:18:45.192 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:18:45.213 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.5199995
+2026-04-27 14:18:45.232 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.559999
+2026-04-27 14:18:45.253 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.76
+2026-04-27 14:18:45.272 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:18:45.292 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.52
+2026-04-27 14:18:45.312 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.6400003
+2026-04-27 14:18:45.332 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.200001
+2026-04-27 14:18:45.352 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.04
+2026-04-27 14:18:45.373 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.4
+2026-04-27 14:18:45.392 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:18:45.453 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.5199995
+2026-04-27 14:18:45.455 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:18:45.494 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.68
+2026-04-27 14:18:45.495 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.16
+2026-04-27 14:18:45.532 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.56
+2026-04-27 14:18:45.534 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.92
+2026-04-27 14:18:45.573 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.44
+2026-04-27 14:18:45.575 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.08
+2026-04-27 14:18:45.614 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:18:45.615 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.04
+2026-04-27 14:18:45.652 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.68
+2026-04-27 14:18:45.654 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.44
+2026-04-27 14:18:45.693 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.24
+2026-04-27 14:18:45.694 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.56
+2026-04-27 14:18:46.899 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Konec reci
+2026-04-27 14:18:47.032 22947-22947/cz.kubmak.rubby_llm_exp I/RubbyLLM: Rozpoznano: Copak o sobě bys mi dokázala říct
+2026-04-27 14:19:48.176 22947-23070/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba LLM: timeout
+    java.net.SocketTimeoutException: timeout
+        at okhttp3.internal.http2.Http2Stream$StreamTimeout.newTimeoutException(Http2Stream.java:678)
+        at okhttp3.internal.http2.Http2Stream$StreamTimeout.exitAndThrowIfTimedOut(Http2Stream.java:686)
+        at okhttp3.internal.http2.Http2Stream.takeHeaders(Http2Stream.java:154)
+        at okhttp3.internal.http2.Http2ExchangeCodec.readResponseHeaders(Http2ExchangeCodec.java:136)
+        at okhttp3.internal.connection.Exchange.readResponseHeaders(Exchange.java:115)
+        at okhttp3.internal.http.CallServerInterceptor.intercept(CallServerInterceptor.java:94)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.connection.ConnectInterceptor.intercept(ConnectInterceptor.java:43)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:117)
+        at okhttp3.internal.cache.CacheInterceptor.intercept(CacheInterceptor.java:94)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:117)
+        at okhttp3.internal.http.BridgeInterceptor.intercept(BridgeInterceptor.java:93)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.http.RetryAndFollowUpInterceptor.intercept(RetryAndFollowUpInterceptor.java:88)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:117)
+        at okhttp3.logging.HttpLoggingInterceptor.intercept(HttpLoggingInterceptor.java:225)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:142)
+        at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:117)
+        at okhttp3.RealCall.getResponseWithInterceptorChain(RealCall.java:229)
+        at okhttp3.RealCall.execute(RealCall.java:81)
+        at retrofit2.OkHttpCall.execute(OkHttpCall.java:204)
+        at retrofit2.DefaultCallAdapterFactory$ExecutorCallbackCall.execute(DefaultCallAdapterFactory.java:108)
+        at cz.kubmak.rubby_llm_exp.llm.GeminiService.generateResponse(GeminiService.java:93)
+        at cz.kubmak.rubby_llm_exp.MainActivity.lambda$processUserInput$8$cz-kubmak-rubby_llm_exp-MainActivity(MainActivity.java:341)
+        at cz.kubmak.rubby_llm_exp.MainActivity$$ExternalSyntheticLambda2.run(D8$$SyntheticClass)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
+        at java.lang.Thread.run(Thread.java:818)
+2026-04-27 14:19:54.519 22947-22947/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba inicializace Wake Wordu: null
+2026-04-27 14:19:55.789 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: SpeechRecognizer pripraven a ceka na hlas
+2026-04-27 14:19:55.890 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.6399999
+2026-04-27 14:19:55.929 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:55.969 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:19:55.970 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.5199995
+2026-04-27 14:19:56.011 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:56.013 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.88
+2026-04-27 14:19:56.051 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:56.171 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.440001
+2026-04-27 14:19:56.177 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.88
+2026-04-27 14:19:56.210 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.5199995
+2026-04-27 14:19:56.212 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:56.312 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:19:56.350 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.4800005
+2026-04-27 14:19:56.352 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:19:56.393 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.24
+2026-04-27 14:19:56.396 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.56
+2026-04-27 14:19:56.409 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.08
+2026-04-27 14:19:56.433 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Zaznamenavam rec...
+2026-04-27 14:19:56.449 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.56
+2026-04-27 14:19:56.810 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.56
+2026-04-27 14:19:56.849 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.7200003
+2026-04-27 14:19:56.850 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.559999
+2026-04-27 14:19:56.891 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.171 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.64
+2026-04-27 14:19:57.172 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.68
+2026-04-27 14:19:57.210 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.251 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.92
+2026-04-27 14:19:57.252 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.333 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:19:57.371 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:19:57.373 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.68
+2026-04-27 14:19:57.411 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.64
+2026-04-27 14:19:57.412 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.532 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:19:57.570 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.733 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.76
+2026-04-27 14:19:57.771 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.2799997
+2026-04-27 14:19:57.772 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.4800005
+2026-04-27 14:19:57.792 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.56
+2026-04-27 14:19:57.833 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:19:57.834 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.7200003
+2026-04-27 14:19:57.851 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.7999997
+2026-04-27 14:19:57.892 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:19:57.894 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.7200003
+2026-04-27 14:19:57.936 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.3599997
+2026-04-27 14:19:57.937 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:57.993 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.6000004
+2026-04-27 14:19:58.032 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.92
+2026-04-27 14:19:58.033 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.12
+2026-04-27 14:19:58.074 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.0
+2026-04-27 14:19:58.112 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.04
+2026-04-27 14:19:58.114 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.153 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.559999
+2026-04-27 14:19:58.153 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.193 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:19:58.194 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 6.16
+2026-04-27 14:19:58.231 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:19:58.234 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:19:58.273 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 4.12
+2026-04-27 14:19:58.321 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.3999996
+2026-04-27 14:19:58.323 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.88
+2026-04-27 14:19:58.355 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.04
+2026-04-27 14:19:58.355 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.392 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.7200003
+2026-04-27 14:19:58.394 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.3599997
+2026-04-27 14:19:58.434 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.32
+2026-04-27 14:19:58.434 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:19:58.473 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.92
+2026-04-27 14:19:58.474 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.513 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.28
+2026-04-27 14:19:58.513 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 5.2000003
+2026-04-27 14:19:58.551 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.04
+2026-04-27 14:19:58.554 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.6799998
+2026-04-27 14:19:58.591 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 7.0
+2026-04-27 14:19:58.593 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.633 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 9.4
+2026-04-27 14:19:58.672 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 10.0
+2026-04-27 14:19:58.754 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 8.08
+2026-04-27 14:19:58.791 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 3.2799997
+2026-04-27 14:19:58.954 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.56
+2026-04-27 14:19:59.275 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.44
+2026-04-27 14:19:59.312 22947-22947/cz.kubmak.rubby_llm_exp V/RubbyLLM: Hladina zvuku (RMS): 2.92
+2026-04-27 14:19:59.942 22947-22947/cz.kubmak.rubby_llm_exp D/RubbyLLM: Konec reci
+2026-04-27 14:20:00.127 22947-22947/cz.kubmak.rubby_llm_exp I/RubbyLLM: Rozpoznano: mohla bys mi říct něco o sobě
+2026-04-27 14:20:54.882 22947-23070/cz.kubmak.rubby_llm_exp E/RubbyLLM: Chyba LLM: Gemini API chyba 503: {
+      "error": {
+        "code": 503,
+        "message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+        "status": "UNAVAILABLE"
+      }
+    }
+    
+    java.lang.Exception: Gemini API chyba 503: {
+      "error": {
+        "code": 503,
+        "message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+        "status": "UNAVAILABLE"
+      }
+    }
+    
+        at cz.kubmak.rubby_llm_exp.llm.GeminiService.generateResponse(GeminiService.java:127)
+        at cz.kubmak.rubby_llm_exp.MainActivity.lambda$processUserInput$8$cz-kubmak-rubby_llm_exp-MainActivity(MainActivity.java:341)
+        at cz.kubmak.rubby_llm_exp.MainActivity$$ExternalSyntheticLambda2.run(D8$$SyntheticClass)
         at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1113)
         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:588)
         at java.lang.Thread.run(Thread.java:818)

@@ -49,7 +49,7 @@ This project is a specialized Android "wrapper" application for the **SoftBank R
 - **Compatibility First:** Never use Java 8+ features (like Streams) or modern Android SDKs (minSdk 26+) without verifying compatibility with API 23.
 - **Threading:** All network and heavy AI processing **must** occur on background threads (see `executor` in `MainActivity.java`).
 - **Clean Output:** Responses from Gemini must be stripped of Markdown (e.g., `*`, `#`) using `TextCleaner` before being spoken by the robot, as the TTS engine will read these symbols literally.
-- **Persona Consistency:** The robot identifies as "Rubby", a helpful mascot for ICUK s.r.o. in Ostrava. Maintain this tone in the system prompt.
+- **Persona Consistency:** The robot identifies as "Rubby", a helpful mascot for ICUK v Ústí nad Labem. Maintain this tone in the system prompt.
 
 ## 📂 Key Files
 - `MainActivity.java`: The central hub managing the robot lifecycle, UI, and conversation flow.

@@ -33,6 +33,8 @@ import com.aldebaran.qi.sdk.builder.SayBuilder;
 import com.aldebaran.qi.sdk.object.actuation.Animate;
 import com.aldebaran.qi.sdk.object.actuation.Animation;
 import com.aldebaran.qi.sdk.object.conversation.Say;
+import com.aldebaran.qi.sdk.object.touch.Touch;
+import com.aldebaran.qi.sdk.object.touch.TouchSensor;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -70,6 +72,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     // QiSDK - muze byt null pokud neni focus (virtualni robot, telefon)
     private QiContext qiContext;
+
+    // QiSDK sensors
+    private TouchSensor headTouchSensor;
 
     // Android TTS fallback (kdyz neni QiSDK nebo neni focus)
     private TextToSpeech androidTts;
@@ -494,6 +499,17 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     public void onRobotFocusGained(QiContext qiContext) {
         this.qiContext = qiContext;
         Log.i(TAG, "Robot Focus GAINED");
+
+        // Initialize Head Touch Sensor
+        Touch touch = qiContext.getTouch();
+        headTouchSensor = touch.getSensor("Head/Touch");
+        headTouchSensor.addOnStateChangedListener(touchState -> {
+            if (touchState.getTouched()) {
+                Log.i(TAG, "Head sensor touched!");
+                runOnUiThread(this::onHeadTouched);
+            }
+        });
+
         runOnUiThread(() -> {
             appendToChat("SYSTEM", "Robot Focus ziskan! Rubby pouziva svuj vlastni hlas a animace.");
             updateStatus("Rubby - Pripravena (QiSDK)", true);
@@ -502,6 +518,10 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRobotFocusLost() {
+        if (headTouchSensor != null) {
+            headTouchSensor.removeAllOnStateChangedListeners();
+            headTouchSensor = null;
+        }
         this.qiContext = null;
         Log.w(TAG, "Robot Focus LOST");
         runOnUiThread(() -> {
@@ -516,6 +536,29 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         runOnUiThread(() -> {
             appendToChat("SYSTEM", "Robot Focus odmitnut: " + reason + ". Funguju i bez nej.");
             updateStatus("Rubby - Pripravena (bez QiSDK)", true);
+        });
+    }
+
+    private void onHeadTouched() {
+        if (currentState == ConversationState.PROCESSING || currentState == ConversationState.LISTENING) {
+            return;
+        }
+
+        executor.execute(() -> {
+            try {
+                // Feedback: Say "Ano?"
+                if (qiContext != null) {
+                    Say say = SayBuilder.with(qiContext)
+                            .withText("Ano?")
+                            .build();
+                    say.run();
+                }
+
+                // Start listening
+                runOnUiThread(this::startSpeechRecognition);
+            } catch (Exception e) {
+                Log.e(TAG, "Error in head touch response: " + e.getMessage());
+            }
         });
     }
 

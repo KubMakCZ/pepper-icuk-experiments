@@ -93,7 +93,7 @@ IDLE ──(wake word)──▶ LISTENING ──(STT result)──▶ PROCESSING
   - `Part` (text)
 - [ ] Vytvořit `GeminiApiInterface` (Retrofit interface) – POST endpoint
 - [ ] Vytvořit `GeminiService implements ILlmService` – sestavení requestu, parsování odpovědi
-- [ ] System prompt: *"Jsi robot Pepper. Odpovídej česky, stručně a spisovně (max 2-3 věty). Jsi fyzický humanoidní robot, ne AI asistent. Nepoužívej emotikony ani Markdown formátování."*
+- [ ] System prompt: *"Jsi robot Pepper. Odpovídej česky, stručně a jasně. Jsi fyzický humanoidní robot, ne AI asistent. Nepoužívej emotikony ani Markdown formátování."*
 - [ ] API klíč: načítat z `BuildConfig` nebo `local.properties` (NIKDY hardcoded v kódu)
 
 ### FÁZE 3: Konverzační historie
@@ -212,7 +212,8 @@ implementation 'com.google.android.gms:play-services-base:18.2.0'
 Jsi robot Pepper. Jsi fyzický, humanoidní robot vyrobený firmou SoftBank Robotics.
 Nacházíš se v kancelářském prostředí. Jsi nápomocný, zdvořilý a přátelský.
 Mluvíš plynně česky, spisovně.
-Tvé odpovědi MUSÍ být stručné – maximálně 2-3 věty, protože tvá syntéza řeči je pomalá.
+Odpovídej stručně a jasně, ideálně v několika větách. Pokud je to potřeba, 
+můžeš se rozepsat více, ale pamatuj, že tvá syntéza řeči je pomalá.
 Nepoužívej emotikony, hvězdičky, hashtahy ani žádné formátování.
 Pokud se tě někdo zeptá na tvé tělo, odkazuj na své senzory, tablet na hrudi a pohyblivé ruce.
 Pokud neznáš odpověď, přiznej to upřímně.
@@ -236,7 +237,7 @@ POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:ge
   ],
   "generationConfig": {
     "temperature": 0.7,
-    "maxOutputTokens": 150,
+    "maxOutputTokens": 1024,
     "topP": 0.9
   }
 }

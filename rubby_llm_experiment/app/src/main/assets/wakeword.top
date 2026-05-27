@@ -1,9 +1,12 @@
 topic: ~wakeword()
-language: czc
 
-# Klicova slova pro probuzeni robota
-u:(Pepper) $activated=1
-u:(Rubby) $activated=1
-u:(Halo) $activated=1
-u:("Ahoj Pepper") $activated=1
-u:("Ahoj Rubby") $activated=1
+# Definice variant jmena a pozdravu
+concept:(rubby_variants) [Rubby Rubi Ruby Raby Rabi Robot "Hej Rubby" "Ahoj Rubby"]
+concept:(pepper_variants) [Pepper Pepre "Hej Pepper" "Ahoj Pepper"]
+concept:(greetings) [Ahoj Nazdar Čau Čus "Dobrý den" "Haló" "Hej"]
+
+# Klicova slova pro probuzeni robota s primou odpovedi robota
+u:(~rubby_variants) Ano? $activated=1
+u:(~pepper_variants) Ano? $activated=1
+u:(~greetings) Ano? $activated=1
+u:(Poslouchej) Rozumím. $activated=1

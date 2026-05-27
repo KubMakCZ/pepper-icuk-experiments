@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 public interface GeminiApiInterface {
 
-    @POST("v1beta/models/gemini-2.5-flash:generateContent")
+    @POST("v1beta/models/gemini-3.1-flash-lite-preview:generateContent")
     Call<GeminiResponse> generateContent(
             @Query("key") String apiKey,
             @Body GeminiRequest request

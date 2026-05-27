@@ -19,7 +19,7 @@ public class GeminiRequest {
     public GeminiRequest(String systemPrompt, List<Content> contents) {
         this.systemInstruction = new SystemInstruction(systemPrompt);
         this.contents = contents;
-        this.generationConfig = new GenerationConfig(0.7, 200, 0.9);
+        this.generationConfig = new GenerationConfig(0.7, 1024, 0.9);
     }
 
     // System instruction - bez role, jen parts

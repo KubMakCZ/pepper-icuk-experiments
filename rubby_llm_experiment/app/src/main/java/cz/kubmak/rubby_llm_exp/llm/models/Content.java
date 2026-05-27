@@ -28,9 +28,16 @@ public class Content {
     }
 
     public String getTextContent() {
-        if (parts != null && !parts.isEmpty()) {
-            return parts.get(0).getText();
+        if (parts == null || parts.isEmpty()) {
+            return "";
         }
-        return "";
+        
+        StringBuilder sb = new StringBuilder();
+        for (Part part : parts) {
+            if (part.getText() != null) {
+                sb.append(part.getText());
+            }
+        }
+        return sb.toString();
     }
 }

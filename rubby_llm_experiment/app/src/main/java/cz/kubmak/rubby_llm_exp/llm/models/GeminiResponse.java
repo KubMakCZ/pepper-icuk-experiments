@@ -26,6 +26,16 @@ public class GeminiResponse {
         return null;
     }
 
+    /**
+     * Ziska duvod ukonceni generovani (napr. STOP, MAX_TOKENS).
+     */
+    public String getFinishReason() {
+        if (candidates != null && !candidates.isEmpty()) {
+            return candidates.get(0).finishReason;
+        }
+        return "UNKNOWN";
+    }
+
     public ApiError getError() {
         return error;
     }

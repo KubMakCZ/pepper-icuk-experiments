@@ -32,9 +32,9 @@ public class NetworkClient {
 
     private static OkHttpClient createClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS);
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS);
 
         // TLS 1.2 patch pro Android < 7.0 (API < 24)
         if (Build.VERSION.SDK_INT < 24) {
