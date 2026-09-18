@@ -122,9 +122,9 @@ if ($Launch) {
     adb -s $targetDevice shell "am start -n $ACTIVITY" | Out-Null
     Start-Sleep -Seconds 2
     
-    $pid = adb -s $targetDevice shell "pidof $PACKAGE" 2>$null
-    if ($pid) {
-        Write-OK "Aplikace bezi (PID: $($pid.Trim()))"
+    $appPid = adb -s $targetDevice shell "pidof $PACKAGE" 2>$null
+    if ($appPid) {
+        Write-OK "Aplikace bezi (PID: $($appPid.Trim()))"
     } else {
         Write-WARN "Aplikace se nespustila automaticky - spust ji rucne na zarizeni."
     }
