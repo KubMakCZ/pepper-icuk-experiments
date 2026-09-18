@@ -144,12 +144,28 @@ public class FileLogger {
 
     // ===== Convenience methods (mirror Log.x) =====
 
-    public void v(String tag, String msg) { log(Log.VERBOSE, tag, msg); }
-    public void d(String tag, String msg) { log(Log.DEBUG, tag, msg); }
-    public void i(String tag, String msg) { log(Log.INFO, tag, msg); }
-    public void w(String tag, String msg) { log(Log.WARN, tag, msg); }
-    public void e(String tag, String msg) { log(Log.ERROR, tag, msg); }
+    public void v(String tag, String msg) { 
+        Log.v(tag, msg);
+        log(Log.VERBOSE, tag, msg); 
+    }
+    public void d(String tag, String msg) { 
+        Log.d(tag, msg);
+        log(Log.DEBUG, tag, msg); 
+    }
+    public void i(String tag, String msg) { 
+        Log.i(tag, msg);
+        log(Log.INFO, tag, msg); 
+    }
+    public void w(String tag, String msg) { 
+        Log.w(tag, msg);
+        log(Log.WARN, tag, msg); 
+    }
+    public void e(String tag, String msg) { 
+        Log.e(tag, msg);
+        log(Log.ERROR, tag, msg); 
+    }
     public void e(String tag, String msg, Throwable tr) {
+        Log.e(tag, msg, tr);
         log(Log.ERROR, tag, msg + "\n" + Log.getStackTraceString(tr));
     }
 

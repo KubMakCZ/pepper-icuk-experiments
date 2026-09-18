@@ -55,6 +55,7 @@ import java.util.concurrent.Executors;
 
 import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.conversation.ChatHistoryManager;
+import cz.kubmak.rubby_llm_exp.util.FileLogger;
 import cz.kubmak.rubby_llm_exp.conversation.ConversationState;
 import cz.kubmak.rubby_llm_exp.llm.GeminiService;
 import cz.kubmak.rubby_llm_exp.llm.OpenRouterService;
@@ -67,6 +68,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private static final int PERMISSION_REQUEST_AUDIO = 1001;
 
     private final Random random = new Random();
+    private FileLogger fileLogger;
 
     // UI
     private TextView tvStatus;
@@ -114,13 +116,14 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         // hideSystemUI();
 
         setContentView(R.layout.activity_main);
+        fileLogger = FileLogger.getInstance(this);
 
         // Registrace QiSDK lifecycle - na ne-Pepper zarizeni se nic nestane
         try {
             QiSDK.register(this, this);
-            Log.i(TAG, "QiSDK registrace uspesna");
+            fileLogger.i(TAG, "QiSDK registrace uspesna");
         } catch (Exception e) {
-            Log.w(TAG, "QiSDK neni k dispozici (telefon/emulator): " + e.getMessage());
+            fileLogger.w(TAG, "QiSDK neni k dispozici (telefon/emulator): " + e.getMessage());
         }
 
         // Inicializace UI
@@ -138,14 +141,14 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 int result = androidTts.setLanguage(czLocale);
                 
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    Log.e(TAG, "Cestina pro Android TTS neni v tomto zarizeni/emulatoru podporovana.");
+                    fileLogger.e(TAG, "Cestina pro Android TTS neni v tomto zarizeni/emulatoru podporovana.");
                     androidTts.setLanguage(Locale.US); // Zkus aspon anglictinu pro test
                 }
                 
                 androidTtsReady = true;
-                Log.i(TAG, "Android TTS pripraven (Fallback)");
+                fileLogger.i(TAG, "Android TTS pripraven (Fallback)");
             } else {
-                Log.e(TAG, "Inicializace Android TTS selhala!");
+                fileLogger.e(TAG, "Inicializace Android TTS selhala!");
             }
         });
 
@@ -281,7 +284,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_AUDIO) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "Povoleni mikrofonu udeleno");
+                fileLogger.i(TAG, "Povoleni mikrofonu udeleno");
                 initSpeechRecognizer();
             } else {
                 appendToChat("SYSTEM", "Mikrofon neni povolen - hlasove ovladani nebude fungovat.");
@@ -297,12 +300,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         speechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-                Log.d(TAG, "SpeechRecognizer pripraven");
+                fileLogger.d(TAG, "SpeechRecognizer pripraven");
             }
 
             @Override
             public void onBeginningOfSpeech() {
-                Log.d(TAG, "Zaznamenavam rec...");
+                fileLogger.d(TAG, "Zaznamenavam rec...");
             }
 
             @Override
@@ -313,7 +316,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
             @Override
             public void onEndOfSpeech() {
-                Log.d(TAG, "Konec reci");
+                fileLogger.d(TAG, "Konec reci");
                 runOnUiThread(() -> updateStatus("Zpracovavam...", true));
             }
 
@@ -338,7 +341,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                         msg = "Chyba rozpoznavani (kod " + error + ").";
                         break;
                 }
-                Log.e(TAG, "SpeechRecognizer chyba: " + error);
+                fileLogger.e(TAG, "SpeechRecognizer chyba: " + error);
                 
                 // Restart pro chyby zpusobene zaseknutim
                 if (error == SpeechRecognizer.ERROR_CLIENT || error == SpeechRecognizer.ERROR_SERVER) {
@@ -357,7 +360,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (matches != null && !matches.isEmpty()) {
                     String recognizedText = matches.get(0);
-                    Log.i(TAG, "Rozpoznano: " + recognizedText);
+                    fileLogger.i(TAG, "Rozpoznano: " + recognizedText);
                     runOnUiThread(() -> processUserInput(recognizedText));
                 } else {
                     runOnUiThread(() -> {
@@ -436,7 +439,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 });
 
             } catch (OutOfMemoryError e) {
-                Log.e(TAG, "OutOfMemoryError! Cistim historii.", e);
+                fileLogger.e(TAG, "OutOfMemoryError! Cistim historii.", e);
                 chatHistory.clear();
                 runOnUiThread(() -> {
                     appendToChat("SYSTEM", "Dosla pamet. Historie smazana.");
@@ -444,7 +447,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     updateStatus("Rubby - Pripravena", true);
                 });
             } catch (Exception e) {
-                Log.e(TAG, "Chyba LLM: " + e.getMessage(), e);
+                fileLogger.e(TAG, "Chyba LLM: " + e.getMessage(), e);
                 runOnUiThread(() -> {
                     appendToChat("Rubby", "Omlouvam se, doslo k chybe spojeni.");
                     setState(ConversationState.IDLE);
@@ -468,7 +471,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     int animRes;
                     if (animationCategory != null && AnimationManager.hasCategory(animationCategory)) {
                         animRes = AnimationManager.getAnimation(animationCategory);
-                        Log.i(TAG, "LLM pozadala animaci: " + animationCategory);
+                        fileLogger.i(TAG, "LLM pozadala animaci: " + animationCategory);
                     } else {
                         animRes = AnimationManager.getIdleAnimation();
                     }
@@ -488,7 +491,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                         updateStatus("Rubby - Pripravena", true);
                     });
                 } catch (Exception e) {
-                    Log.e(TAG, "QiSDK Say chyba: " + e.getMessage());
+                    fileLogger.e(TAG, "QiSDK Say chyba: " + e.getMessage());
                     // Say selhalo - rovnou odemkni UI (nevolej Android TTS z executoru)
                     runOnUiThread(() -> {
                         setState(ConversationState.IDLE);
@@ -513,7 +516,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     .build();
             animate.async().run();
         } catch (Exception e) {
-            Log.w(TAG, "Animace se nezdarila (neni kriticke): " + e.getMessage());
+            fileLogger.w(TAG, "Animace se nezdarila (neni kriticke): " + e.getMessage());
         }
     }
 
@@ -541,7 +544,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             });
             androidTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "rubby_response");
         } else {
-            Log.w(TAG, "Zadny TTS neni k dispozici - jen text na obrazovce");
+            fileLogger.w(TAG, "Zadny TTS neni k dispozici - jen text na obrazovce");
             setState(ConversationState.IDLE);
             updateStatus("Rubby - Pripravena", true);
         }
@@ -591,9 +594,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                         .withChatbot(qiChatbot)
                         .build();
                 wakeWordChatFuture = wakeWordChat.async().run();
-                Log.i(TAG, "Wake word listening started");
+                fileLogger.i(TAG, "Wake word listening started");
             } catch (Exception e) {
-                Log.w(TAG, "Failed to start wake word chat: " + e.getMessage());
+                fileLogger.w(TAG, "Failed to start wake word chat: " + e.getMessage());
             }
         });
     }
@@ -602,7 +605,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (wakeWordChatFuture != null) {
             wakeWordChatFuture.requestCancellation();
             wakeWordChatFuture = null;
-            Log.i(TAG, "Wake word listening stopped");
+            fileLogger.i(TAG, "Wake word listening stopped");
         }
     }
 
@@ -627,14 +630,14 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     @Override
     public void onRobotFocusGained(QiContext qiContext) {
         this.qiContext = qiContext;
-        Log.i(TAG, "Robot Focus GAINED");
+        fileLogger.i(TAG, "Robot Focus GAINED");
 
         // Initialize Head Touch Sensor
         Touch touch = qiContext.getTouch();
         headTouchSensor = touch.getSensor("Head/Touch");
         headTouchSensor.addOnStateChangedListener(touchState -> {
             if (touchState.getTouched()) {
-                Log.i(TAG, "Head sensor touched!");
+                fileLogger.i(TAG, "Head sensor touched!");
                 runOnUiThread(this::onHeadTouched);
             }
         });
@@ -652,7 +655,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
                 qiChatbot.addOnBookmarkReachedListener((bookmark) -> {
                     if ("wake_word_heard".equals(bookmark.getName())) {
-                        Log.i(TAG, "Wake word (Rubby) detected!");
+                        fileLogger.i(TAG, "Wake word (Rubby) detected!");
                         runOnUiThread(() -> {
                             // Simulujeme dotyk hlavy - spusti poslouchani a zastavi chat
                             onHeadTouched();
@@ -666,7 +669,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, "Nelze inicializovat QiChat wakeword: " + e.getMessage());
+                fileLogger.e(TAG, "Nelze inicializovat QiChat wakeword: " + e.getMessage());
             }
         });
 
@@ -688,7 +691,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             qiChatbot = null;
         }
         this.qiContext = null;
-        Log.w(TAG, "Robot Focus LOST");
+        fileLogger.w(TAG, "Robot Focus LOST");
         runOnUiThread(() -> {
             appendToChat("SYSTEM", "Robot Focus ztracen. Pouzivam Android TTS.");
             updateStatus("Rubby - Pripravena (bez QiSDK)", true);
@@ -697,7 +700,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRobotFocusRefused(String reason) {
-        Log.w(TAG, "Robot Focus REFUSED: " + reason);
+        fileLogger.w(TAG, "Robot Focus REFUSED: " + reason);
         runOnUiThread(() -> {
             appendToChat("SYSTEM", "Robot Focus odmitnut: " + reason + ". Funguju i bez nej.");
             updateStatus("Rubby - Pripravena (bez QiSDK)", true);
@@ -722,7 +725,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 // Start listening
                 runOnUiThread(this::startSpeechRecognition);
             } catch (Exception e) {
-                Log.e(TAG, "Error in head touch response: " + e.getMessage());
+                fileLogger.e(TAG, "Error in head touch response: " + e.getMessage());
             }
         });
     }
@@ -759,7 +762,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         try {
             QiSDK.unregister(this, this);
         } catch (Exception e) {
-            Log.w(TAG, "QiSDK unregister: " + e.getMessage());
+            fileLogger.w(TAG, "QiSDK unregister: " + e.getMessage());
         }
 
         if (speechRecognizer != null) {
