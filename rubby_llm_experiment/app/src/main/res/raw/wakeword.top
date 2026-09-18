@@ -1,4 +1,4 @@
-topic: ~wakeword();language:cs
+topic: ~wakeword()
 
 concept:(wake_trigger) [Rubby Rubi Rabi Rabby "Ahoj Rubby" "Hej Rubby" "Rubby poslouchej"]
 

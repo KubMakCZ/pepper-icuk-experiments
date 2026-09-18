@@ -90,10 +90,25 @@ if ($Device -ne "") {
 
 Write-Host ""
 
-# --- KROK 4: Instalace ---
-Write-INFO "Instaluji APK na $targetDevice (muze trvat 1-3 minuty pres WiFi)..."
-$installResult = adb -s $targetDevice install -r $APK_PATH 2>&1 | Out-String
-if ($LASTEXITCODE -ne 0 -or ($installResult -match "Failure")) {
+# --- KROK 4: Přenos APK (adb push - ukazuje % průběhu) ---
+$remoteApkPath = "/data/local/tmp/rubby_deploy.apk"
+Write-INFO "Prenos APK na zarizeni (uvidis % prubehu)..."
+Write-Host ""
+adb -s $targetDevice push $APK_PATH $remoteApkPath
+if ($LASTEXITCODE -ne 0) {
+    Write-FAIL "Prenos APK selhal! Zkontroluj WiFi spojeni."
+    exit 1
+}
+Write-Host ""
+Write-OK "Prenos dokoncen."
+
+# --- KROK 5: Instalace (rychle, jen secunada) ---
+Write-INFO "Instaluji APK na zarizeni..."
+$installResult = adb -s $targetDevice shell "pm install -r $remoteApkPath" 2>&1 | Out-String
+# Uklidime docasny soubor
+adb -s $targetDevice shell "rm $remoteApkPath" | Out-Null
+
+if ($installResult -notmatch "Success") {
     Write-FAIL "Instalace SELHALA!"
     Write-Host $installResult -ForegroundColor Red
     exit 1
