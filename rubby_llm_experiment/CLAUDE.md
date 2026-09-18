@@ -80,4 +80,6 @@ All code comments, UI strings, log messages, and commit messages are in Czech. F
 
 ## Workflow Rules (AI Assistants)
 1. **Always compile after changes:** Run `./gradlew assembleDebug` (or `./gradlew compileDebugJavaWithJavac`) after modifying code to verify it compiles successfully.
+   *Note: If you face Java version errors (e.g. major version 65 / Java 21) from the CLI, set `JAVA_HOME` to the Android Studio bundled JRE:*
+   `$env:JAVA_HOME="C:\Program Files\Android\Android Studio\jre"; .\gradlew assembleDebug`
 2. **Always commit on success:** If the compilation succeeds, automatically create a git commit (`git add . && git commit -m "..."`) with a descriptive message in Czech explaining the changes.

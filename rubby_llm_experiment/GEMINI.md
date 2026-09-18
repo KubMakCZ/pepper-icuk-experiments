@@ -59,5 +59,7 @@ This project is a specialized Android "wrapper" application for the **SoftBank R
 - `wakeword.top`: (Planned/In Assets) QiChat trigger file for wake-word detection.
 
 ## 🤖 AI Workflow Rules
-1. **Always compile:** After making changes, attempt to compile the project (e.g., `./gradlew assembleDebug`).
+1. **Always compile:** After making changes, attempt to compile the project (e.g., `./gradlew assembleDebug`). 
+   *Note: If you encounter Java version incompatibility errors from the CLI (e.g., major version 65), point `JAVA_HOME` to Android Studio's bundled JRE before running Gradle:*
+   `$env:JAVA_HOME="C:\Program Files\Android\Android Studio\jre"; .\gradlew assembleDebug`
 2. **Always commit:** If compilation is successful, create a git commit automatically (`git add . && git commit -m "..."`) with a descriptive message in Czech.
