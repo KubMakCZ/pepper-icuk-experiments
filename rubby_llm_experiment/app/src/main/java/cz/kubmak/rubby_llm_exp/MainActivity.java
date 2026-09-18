@@ -215,6 +215,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
         String[] options = {
             "Gemini Flash (Google)",
+            "Auto Free (OpenRouter)",
             "Llama 3.1 8B (OpenRouter Free)",
             "Qwen 3 8B (OpenRouter Free)",
             "Mistral 7B (OpenRouter Free)"
@@ -239,9 +240,10 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     if (openRouterService == null) {
                         appendToChat("SYSTEM", "Upozorneni: OpenRouter klic chybi.");
                     } else {
-                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
-                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
-                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
+                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("openrouter/auto");
+                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
+                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
+                        else if (position == 4) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
 
                         appendToChat("SYSTEM", "Prepina se na: OpenRouter (" + options[position] + ").");
                     }
@@ -723,7 +725,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         String[] responses = {
             "Ano?",
             "Copak?",
-            "Jééé, to je příjemné, copak potřebuješ?",
+            "Jeee, to je příjemné, copak potřebuješ?",
             "Jůůů, copak si přeješ?",
             "Vrruuum, tady jsem!",
             "Hi hi, to lechtá! Copak bys rád?",
