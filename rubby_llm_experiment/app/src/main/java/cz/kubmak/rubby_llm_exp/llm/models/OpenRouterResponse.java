@@ -26,4 +26,17 @@ public class OpenRouterResponse {
         @SerializedName("content")
         public String content;
     }
+
+    @SerializedName("usage")
+    private Usage usage;
+
+    public int getTotalTokens() {
+        if (usage != null) return usage.totalTokens;
+        return 0;
+    }
+
+    public static class Usage {
+        @SerializedName("total_tokens")
+        public int totalTokens;
+    }
 }

@@ -425,19 +425,38 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         // Odeslani do LLM na background vlakne
         executor.execute(() -> {
             try {
-                String response = llmService.generateResponse(chatHistory.getHistory());
+                cz.kubmak.rubby_llm_exp.llm.models.LlmResult result = llmService.generateResponse(chatHistory.getHistory());
+                String response = result.text;
+                int tokens = result.tokensUsed;
 
-                // Extrakce animacniho tagu pred cistenim textu
-                String animationCategory = TextCleaner.extractAnimationTag(response);
-                String cleanedResponse = TextCleaner.clean(response);
+                // Extrakce animacniho tagu pred cistenim textu (TextCleaner.clean se pouzije v ramci LlmService, ale my extrahujeme z cisteho)
+                // Puvodne zde bylo TextCleaner.clean, ale LlmService jiz vraci cleanText() v LlmResult.text.
+                // Protoze jsme pred chvili do LlmResult.text zacali ukladat TextCleaner.cleanText(), 
+                // tak animacni tag musime extrahovat z puvodniho textu (v LlmResult muzeme poslat obe verze,
+                // ale ted staci upravit LlmResult, aby v text mel plny a my to vycistili).
+                
+                // Pockat, LlmService ted vraci LlmResult s vycistenym textem, coz by znamenalo, ze jsme ztratili tag.
+                // Udelejme to radsi takto:
+                String animationCategory = cz.kubmak.rubby_llm_exp.util.TextCleaner.extractAnimationTag(response);
+                String cleanedResponse = cz.kubmak.rubby_llm_exp.util.TextCleaner.clean(response);
 
                 chatHistory.addModelMessage(cleanedResponse);
 
                 runOnUiThread(() -> {
                     appendToChat("Rubby", cleanedResponse);
+                    if (tokens > 0) {
+                        appendToChat("SYSTEM", "[TOKEN USAGE] Tento dotaz spotřeboval " + tokens + " tokenů.");
+                    }
                     speakResponse(cleanedResponse, animationCategory);
                 });
 
+            } catch (Exception e) {
+                fileLogger.e(TAG, "Chyba LLM: " + e.getMessage(), e);
+                runOnUiThread(() -> {
+                    appendToChat("Rubby", "Omlouvam se, doslo k chybe spojeni.");
+                    setState(ConversationState.IDLE);
+                    updateStatus("Chyba spojeni", false);
+                });
             } catch (OutOfMemoryError e) {
                 fileLogger.e(TAG, "OutOfMemoryError! Cistim historii.", e);
                 chatHistory.clear();
@@ -445,13 +464,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     appendToChat("SYSTEM", "Dosla pamet. Historie smazana.");
                     setState(ConversationState.IDLE);
                     updateStatus("Rubby - Pripravena", true);
-                });
-            } catch (Exception e) {
-                fileLogger.e(TAG, "Chyba LLM: " + e.getMessage(), e);
-                runOnUiThread(() -> {
-                    appendToChat("Rubby", "Omlouvam se, doslo k chybe spojeni.");
-                    setState(ConversationState.IDLE);
-                    updateStatus("Chyba spojeni", false);
                 });
             }
         });

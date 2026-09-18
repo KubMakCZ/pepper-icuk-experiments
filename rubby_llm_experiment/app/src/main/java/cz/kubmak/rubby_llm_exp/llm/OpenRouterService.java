@@ -80,7 +80,7 @@ public class OpenRouterService implements ILlmService {
     private static final long RETRY_DELAY_MS = 2000;
 
     @Override
-    public String generateResponse(List<Content> history) throws Exception {
+    public cz.kubmak.rubby_llm_exp.llm.models.LlmResult generateResponse(List<Content> history) throws Exception {
         List<OpenRouterMessage> messages = new ArrayList<>();
         messages.add(new OpenRouterMessage("system", SYSTEM_PROMPT));
 
@@ -116,7 +116,7 @@ public class OpenRouterService implements ILlmService {
                     }
 
                     Log.d(TAG, "Odpoved OpenRouter: " + text);
-                    return text;
+                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, 0);
                 }
 
                 int code = response.code();

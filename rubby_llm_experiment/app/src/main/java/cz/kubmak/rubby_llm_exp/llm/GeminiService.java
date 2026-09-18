@@ -88,7 +88,7 @@ public class GeminiService implements ILlmService {
     private static final long RETRY_DELAY_MS = 2000;
 
     @Override
-    public String generateResponse(List<Content> history) throws Exception {
+    public cz.kubmak.rubby_llm_exp.llm.models.LlmResult generateResponse(List<Content> history) throws Exception {
         GeminiRequest request = new GeminiRequest(SYSTEM_PROMPT, history);
 
         Log.d(TAG, "Odesilam request s " + history.size() + " zpravami");
@@ -117,7 +117,7 @@ public class GeminiService implements ILlmService {
                     }
 
                     Log.d(TAG, "Odpoved (" + finishReason + "): " + text);
-                    return text;
+                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, 0);
                 }
 
                 int code = response.code();

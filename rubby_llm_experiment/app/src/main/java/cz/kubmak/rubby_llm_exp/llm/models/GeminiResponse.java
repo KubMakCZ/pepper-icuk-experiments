@@ -55,4 +55,17 @@ public class GeminiResponse {
         @SerializedName("code")
         public int code;
     }
+
+    @SerializedName("usageMetadata")
+    private UsageMetadata usageMetadata;
+
+    public int getTotalTokens() {
+        if (usageMetadata != null) return usageMetadata.totalTokenCount;
+        return 0;
+    }
+
+    public static class UsageMetadata {
+        @SerializedName("totalTokenCount")
+        public int totalTokenCount;
+    }
 }
