@@ -88,18 +88,21 @@
         <Spinner
             android:id="@+id/spinnerLlm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="#ffffff" />
+            android:background="#1a1a4e"
+            android:backgroundTint="#7c7cff"
+            android:popupBackground="#0f0f23"
+            android:padding="4dp" />
 
         <Button
             android:id="@+id/btnClear"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="SMAZAT CHAT"
+            android:layout_height="36dp"
+            android:text="SMAZAT"
             android:textSize="11sp"
-            android:textColor="#aaaaaa"
-            android:background="#222244"
+            android:textColor="#ffffff"
+            android:background="#3d1a1a"
             android:paddingStart="12dp"
             android:paddingEnd="12dp" />
     </LinearLayout>
