@@ -49,16 +49,20 @@ public class FileLogger {
 
     private FileLogger(Context context) {
         this.context = context;
-        initLogDirectory();
+        tryInitLogDirectory();
     }
 
-    private void initLogDirectory() {
+    private boolean tryInitLogDirectory() {
+        if (currentLogFile != null) return true; // Už je připraveno
         File logDir = new File(context.getExternalFilesDir(null), LOG_DIR_NAME);
         if (!logDir.exists()) {
-            logDir.mkdirs();
+            if (!logDir.mkdirs()) {
+                return false; // Nelze vytvořit složku, zřejmě stále chybí práva
+            }
         }
         currentLogFile = getNextLogFile(logDir);
-        currentFileSize = currentLogFile.length();
+        currentFileSize = currentLogFile.exists() ? currentLogFile.length() : 0;
+        return true;
     }
 
     private File getNextLogFile(File logDir) {
@@ -71,6 +75,10 @@ public class FileLogger {
      */
     public void log(int priority, String tag, String message) {
         writeExecutor.execute(() -> {
+            if (!tryInitLogDirectory()) {
+                Log.e(TAG, "Nelze zapisovat logy - chybí práva nebo adresář.");
+                return;
+            }
             try {
                 // Rotation check
                 if (currentFileSize > MAX_FILE_SIZE_BYTES) {
@@ -89,6 +97,8 @@ public class FileLogger {
                 currentFileSize += line.length();
             } catch (IOException e) {
                 Log.e(TAG, "Chyba zapisu logu: " + e.getMessage());
+                // Pokud selže přístup, resetuj currentLogFile, aby to zkusil příště znovu
+                currentLogFile = null;
             }
         });
     }
@@ -130,13 +140,14 @@ public class FileLogger {
      * Vrací cestu k aktuálnímu log souboru.
      */
     public String getCurrentLogPath() {
-        return currentLogFile.getAbsolutePath();
+        return currentLogFile != null ? currentLogFile.getAbsolutePath() : null;
     }
 
     /**
      * Vrací seznam všech log souborů.
      */
     public File[] getLogFiles() {
+        if (currentLogFile == null) return new File[0];
         File logDir = currentLogFile.getParentFile();
         if (logDir == null) return new File[0];
         return logDir.listFiles((dir, name) -> name.startsWith("rubby_log_"));

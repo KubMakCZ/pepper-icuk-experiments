@@ -48,6 +48,7 @@ import com.aldebaran.qi.sdk.object.conversation.Chat;
 import com.aldebaran.qi.sdk.builder.ChatBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -153,7 +154,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         });
 
         // Povoleni mikrofonu a inicializace
-        checkAudioPermission();
+        checkPermissions();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             initSpeechRecognizer();
         }
@@ -272,11 +273,18 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     // ==================== SPEECH RECOGNITION ====================
 
-    private void checkAudioPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
+    private void checkPermissions() {
+        List<String> neededPermissions = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            neededPermissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            neededPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        
+        if (!neededPermissions.isEmpty()) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    neededPermissions.toArray(new String[0]),
                     PERMISSION_REQUEST_AUDIO);
         }
     }
@@ -736,15 +744,22 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (currentState == ConversationState.PROCESSING || currentState == ConversationState.LISTENING) {
             return;
         }
+        // Musíme zrušit probíhající naslouchání wake wordu předtím, než robot promluví
+        if (wakeWordChatFuture != null && !wakeWordChatFuture.isDone()) {
+            wakeWordChatFuture.requestCancellation();
+        }
 
         executor.execute(() -> {
             try {
-                // Feedback: Say "Ano?"
+                // Krátká pauza, aby se QiSDK stihlo uvolnit z Chat akce
+                Thread.sleep(200);
+                
+                // Feedback: Say "Ano?" atd.
                 if (qiContext != null) {
-                    Say say = SayBuilder.with(qiContext)
+                    com.aldebaran.qi.sdk.builder.SayBuilder.with(qiContext)
                             .withText(getRandomHeadTouchResponse())
-                            .build();
-                    say.run();
+                            .build()
+                            .run();
                 }
 
                 // Start listening
