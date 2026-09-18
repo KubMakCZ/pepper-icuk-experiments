@@ -85,6 +85,13 @@
             android:textColor="#e0e0e0"
             android:textSize="15sp" />
 
+        <Spinner
+            android:id="@+id/spinnerLlm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#ffffff" />
+
         <Button
             android:id="@+id/btnClear"
             android:layout_width="wrap_content"

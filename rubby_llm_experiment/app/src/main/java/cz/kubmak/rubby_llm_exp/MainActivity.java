@@ -18,6 +18,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import com.aldebaran.qi.sdk.design.activity.RobotActivity;
@@ -46,6 +49,7 @@ import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.conversation.ChatHistoryManager;
 import cz.kubmak.rubby_llm_exp.conversation.ConversationState;
 import cz.kubmak.rubby_llm_exp.llm.GeminiService;
+import cz.kubmak.rubby_llm_exp.llm.OpenRouterService;
 import cz.kubmak.rubby_llm_exp.llm.ILlmService;
 import cz.kubmak.rubby_llm_exp.util.TextCleaner;
 
@@ -64,9 +68,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Button btnMic;
     private Button btnClear;
     private ScrollView scrollView;
+    private Spinner spinnerLlm;
 
     // LLM
     private ILlmService llmService;
+    private ILlmService geminiService;
+    private ILlmService openRouterService;
     private ChatHistoryManager chatHistory;
     private ConversationState currentState = ConversationState.IDLE;
 
@@ -109,16 +116,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         // Inicializace UI
         initViews();
 
-        // Inicializace LLM
-        String apiKey = BuildConfig.GEMINI_API_KEY;
-        if (apiKey == null || apiKey.isEmpty()) {
-            appendToChat("SYSTEM", "CHYBA: GEMINI_API_KEY neni nastaven v local.properties!");
-            updateStatus("Chyba: chybi API klic", false);
-        } else {
-            llmService = new GeminiService(apiKey);
-            appendToChat("SYSTEM", "Gemini API pripojeno. Muzete psat nebo mluvit.");
-            updateStatus("Rubby - Pripravena", true);
-        }
+        // Inicializace LLM a Spinneru
+        initLlmAndSpinner();
 
         chatHistory = new ChatHistoryManager();
 
@@ -140,8 +139,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             }
         });
 
-        // Povoleni mikrofonu
+        // Povoleni mikrofonu a inicializace
         checkAudioPermission();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            initSpeechRecognizer();
+        }
     }
 
     private void initViews() {
@@ -152,6 +154,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         btnMic = findViewById(R.id.btnMic);
         btnClear = findViewById(R.id.btnClear);
         scrollView = findViewById(R.id.scrollView);
+        spinnerLlm = findViewById(R.id.spinnerLlm);
 
         // Odeslani zpravy tlacitkem
         btnSend.setOnClickListener(v -> {
@@ -186,6 +189,72 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         });
     }
 
+    private void initLlmAndSpinner() {
+        String geminiKey = BuildConfig.GEMINI_API_KEY;
+        String openRouterKey = BuildConfig.OPENROUTER_API_KEY;
+
+        if (geminiKey != null && !geminiKey.isEmpty()) {
+            geminiService = new GeminiService(geminiKey);
+        }
+        if (openRouterKey != null && !openRouterKey.isEmpty()) {
+            openRouterService = new OpenRouterService(openRouterKey, "google/gemma-2-9b-it:free");
+        }
+
+        String[] options = {
+            "Gemini 1.5 Flash (Google)",
+            "Gemma 2 9B (OpenRouter Free)",
+            "Llama 3.1 8B (OpenRouter Free)",
+            "Mistral 7B (OpenRouter Free)"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLlm.setAdapter(adapter);
+
+        spinnerLlm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+                if (position == 0) {
+                    llmService = geminiService;
+                    if (geminiService == null) {
+                        appendToChat("SYSTEM", "Upozorneni: Gemini klic chybi.");
+                    } else {
+                        appendToChat("SYSTEM", "Prepina se na: Google Gemini API.");
+                    }
+                } else {
+                    llmService = openRouterService;
+                    if (openRouterService == null) {
+                        appendToChat("SYSTEM", "Upozorneni: OpenRouter klic chybi.");
+                    } else {
+                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("google/gemma-2-9b-it:free");
+                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
+                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
+
+                        appendToChat("SYSTEM", "Prepina se na: OpenRouter (" + options[position] + ").");
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Set default based on availability
+        if (geminiService != null) {
+            spinnerLlm.setSelection(0);
+            llmService = geminiService;
+        } else if (openRouterService != null) {
+            spinnerLlm.setSelection(1);
+            llmService = openRouterService;
+        }
+
+        if (llmService == null) {
+            updateStatus("Chyba: chybi API klice", false);
+        } else {
+            updateStatus("Rubby - Pripravena", true);
+        }
+    }
+
     // ==================== SPEECH RECOGNITION ====================
 
     private void checkAudioPermission() {
@@ -203,30 +272,17 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (requestCode == PERMISSION_REQUEST_AUDIO) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.i(TAG, "Povoleni mikrofonu udeleno");
+                initSpeechRecognizer();
             } else {
                 appendToChat("SYSTEM", "Mikrofon neni povolen - hlasove ovladani nebude fungovat.");
             }
         }
     }
 
-    private void startSpeechRecognition() {
-        if (currentState == ConversationState.PROCESSING || currentState == ConversationState.SPEAKING) {
-            return;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            appendToChat("SYSTEM", "Mikrofon neni povolen. Povolte ho v nastaveni.");
-            return;
-        }
-
-        setState(ConversationState.LISTENING);
-        updateStatus("Posloucham...", true);
-
+    private void initSpeechRecognizer() {
         if (speechRecognizer != null) {
             speechRecognizer.destroy();
         }
-
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         speechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
@@ -265,11 +321,20 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
                         msg = "Chyba site. Zkontrolujte pripojeni.";
                         break;
+                    case SpeechRecognizer.ERROR_CLIENT:
+                        msg = "Rozpoznavani bylo preruseno.";
+                        break;
                     default:
                         msg = "Chyba rozpoznavani (kod " + error + ").";
                         break;
                 }
                 Log.e(TAG, "SpeechRecognizer chyba: " + error);
+                
+                // Restart pro chyby zpusobene zaseknutim
+                if (error == SpeechRecognizer.ERROR_CLIENT || error == SpeechRecognizer.ERROR_SERVER) {
+                    runOnUiThread(MainActivity.this::initSpeechRecognizer);
+                }
+                
                 runOnUiThread(() -> {
                     appendToChat("SYSTEM", msg);
                     setState(ConversationState.IDLE);
@@ -299,6 +364,25 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             @Override
             public void onEvent(int eventType, Bundle params) {}
         });
+    }
+
+    private void startSpeechRecognition() {
+        if (currentState == ConversationState.PROCESSING || currentState == ConversationState.SPEAKING) {
+            return;
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            appendToChat("SYSTEM", "Mikrofon neni povolen. Povolte ho v nastaveni.");
+            return;
+        }
+
+        setState(ConversationState.LISTENING);
+        updateStatus("Posloucham...", true);
+
+        if (speechRecognizer == null) {
+            initSpeechRecognizer();
+        }
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);

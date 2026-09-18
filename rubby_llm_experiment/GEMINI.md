@@ -57,3 +57,7 @@ This project is a specialized Android "wrapper" application for the **SoftBank R
 - `Tls12SocketFactory.java`: Essential network security patch for Android 6.0.
 - `ChatHistoryManager.java`: Implements the FIFO buffer for multi-turn memory.
 - `wakeword.top`: (Planned/In Assets) QiChat trigger file for wake-word detection.
+
+## 🤖 AI Workflow Rules
+1. **Always compile:** After making changes, attempt to compile the project (e.g., `./gradlew assembleDebug`).
+2. **Always commit:** If compilation is successful, create a git commit automatically (`git add . && git commit -m "..."`) with a descriptive message in Czech.

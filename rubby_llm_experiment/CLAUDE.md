@@ -77,3 +77,7 @@ Robot personality and behavior rules are in `GeminiService.SYSTEM_PROMPT`. This 
 ## Language
 
 All code comments, UI strings, log messages, and commit messages are in Czech. Follow this convention.
+
+## Workflow Rules (AI Assistants)
+1. **Always compile after changes:** Run `./gradlew assembleDebug` (or `./gradlew compileDebugJavaWithJavac`) after modifying code to verify it compiles successfully.
+2. **Always commit on success:** If the compilation succeeds, automatically create a git commit (`git add . && git commit -m "..."`) with a descriptive message in Czech explaining the changes.
