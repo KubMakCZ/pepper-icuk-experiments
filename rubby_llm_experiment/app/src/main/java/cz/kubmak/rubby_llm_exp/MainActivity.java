@@ -214,14 +214,14 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         }
 
         String[] options = {
-            "Gemini 1.5 Flash (Google)",
-            "Gemma 2 9B (OpenRouter Free)",
+            "Gemini Flash (Google)",
             "Llama 3.1 8B (OpenRouter Free)",
-            "Qwen 3 8B (OpenRouter Free)"
+            "Qwen 3 8B (OpenRouter Free)",
+            "Mistral 7B (OpenRouter Free)"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, options);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spinnerLlm.setAdapter(adapter);
 
         spinnerLlm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -239,9 +239,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     if (openRouterService == null) {
                         appendToChat("SYSTEM", "Upozorneni: OpenRouter klic chybi.");
                     } else {
-                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("google/gemma-2-9b-it:free");
-                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
-                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
+                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
+                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
+                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
 
                         appendToChat("SYSTEM", "Prepina se na: OpenRouter (" + options[position] + ").");
                     }
