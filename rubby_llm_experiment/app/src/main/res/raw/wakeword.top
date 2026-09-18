@@ -1,0 +1,7 @@
+topic: ~wakeword()
+language: cs
+
+# Detekce jmena - ruzne varianty vyslovnosti a osloveni
+concept:(wake_trigger) [Rubby Rubi Rabi Rabby "Ahoj Rubby" "Hej Rubby" "Rubby poslouchej"]
+
+u:(~wake_trigger) %wake_word_heard

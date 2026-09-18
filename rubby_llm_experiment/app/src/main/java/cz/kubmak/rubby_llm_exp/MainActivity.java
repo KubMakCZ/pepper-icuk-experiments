@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 
 import com.aldebaran.qi.sdk.QiContext;
 import com.aldebaran.qi.sdk.QiSDK;
+import com.aldebaran.qi.Future;
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks;
 import com.aldebaran.qi.sdk.builder.AnimateBuilder;
 import com.aldebaran.qi.sdk.builder.AnimationBuilder;
@@ -38,6 +39,13 @@ import com.aldebaran.qi.sdk.object.actuation.Animation;
 import com.aldebaran.qi.sdk.object.conversation.Say;
 import com.aldebaran.qi.sdk.object.touch.Touch;
 import com.aldebaran.qi.sdk.object.touch.TouchSensor;
+
+import com.aldebaran.qi.sdk.object.conversation.Topic;
+import com.aldebaran.qi.sdk.builder.TopicBuilder;
+import com.aldebaran.qi.sdk.object.conversation.QiChatbot;
+import com.aldebaran.qi.sdk.builder.QiChatbotBuilder;
+import com.aldebaran.qi.sdk.object.conversation.Chat;
+import com.aldebaran.qi.sdk.builder.ChatBuilder;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -80,8 +88,10 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     // QiSDK - muze byt null pokud neni focus (virtualni robot, telefon)
     private QiContext qiContext;
 
-    // QiSDK sensors
+    // QiSDK komponenty
     private TouchSensor headTouchSensor;
+    private QiChatbot qiChatbot;
+    private Chat wakeWordChat;
 
     // Android TTS fallback (kdyz neni QiSDK nebo neni focus)
     private TextToSpeech androidTts;
@@ -567,6 +577,35 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         );
     }
 
+    private Future<Void> wakeWordChatFuture;
+
+    private void startWakeWordListening() {
+        if (qiContext == null || qiChatbot == null) return;
+        
+        executor.execute(() -> {
+            try {
+                if (wakeWordChatFuture != null) {
+                    wakeWordChatFuture.requestCancellation();
+                }
+                wakeWordChat = ChatBuilder.with(qiContext)
+                        .withChatbot(qiChatbot)
+                        .build();
+                wakeWordChatFuture = wakeWordChat.async().run();
+                Log.i(TAG, "Wake word listening started");
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to start wake word chat: " + e.getMessage());
+            }
+        });
+    }
+
+    private void stopWakeWordListening() {
+        if (wakeWordChatFuture != null) {
+            wakeWordChatFuture.requestCancellation();
+            wakeWordChatFuture = null;
+            Log.i(TAG, "Wake word listening stopped");
+        }
+    }
+
     private void setState(ConversationState state) {
         this.currentState = state;
         boolean inputEnabled = (state == ConversationState.IDLE);
@@ -575,6 +614,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         btnMic.setEnabled(inputEnabled);
         // Smazat chat je VZDY klikatelne - slouzi i jako nouzovy reset
         btnClear.setEnabled(true);
+
+        if (state == ConversationState.IDLE) {
+            startWakeWordListening();
+        } else {
+            stopWakeWordListening();
+        }
     }
 
     // ==================== QISDK LIFECYCLE ====================
@@ -594,8 +639,39 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             }
         });
 
+        // Inicializace Wake word (QiChat)
+        executor.execute(() -> {
+            try {
+                Topic topic = TopicBuilder.with(qiContext)
+                        .withResource(R.raw.wakeword)
+                        .build();
+
+                qiChatbot = QiChatbotBuilder.with(qiContext)
+                        .withTopic(topic)
+                        .build();
+
+                qiChatbot.addOnBookmarkReachedListener((bookmark) -> {
+                    if ("wake_word_heard".equals(bookmark.getName())) {
+                        Log.i(TAG, "Wake word (Rubby) detected!");
+                        runOnUiThread(() -> {
+                            // Simulujeme dotyk hlavy - spusti poslouchani a zastavi chat
+                            onHeadTouched();
+                        });
+                    }
+                });
+
+                // Zkusit rovnou nastartovat pokud jsme IDLE
+                if (currentState == ConversationState.IDLE) {
+                    startWakeWordListening();
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Nelze inicializovat QiChat wakeword: " + e.getMessage());
+            }
+        });
+
         runOnUiThread(() -> {
-            appendToChat("SYSTEM", "Robot Focus ziskan! Rubby pouziva svuj vlastni hlas a animace.");
+            appendToChat("SYSTEM", "Robot Focus ziskan! Rubby pouziva svuj vlastni hlas, animace a slysi na sve jmeno.");
             updateStatus("Rubby - Pripravena (QiSDK)", true);
         });
     }
@@ -605,6 +681,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (headTouchSensor != null) {
             headTouchSensor.removeAllOnStateChangedListeners();
             headTouchSensor = null;
+        }
+        stopWakeWordListening();
+        if (qiChatbot != null) {
+            qiChatbot.removeAllOnBookmarkReachedListeners();
+            qiChatbot = null;
         }
         this.qiContext = null;
         Log.w(TAG, "Robot Focus LOST");
