@@ -719,6 +719,19 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         });
     }
 
+    private String getRandomHeadTouchResponse() {
+        String[] responses = {
+            "Ano?",
+            "Copak?",
+            "Jééé, to je příjemné, copak potřebuješ?",
+            "Jůůů, copak si přeješ?",
+            "Vrruuum, tady jsem!",
+            "Hi hi, to lechtá! Copak bys rád?",
+            "Jéé, pat pat, poslouchám tě."
+        };
+        return responses[random.nextInt(responses.length)];
+    }
+
     private void onHeadTouched() {
         if (currentState == ConversationState.PROCESSING || currentState == ConversationState.LISTENING) {
             return;
@@ -729,7 +742,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 // Feedback: Say "Ano?"
                 if (qiContext != null) {
                     Say say = SayBuilder.with(qiContext)
-                            .withText("Ano?")
+                            .withText(getRandomHeadTouchResponse())
                             .build();
                     say.run();
                 }
