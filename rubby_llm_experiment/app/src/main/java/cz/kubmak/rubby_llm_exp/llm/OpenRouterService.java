@@ -90,7 +90,7 @@ public class OpenRouterService implements ILlmService {
         }
 
         OpenRouterRequest request = new OpenRouterRequest(this.modelName, messages);
-        Log.d(TAG, "Odesilam request pres OpenRouter s modelem " + this.modelName);
+        cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odesilam request pres OpenRouter s modelem " + this.modelName);
 
         Exception lastException = null;
 
@@ -115,16 +115,16 @@ public class OpenRouterService implements ILlmService {
                         throw new Exception("OpenRouter API vratila prazdny text");
                     }
 
-                    Log.d(TAG, "Odpoved OpenRouter: " + text);
-                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, 0);
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odpoved OpenRouter: " + text);
+                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, body.getTotalTokens());
                 }
 
                 int code = response.code();
                 String errorBody = response.errorBody() != null ? response.errorBody().string() : "neznama chyba";
-                Log.w(TAG, "API chyba " + code + " (pokus " + attempt + "/" + MAX_RETRIES + "): " + errorBody);
+                cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "API chyba " + code + " (pokus " + attempt + "/" + MAX_RETRIES + "): " + errorBody);
 
                 if ((code == 429 || code == 503) && attempt < MAX_RETRIES) {
-                    Log.i(TAG, "Cekam " + RETRY_DELAY_MS + "ms pred dalsim pokusem...");
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).i(TAG, "Cekam " + RETRY_DELAY_MS + "ms pred dalsim pokusem...");
                     Thread.sleep(RETRY_DELAY_MS * attempt);
                     continue;
                 }
@@ -133,7 +133,7 @@ public class OpenRouterService implements ILlmService {
 
             } catch (java.io.IOException e) {
                 lastException = e;
-                Log.w(TAG, "Sitova chyba (pokus " + attempt + "/" + MAX_RETRIES + "): " + e.getMessage());
+                cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "Sitova chyba (pokus " + attempt + "/" + MAX_RETRIES + "): " + e.getMessage());
                 if (attempt < MAX_RETRIES) {
                     Thread.sleep(RETRY_DELAY_MS * attempt);
                 }

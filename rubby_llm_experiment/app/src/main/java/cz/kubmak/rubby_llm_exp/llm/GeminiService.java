@@ -91,7 +91,7 @@ public class GeminiService implements ILlmService {
     public cz.kubmak.rubby_llm_exp.llm.models.LlmResult generateResponse(List<Content> history) throws Exception {
         GeminiRequest request = new GeminiRequest(SYSTEM_PROMPT, history);
 
-        Log.d(TAG, "Odesilam request s " + history.size() + " zpravami");
+        cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odesilam request s " + history.size() + " zpravami");
 
         Exception lastException = null;
 
@@ -108,7 +108,7 @@ public class GeminiService implements ILlmService {
                     // Logovani finishReason pro diagnostiku (napr. pokud dojdou tokeny)
                     String finishReason = body.getFinishReason();
                     if (finishReason != null && !finishReason.equals("STOP")) {
-                        Log.w(TAG, "Upozorneni (v1): Odpoved ukoncena z duvodu: " + finishReason);
+                        cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "Upozorneni (v1): Odpoved ukoncena z duvodu: " + finishReason);
                     }
 
                     String text = body.getResponseText();
@@ -116,17 +116,17 @@ public class GeminiService implements ILlmService {
                         throw new Exception("Gemini API vratila prazdny text");
                     }
 
-                    Log.d(TAG, "Odpoved (" + finishReason + "): " + text);
-                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, 0);
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odpoved (" + finishReason + "): " + text);
+                    return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, body.getTotalTokens());
                 }
 
                 int code = response.code();
                 String errorBody = response.errorBody() != null ? response.errorBody().string() : "neznama chyba";
-                Log.w(TAG, "API chyba " + code + " (pokus " + attempt + "/" + MAX_RETRIES + "): " + errorBody);
+                cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "API chyba " + code + " (pokus " + attempt + "/" + MAX_RETRIES + "): " + errorBody);
 
                 // Retry jen pro 429 (rate limit) a 503 (service unavailable)
                 if ((code == 429 || code == 503) && attempt < MAX_RETRIES) {
-                    Log.i(TAG, "Cekam " + RETRY_DELAY_MS + "ms pred dalsim pokusem...");
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).i(TAG, "Cekam " + RETRY_DELAY_MS + "ms pred dalsim pokusem...");
                     Thread.sleep(RETRY_DELAY_MS * attempt);
                     continue;
                 }
@@ -136,7 +136,7 @@ public class GeminiService implements ILlmService {
             } catch (java.io.IOException e) {
                 // Sitova chyba - zkusit znovu
                 lastException = e;
-                Log.w(TAG, "Sitova chyba (pokus " + attempt + "/" + MAX_RETRIES + "): " + e.getMessage());
+                cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "Sitova chyba (pokus " + attempt + "/" + MAX_RETRIES + "): " + e.getMessage());
                 if (attempt < MAX_RETRIES) {
                     Thread.sleep(RETRY_DELAY_MS * attempt);
                 }

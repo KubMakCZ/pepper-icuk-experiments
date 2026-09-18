@@ -428,17 +428,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         executor.execute(() -> {
             try {
                 cz.kubmak.rubby_llm_exp.llm.models.LlmResult result = llmService.generateResponse(chatHistory.getHistory());
+                // Získáme syrovou odpověď z LLM
                 String response = result.text;
                 int tokens = result.tokensUsed;
 
-                // Extrakce animacniho tagu pred cistenim textu (TextCleaner.clean se pouzije v ramci LlmService, ale my extrahujeme z cisteho)
-                // Puvodne zde bylo TextCleaner.clean, ale LlmService jiz vraci cleanText() v LlmResult.text.
-                // Protoze jsme pred chvili do LlmResult.text zacali ukladat TextCleaner.cleanText(), 
-                // tak animacni tag musime extrahovat z puvodniho textu (v LlmResult muzeme poslat obe verze,
-                // ale ted staci upravit LlmResult, aby v text mel plny a my to vycistili).
-                
-                // Pockat, LlmService ted vraci LlmResult s vycistenym textem, coz by znamenalo, ze jsme ztratili tag.
-                // Udelejme to radsi takto:
+                // Extrakce animačního tagu a vyčištění textu pro TTS
                 String animationCategory = cz.kubmak.rubby_llm_exp.util.TextCleaner.extractAnimationTag(response);
                 String cleanedResponse = cz.kubmak.rubby_llm_exp.util.TextCleaner.clean(response);
 
@@ -722,14 +716,18 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     private String getRandomHeadTouchResponse() {
+        // Pouzivame Unicode escape sekvence kvuli kodovani souboru
+        // \u00e9 = é, \u016f = ů, \u010d = č, \u0161 = š, \u00e1 = á atd.
         String[] responses = {
             "Ano?",
             "Copak?",
-            "Jeee, to je příjemné, copak potřebuješ?",
-            "Jůůů, copak si přeješ?",
-            "Vrruuum, tady jsem!",
-            "Hi hi, to lechtá! Copak bys rád?",
-            "Jéé, pat pat, poslouchám tě."
+            "Vrruum, tady jsem!",
+            "Hi hi, to lecht\u00e1! Copak bys r\u00e1d?",
+            "J\u00e9\u00e9, pat pat, poslou\u010d\u00e1m t\u011b.",
+            "J\u016f\u016f\u016f, copak si p\u0159eje\u0161?",
+            "Hele, to je p\u0159\u00edjemn\u00e9! Co pot\u0159ebuje\u0161?",
+            "\u00dat\u011bk, n\u011bkdo m\u011b pohladil! Co t\u011b tr\u00e1p\u00ed?",
+            "Haló, haló! Sly\u0161\u00edm t\u011b.",
         };
         return responses[random.nextInt(responses.length)];
     }
