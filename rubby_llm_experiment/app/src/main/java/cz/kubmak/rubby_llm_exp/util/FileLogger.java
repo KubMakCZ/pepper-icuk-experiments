@@ -29,10 +29,11 @@ public class FileLogger {
     private static final long MAX_FILE_SIZE_BYTES = 512 * 1024; // 500 KB
     private static final int MAX_LOG_FILES = 3;
 
-    private final Context context;
+    private volatile Context context;
     private final ExecutorService writeExecutor = Executors.newSingleThreadExecutor();
     private File currentLogFile;
     private long currentFileSize = 0;
+    private boolean useInternalFallback = false;
 
     private static volatile FileLogger INSTANCE;
 
@@ -40,9 +41,11 @@ public class FileLogger {
         if (INSTANCE == null) {
             synchronized (FileLogger.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new FileLogger(context.getApplicationContext());
+                    INSTANCE = new FileLogger(context != null ? context.getApplicationContext() : null);
                 }
             }
+        } else if (INSTANCE.context == null && context != null) {
+            INSTANCE.context = context.getApplicationContext();
         }
         return INSTANCE;
     }
@@ -54,11 +57,27 @@ public class FileLogger {
 
     private boolean tryInitLogDirectory() {
         if (currentLogFile != null) return true; // Už je připraveno
-        File logDir = new File(context.getExternalFilesDir(null), LOG_DIR_NAME);
-        if (!logDir.exists()) {
-            if (!logDir.mkdirs()) {
-                return false; // Nelze vytvořit složku, zřejmě stále chybí práva
+        if (context == null) return false;
+
+        File baseDir = null;
+        if (!useInternalFallback) {
+            try {
+                baseDir = context.getExternalFilesDir(null);
+            } catch (Exception ignored) {
             }
+        }
+        if (baseDir == null) {
+            baseDir = context.getFilesDir();
+        }
+        if (baseDir == null) return false;
+
+        File logDir = new File(baseDir, LOG_DIR_NAME);
+        if (!logDir.exists() && !logDir.mkdirs()) {
+            if (!useInternalFallback) {
+                useInternalFallback = true;
+                return tryInitLogDirectory();
+            }
+            return false;
         }
         currentLogFile = getNextLogFile(logDir);
         currentFileSize = currentLogFile.exists() ? currentLogFile.length() : 0;
@@ -74,9 +93,9 @@ public class FileLogger {
      * Zapsane log do souboru (async).
      */
     public void log(int priority, String tag, String message) {
+        if (writeExecutor.isShutdown()) return;
         writeExecutor.execute(() -> {
             if (!tryInitLogDirectory()) {
-                Log.e(TAG, "Nelze zapisovat logy - chybí práva nebo adresář.");
                 return;
             }
             try {
@@ -96,9 +115,13 @@ public class FileLogger {
 
                 currentFileSize += line.length();
             } catch (IOException e) {
-                Log.e(TAG, "Chyba zapisu logu: " + e.getMessage());
-                // Pokud selže přístup, resetuj currentLogFile, aby to zkusil příště znovu
                 currentLogFile = null;
+                if (!useInternalFallback) {
+                    Log.w(TAG, "Externi uloziste nedostupne (" + e.getMessage() + "), prepinam na interni uloziste.");
+                    useInternalFallback = true;
+                } else {
+                    Log.e(TAG, "Chyba zapisu logu: " + e.getMessage());
+                }
             }
         });
     }

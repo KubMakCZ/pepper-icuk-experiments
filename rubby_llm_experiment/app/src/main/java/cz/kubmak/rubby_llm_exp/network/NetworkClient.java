@@ -49,9 +49,11 @@ public class NetworkClient {
             }
         }
 
-        // Logging pro debug (v produkci prepnout na NONE)
+        // Logging pouze zakladnich informaci v debug buildu (setri RAM na API 23 a neloguje Bearer klice v hlavickach)
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(cz.kubmak.rubby_llm_exp.BuildConfig.DEBUG
+                ? HttpLoggingInterceptor.Level.BASIC
+                : HttpLoggingInterceptor.Level.NONE);
         builder.addInterceptor(logging);
 
         return builder.build();

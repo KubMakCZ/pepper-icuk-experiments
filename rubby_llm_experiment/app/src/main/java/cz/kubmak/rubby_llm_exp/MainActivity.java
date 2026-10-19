@@ -211,7 +211,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             geminiService = new GeminiService(geminiKey);
         }
         if (openRouterKey != null && !openRouterKey.isEmpty()) {
-            openRouterService = new OpenRouterService(openRouterKey, "google/gemma-2-9b-it:free");
+            openRouterService = new OpenRouterService(openRouterKey, "openrouter/free");
         }
 
         String[] options = {
@@ -241,7 +241,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     if (openRouterService == null) {
                         appendToChat("SYSTEM", "Upozorneni: OpenRouter klic chybi.");
                     } else {
-                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("openrouter/auto");
+                        if (position == 1) ((OpenRouterService)openRouterService).setModelName("openrouter/free");
                         else if (position == 2) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
                         else if (position == 3) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
                         else if (position == 4) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
@@ -293,11 +293,19 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_AUDIO) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fileLogger.i(TAG, "Povoleni mikrofonu udeleno");
-                initSpeechRecognizer();
-            } else {
-                appendToChat("SYSTEM", "Mikrofon neni povolen - hlasove ovladani nebude fungovat.");
+            for (int i = 0; i < permissions.length && i < grantResults.length; i++) {
+                if (Manifest.permission.RECORD_AUDIO.equals(permissions[i])) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        fileLogger.i(TAG, "Povoleni mikrofonu udeleno");
+                        initSpeechRecognizer();
+                    } else {
+                        appendToChat("SYSTEM", "Mikrofon neni povolen - hlasove ovladani nebude fungovat.");
+                    }
+                } else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        fileLogger.i(TAG, "Povoleni pro zapis logu udeleno");
+                    }
+                }
             }
         }
     }
@@ -390,12 +398,16 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     private void startSpeechRecognition() {
-        if (currentState == ConversationState.PROCESSING || currentState == ConversationState.SPEAKING) {
+        if (currentState != ConversationState.IDLE) {
             return;
         }
+        startListeningInternal(wakeWordChatFuture != null);
+    }
 
+    private void startListeningInternal(boolean waitForWakeWordRelease) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
+            setState(ConversationState.IDLE);
             appendToChat("SYSTEM", "Mikrofon neni povolen. Povolte ho v nastaveni.");
             return;
         }
@@ -407,13 +419,22 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             initSpeechRecognizer();
         }
 
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "cs-CZ");
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 
-        speechRecognizer.startListening(intent);
+        if (waitForWakeWordRelease) {
+            // Dej QiSDK ~200 ms na uvolneni mikrofonu po stopWakeWordListening()
+            tvStatus.postDelayed(() -> {
+                if (currentState == ConversationState.LISTENING && speechRecognizer != null) {
+                    speechRecognizer.startListening(intent);
+                }
+            }, 200);
+        } else {
+            speechRecognizer.startListening(intent);
+        }
     }
 
     // ==================== HLAVNI LOGIKA ====================
@@ -423,14 +444,14 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         appendToChat("Vy", userText);
         updateStatus("Rubby premysli...", true);
 
-        chatHistory.addUserMessage(userText);
-
         if (llmService == null) {
             appendToChat("SYSTEM", "LLM service neni inicializovana. Zkontrolujte API klic.");
             setState(ConversationState.IDLE);
             updateStatus("Chyba", false);
             return;
         }
+
+        chatHistory.addUserMessage(userText);
 
         // Odeslani do LLM na background vlakne
         executor.execute(() -> {
@@ -456,6 +477,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
             } catch (Exception e) {
                 fileLogger.e(TAG, "Chyba LLM: " + e.getMessage(), e);
+                chatHistory.removeLastUserMessage();
                 runOnUiThread(() -> {
                     appendToChat("Rubby", "Omlouvam se, doslo k chybe spojeni.");
                     setState(ConversationState.IDLE);
@@ -731,41 +753,44 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             "Copak?",
             "Vrruum, tady jsem!",
             "Hi hi, to lecht\u00e1! Copak bys r\u00e1d?",
-            "J\u00e9\u00e9, pat pat, poslou\u010d\u00e1m t\u011b.",
+            "J\u00e9\u00e9, pat pat, poslouch\u00e1m t\u011b.",
             "J\u016f\u016f\u016f, copak si p\u0159eje\u0161?",
             "Hele, to je p\u0159\u00edjemn\u00e9! Co pot\u0159ebuje\u0161?",
             "\u00dat\u011bk, n\u011bkdo m\u011b pohladil! Co t\u011b tr\u00e1p\u00ed?",
-            "Haló, haló! Sly\u0161\u00edm t\u011b.",
+            "Hal\u00f3, hal\u00f3! Sly\u0161\u00edm t\u011b.",
         };
         return responses[random.nextInt(responses.length)];
     }
 
     private void onHeadTouched() {
-        if (currentState == ConversationState.PROCESSING || currentState == ConversationState.LISTENING) {
+        if (currentState != ConversationState.IDLE) {
             return;
         }
-        // Musíme zrušit probíhající naslouchání wake wordu předtím, než robot promluví
-        if (wakeWordChatFuture != null && !wakeWordChatFuture.isDone()) {
-            wakeWordChatFuture.requestCancellation();
-        }
+        // Okamzite uzamkni stav na SPEAKING (tim se i zastavi wakeWordChatFuture
+        // a zabrani se vicenasobnemu spusteni pri rychlem hlazeni po hlave)
+        setState(ConversationState.SPEAKING);
+        updateStatus("Rubby mluvi...", true);
 
         executor.execute(() -> {
             try {
-                // Krátká pauza, aby se QiSDK stihlo uvolnit z Chat akce
-                Thread.sleep(200);
-                
-                // Feedback: Say "Ano?" atd.
+                // Kratka pauza, aby QiSDK stihlo ukoncit Chat akci z wake-wordu
+                Thread.sleep(250);
+
                 if (qiContext != null) {
-                    com.aldebaran.qi.sdk.builder.SayBuilder.with(qiContext)
+                    SayBuilder.with(qiContext)
                             .withText(getRandomHeadTouchResponse())
                             .build()
                             .run();
                 }
-
-                // Start listening
-                runOnUiThread(this::startSpeechRecognition);
             } catch (Exception e) {
                 fileLogger.e(TAG, "Error in head touch response: " + e.getMessage());
+            } finally {
+                // Prejdi do poslouchani (mikrofon uz neni blokovan wake-wordem)
+                runOnUiThread(() -> {
+                    if (currentState == ConversationState.SPEAKING) {
+                        startListeningInternal(false);
+                    }
+                });
             }
         });
     }

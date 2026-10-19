@@ -31,25 +31,38 @@ public class TextCleaner {
         // Odstraneni animacnich tagu [ANIMACE:xxx]
         text = ANIMATION_TAG_PATTERN.matcher(text).replaceAll("");
 
-        // Odstraneni bold/italic (**text**, *text*, __text__, _text_)
-        text = text.replaceAll("\\*\\*(.+?)\\*\\*", "$1");
-        text = text.replaceAll("\\*(.+?)\\*", "$1");
-        text = text.replaceAll("__(.+?)__", "$1");
-        text = text.replaceAll("_(.+?)_", "$1");
-
-        // Odstraneni headingu (# ## ### atd.)
-        text = text.replaceAll("(?m)^#{1,6}\\s*", "");
+        // Odstraneni code blocku (```...```) - musi byt pred inline kodem
+        text = text.replaceAll("```[\\s\\S]*?```", "");
 
         // Odstraneni inline kodu (`code`)
         text = text.replaceAll("`(.+?)`", "$1");
 
-        // Odstraneni code blocku (```...```)
-        text = text.replaceAll("```[\\s\\S]*?```", "");
+        // Odstraneni Markdown odkazu [text](url) -> text
+        text = text.replaceAll("\\[([^\\]]+)\\]\\([^)]+\\)", "$1");
 
-        // Odstraneni odrazek (- item, * item)
-        text = text.replaceAll("(?m)^[\\-\\*]\\s+", "");
+        // Odstraneni bold/italic (**text**, *text*, __text__, _text_, ~~text~~)
+        text = text.replaceAll("\\*\\*(.+?)\\*\\*", "$1");
+        text = text.replaceAll("\\*(.+?)\\*", "$1");
+        text = text.replaceAll("__(.+?)__", "$1");
+        text = text.replaceAll("_(.+?)_", "$1");
+        text = text.replaceAll("~~(.+?)~~", "$1");
+
+        // Odstraneni headingu (# ## ### atd.) a citaci (>)
+        text = text.replaceAll("(?m)^#{1,6}\\s*", "");
+        text = text.replaceAll("(?m)^>\\s*", "");
+
+        // Odstraneni odrazek (- item, * item, • item)
+        text = text.replaceAll("(?m)^\\s*[\\-\\*•]\\s+", "");
+
+        // Odstraneni emotikonu a piktogramu (surrogate pairs + bezne symboly)
+        text = text.replaceAll("[\\uD83C-\\uDBFF\\uDC00-\\uDFFF]+", "");
+        text = text.replaceAll("[\\u2600-\\u27BF]", "");
+
+        // Odstraneni osamocenych hvezdicek a mrizek
+        text = text.replace("*", "").replace("#", "");
 
         // Odstraneni vicenasobnych mezer a prazdnych radku
+        text = text.replaceAll("[ \\t]{2,}", " ");
         text = text.replaceAll("\\n{3,}", "\n\n");
         text = text.trim();
 
