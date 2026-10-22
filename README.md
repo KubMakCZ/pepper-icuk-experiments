@@ -4,6 +4,8 @@ Repozitář pro experimenty a projekty s humanoidním robotem **Pepper** (SoftBa
 
 ---
 
+> Pro AI asistenty / vibecoding: začněte v [`AGENTS.md`](./AGENTS.md). Mapa projektů: [`docs/PROJEKTY.md`](./docs/PROJEKTY.md).
+
 ## 📌 Struktura repozitáře
 
 Každá složka je **samostatný Android/Gradle projekt** – otevírejte v Android Studiu vždy konkrétní složku, ne kořen repozitáře.
@@ -11,8 +13,8 @@ Každá složka je **samostatný Android/Gradle projekt** – otevírejte v Andr
 | Projekt | Jazyk | Stav | Popis |
 |---------|-------|------|-------|
 | **[testRubby2](./testRubby2)** | Java | ✅ Stabilní šablona | Referenční projekt v češtině – ukázky řeči, animací a životního cyklu. **Nové projekty zakládejte kopií této složky.** |
-| **[rubby_llm_experiment](./rubby_llm_experiment)** | Java | 🚧 WIP | Experiment: propojení Peppera s Google Gemini 1.5 Flash pro plynulou konverzaci v češtině. |
-| **[ICUK_Rubby_app-5_dod_ujep_02_24](./ICUK_Rubby_app-5_dod_ujep_02_24)** | Kotlin | ✅ Produkce | Prezentační aplikace ICUK – robot představuje 10 témat (coworking, sály, kanceláře…) pomocí fragmentové navigace a QiChat. |
+| **[rubby_llm_experiment](./rubby_llm_experiment)** | Java | 🚧 Aktivní vývoj | Experiment: propojení Peppera s LLM (Gemini 2.5 Flash a OpenRouter) pro plynulou konverzaci v češtině, wakeword „Rubby“. |
+| **[ICUK_Rubby_app-5_dod_ujep_02_24](./ICUK_Rubby_app-5_dod_ujep_02_24)** | Java | ✅ Produkce | Prezentační aplikace ICUK – robot představuje 10 témat (coworking, sály, kanceláře…) pomocí fragmentové navigace a QiChat. |
 
 ---
 
@@ -120,7 +122,7 @@ Demonstrace core funkcí robota v češtině s minimálním rizikem pádu.
 
 ### rubby_llm_experiment – Pepper × LLM
 
-Wrapper aplikace propojující Peppera s **Google Gemini 1.5 Flash** API pro dynamickou konverzaci v češtině. Projekt je zatím skeleton – vše se implementuje od nuly.
+Wrapper aplikace propojující Peppera s **Google Gemini 1.5 Flash** API pro dynamickou konverzaci v češtině. Projekt je funkční (LLM, wakeword, animace, logování); detaily viz `rubby_llm_experiment/README.md` a `CLAUDE.md`.
 
 **Architektura (cílový stav):**
 

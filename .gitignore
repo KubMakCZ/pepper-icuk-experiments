@@ -403,3 +403,17 @@ hs_err_pid*
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,visualstudiocode,jetbrains+all,node
+
+# --- Fáze 1 úklid ---
+# API klíče a tajemství
+*key*.txt
+*_key_*
+secrets.properties
+# Logy a pády JVM
+hs_err_pid*.log
+replay_pid*.log
+log.txt
+logg.txt
+idea.log
+# Screenshoty v rootech projektů
+/*/*.png
