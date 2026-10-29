@@ -1,8 +1,11 @@
 package cz.kubmak.rubby_llm_exp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -17,6 +20,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
@@ -71,15 +75,28 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private final Random random = new Random();
     private FileLogger fileLogger;
 
-    // UI
+    // UI - Admin / Testovaci obrazovka
+    private View adminContainer;
     private TextView tvStatus;
     private TextView tvChatLog;
     private EditText etInput;
     private Button btnSend;
     private Button btnMic;
     private Button btnClear;
+    private Button btnAnimations;
+    private Button btnSwitchToVisitor;
     private ScrollView scrollView;
     private Spinner spinnerLlm;
+    private SeekBar seekBarVolume;
+    private TextView tvVolumePercent;
+
+    // UI - Navstevnicka / Prezentacni obrazovka
+    private View visitorContainer;
+    private Button btnSwitchToAdmin;
+    private Button btnVisitorMic;
+    private Button btnVisitorAnimations;
+    private TextView tvVisitorStateTitle;
+    private TextView tvVisitorStateSubtitle;
 
     // LLM
     private ILlmService llmService;
@@ -161,14 +178,26 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     private void initViews() {
+        adminContainer = findViewById(R.id.adminContainer);
         tvStatus = findViewById(R.id.tvStatus);
         tvChatLog = findViewById(R.id.tvChatLog);
         etInput = findViewById(R.id.etInput);
         btnSend = findViewById(R.id.btnSend);
         btnMic = findViewById(R.id.btnMic);
         btnClear = findViewById(R.id.btnClear);
+        btnAnimations = findViewById(R.id.btnAnimations);
+        btnSwitchToVisitor = findViewById(R.id.btnSwitchToVisitor);
         scrollView = findViewById(R.id.scrollView);
         spinnerLlm = findViewById(R.id.spinnerLlm);
+        seekBarVolume = findViewById(R.id.seekBarVolume);
+        tvVolumePercent = findViewById(R.id.tvVolumePercent);
+
+        visitorContainer = findViewById(R.id.visitorContainer);
+        btnSwitchToAdmin = findViewById(R.id.btnSwitchToAdmin);
+        btnVisitorMic = findViewById(R.id.btnVisitorMic);
+        btnVisitorAnimations = findViewById(R.id.btnVisitorAnimations);
+        tvVisitorStateTitle = findViewById(R.id.tvVisitorStateTitle);
+        tvVisitorStateSubtitle = findViewById(R.id.tvVisitorStateSubtitle);
 
         // Odeslani zpravy tlacitkem
         btnSend.setOnClickListener(v -> {
@@ -189,8 +218,26 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             return false;
         });
 
-        // Mikrofon
+        // Mikrofon (v Admin i Navstevnickem rezimu)
         btnMic.setOnClickListener(v -> startSpeechRecognition());
+        btnVisitorMic.setOnClickListener(v -> startSpeechRecognition());
+
+        // Prepinani mezi Admin (Test) a Navstevnickou (Prezentacni) obrazovkou
+        btnSwitchToVisitor.setOnClickListener(v -> {
+            adminContainer.setVisibility(View.GONE);
+            visitorContainer.setVisibility(View.VISIBLE);
+        });
+        btnSwitchToAdmin.setOnClickListener(v -> {
+            visitorContainer.setVisibility(View.GONE);
+            adminContainer.setVisibility(View.VISIBLE);
+        });
+
+        // Popup s prehledem a primym spoustenim 44 kategorii animaci
+        btnAnimations.setOnClickListener(v -> showAnimationsPopup());
+        btnVisitorAnimations.setOnClickListener(v -> showAnimationsPopup());
+
+        // Slider hlasitosti (AudioManager STREAM_MUSIC)
+        initVolumeControl();
 
         // Smazani chatu - VZDY klikatelne, resetuje i zasekly stav
         btnClear.setOnClickListener(v -> {
@@ -201,6 +248,57 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             appendToChat("SYSTEM", "Chat smazan. Muzete zacit novou konverzaci.");
             updateStatus("Rubby - Pripravena", true);
         });
+    }
+
+    private void initVolumeControl() {
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager == null) return;
+
+        final int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        final int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        seekBarVolume.setMax(maxVolume);
+        seekBarVolume.setProgress(currentVolume);
+        updateVolumeLabel(currentVolume, maxVolume);
+
+        seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                }
+                updateVolumeLabel(progress, maxVolume);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+    }
+
+    private void updateVolumeLabel(int current, int max) {
+        if (max <= 0) return;
+        int percent = Math.round((current * 100f) / max);
+        tvVolumePercent.setText(percent + " %");
+    }
+
+    private void showAnimationsPopup() {
+        final String[] keys = AnimationManager.getCategoryKeys();
+        final String[] labels = AnimationManager.getPopupLabels();
+
+        new AlertDialog.Builder(this)
+                .setTitle("\uD83C\uDFAD Co vsechno Rubby umi predvest (44 kategorii / 93 animaci)")
+                .setItems(labels, (dialog, which) -> {
+                    if (which >= 0 && which < keys.length) {
+                        String selectedKey = keys[which];
+                        appendToChat("SYSTEM", "Spoustim ukazkovou animaci: [" + selectedKey + "]");
+                        runAnimationAsync(AnimationManager.getAnimation(selectedKey));
+                    }
+                })
+                .setNegativeButton("Zavrit", null)
+                .show();
     }
 
     private void initLlmAndSpinner() {
@@ -653,8 +751,49 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         etInput.setEnabled(inputEnabled);
         btnSend.setEnabled(inputEnabled);
         btnMic.setEnabled(inputEnabled);
+        btnVisitorMic.setEnabled(inputEnabled);
         // Smazat chat je VZDY klikatelne - slouzi i jako nouzovy reset
         btnClear.setEnabled(true);
+
+        // Aktualizace barvy a popisku podle stavu (v Admin i Navstevnicke obrazovce)
+        switch (state) {
+            case IDLE:
+                btnMic.setText("\uD83C\uDFA4 MIC");
+                btnMic.setBackgroundColor(0xFF1565C0);
+                visitorContainer.setBackgroundColor(0xFF102A43);
+                tvVisitorStateTitle.setText("\uD83D\uDFE2 P\u0158IPRAVENA K ROZHOVORU");
+                tvVisitorStateSubtitle.setText("Oslov m\u011b jm\u00e9nem \u201eRubby\u201c, pohla\u010f m\u011b po hlav\u011b nebo klepni na tla\u010d\u00edtko mikrofonu dole!");
+                btnVisitorMic.setText("\uD83C\uDFA4  MLUVIT S RUBBY");
+                btnVisitorMic.setBackgroundColor(0xFF1565C0);
+                break;
+            case LISTENING:
+                btnMic.setText("\uD83D\uDD34 POSLOUCH\u00c1M");
+                btnMic.setBackgroundColor(0xFF2E7D32);
+                visitorContainer.setBackgroundColor(0xFF1B5E20);
+                tvVisitorStateTitle.setText("\uD83C\uDFA4 POSLOUCH\u00c1M T\u011a...");
+                tvVisitorStateSubtitle.setText("Mluv pros\u00edm z\u0159eteln\u011b \u010desky \u2013 zeptej se na cokoliv nebo mi \u0159ekni, co m\u00e1m p\u0159edv\u00e9st!");
+                btnVisitorMic.setText("\uD83C\uDFA4  POSLOUCH\u00c1M...");
+                btnVisitorMic.setBackgroundColor(0xFF2E7D32);
+                break;
+            case PROCESSING:
+                btnMic.setText("\u23F3 P\u0158EM\u00dd\u0160L\u00cdM");
+                btnMic.setBackgroundColor(0xFFE65100);
+                visitorContainer.setBackgroundColor(0xFFB45309);
+                tvVisitorStateTitle.setText("\uD83E\uDDE0 P\u0158EM\u00dd\u0160L\u00cdM NAD ODPOV\u011aD\u00cd...");
+                tvVisitorStateSubtitle.setText("Chvili\u010dku strpen\u00ed, pr\u00e1v\u011b zpracov\u00e1v\u00e1m tv\u016fj dotaz...");
+                btnVisitorMic.setText("\uD83E\uDDE0  P\u0158EM\u00dd\u0160L\u00cdM...");
+                btnVisitorMic.setBackgroundColor(0xFFE65100);
+                break;
+            case SPEAKING:
+                btnMic.setText("\uD83D\uDDE3\uFE0F MLUV\u00cdM");
+                btnMic.setBackgroundColor(0xFF283593);
+                visitorContainer.setBackgroundColor(0xFF1E3A8A);
+                tvVisitorStateTitle.setText("\uD83D\uDDE3\uFE0F RUBBY PR\u00c1V\u011a MLUV\u00cd / P\u0158EDV\u00c1D\u00cd");
+                tvVisitorStateSubtitle.setText("Poslouchej a d\u00edvej se, co pr\u00e1v\u011b \u0159\u00edk\u00e1m a p\u0159edv\u00e1d\u00edm!");
+                btnVisitorMic.setText("\uD83D\uDDE3\uFE0F  RUBBY MLUV\u00cd...");
+                btnVisitorMic.setBackgroundColor(0xFF283593);
+                break;
+        }
 
         if (state == ConversationState.IDLE) {
             startWakeWordListening();

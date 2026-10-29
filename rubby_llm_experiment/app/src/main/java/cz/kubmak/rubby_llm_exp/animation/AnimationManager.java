@@ -148,4 +148,25 @@ public class AnimationManager {
         }
         return sb.toString();
     }
+
+    /**
+     * Vrati klice vsech registrovanych kategorii v poradi pro popup dialog.
+     */
+    public static String[] getCategoryKeys() {
+        return DESCRIPTIONS.keySet().toArray(new String[0]);
+    }
+
+    /**
+     * Vrati prehledne popisky pro popup okno (vcetne tipu, co rict Rubby).
+     */
+    public static String[] getPopupLabels() {
+        String[] keys = getCategoryKeys();
+        String[] labels = new String[keys.length];
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            String desc = DESCRIPTIONS.get(key);
+            labels[i] = "\u25B6  " + desc.toUpperCase() + "  \u2014  řekni např.: „Předveď " + desc.split("/")[0].trim() + "“  [" + key + "]";
+        }
+        return labels;
+    }
 }
