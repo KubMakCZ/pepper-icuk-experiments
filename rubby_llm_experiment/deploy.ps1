@@ -104,9 +104,17 @@ Write-OK "Prenos dokoncen."
 
 # --- KROK 5: Instalace (rychle, jen secunada) ---
 Write-INFO "Instaluji APK na zarizeni..."
-$installResult = adb -s $targetDevice shell "pm install -r $remoteApkPath" 2>&1 | Out-String
+$installResult = adb -s $targetDevice shell "pm install -r -t $remoteApkPath" 2>&1 | Out-String
+if ($installResult -notmatch "Success") {
+    Write-WARN "Znovu navazuji ADB spojeni po dlouhem prenosu a opakuji instalaci..."
+    adb disconnect | Out-Null
+    Start-Sleep -Seconds 1
+    adb connect $targetDevice | Out-Null
+    Start-Sleep -Seconds 1
+    $installResult = adb -s $targetDevice shell "pm install -r -t $remoteApkPath" 2>&1 | Out-String
+}
 # Uklidime docasny soubor
-adb -s $targetDevice shell "rm $remoteApkPath" | Out-Null
+adb -s $targetDevice shell "rm -f $remoteApkPath" | Out-Null
 
 if ($installResult -notmatch "Success") {
     Write-FAIL "Instalace SELHALA!"
@@ -119,6 +127,7 @@ Write-OK "Instalace uspesna!"
 if ($Launch) {
     Write-Host ""
     Write-INFO "Spoustim aplikaci..."
+    adb -s $targetDevice shell "am force-stop $PACKAGE" | Out-Null
     adb -s $targetDevice shell "am start -n $ACTIVITY" | Out-Null
     Start-Sleep -Seconds 2
     
