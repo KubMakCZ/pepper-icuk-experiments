@@ -47,8 +47,11 @@ import com.aldebaran.qi.sdk.object.actuation.Frame;
 import com.aldebaran.qi.sdk.object.actuation.FreeFrame;
 import com.aldebaran.qi.sdk.object.actuation.GoTo;
 import com.aldebaran.qi.sdk.object.actuation.Mapping;
+import com.aldebaran.qi.sdk.object.actuation.OrientationPolicy;
+import com.aldebaran.qi.sdk.object.actuation.PathPlanningPolicy;
 import com.aldebaran.qi.sdk.object.conversation.Say;
 import com.aldebaran.qi.sdk.object.geometry.Transform;
+import com.aldebaran.qi.sdk.object.power.FlapSensor;
 import com.aldebaran.qi.sdk.object.touch.Touch;
 import com.aldebaran.qi.sdk.object.touch.TouchSensor;
 
@@ -120,6 +123,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     // QiSDK komponenty
     private TouchSensor headTouchSensor;
+    private FlapSensor chargingFlapSensor;
+    private volatile boolean chargingFlapOpen = false;
     private QiChatbot qiChatbot;
     private Chat wakeWordChat;
     private Future<Void> currentAnimateFuture;
@@ -862,6 +867,30 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             }
         });
 
+        // Inicializace senzoru dvířek napájecího portu (FlapSensor)
+        try {
+            chargingFlapSensor = qiContext.getPower().getChargingFlap();
+            chargingFlapOpen = chargingFlapSensor.getState().getOpen();
+            fileLogger.i(TAG, "Charging flap initial state (open): " + chargingFlapOpen);
+            if (chargingFlapOpen) {
+                runOnUiThread(() -> appendToChat("SYSTEM",
+                        "POZOR: Napájecí port (dvířka vzadu dole) je OTEVŘENÝ – Rubby má zablokovaný pojezd!"));
+            }
+            chargingFlapSensor.addOnStateChangedListener(flapState -> {
+                chargingFlapOpen = flapState.getOpen();
+                fileLogger.i(TAG, "Charging flap state changed (open): " + chargingFlapOpen);
+                runOnUiThread(() -> {
+                    if (chargingFlapOpen) {
+                        appendToChat("SYSTEM", "POZOR: Napájecí port byl otevřen – pojezd Rubby je zablokován!");
+                    } else {
+                        appendToChat("SYSTEM", "Napájecí port uzavřen – pojezd Rubby je opět povolen.");
+                    }
+                });
+            });
+        } catch (Exception e) {
+            fileLogger.w(TAG, "Nelze inicializovat FlapSensor: " + e.getMessage());
+        }
+
         // Inicializace Wake word (QiChat)
         executor.execute(() -> {
             try {
@@ -902,6 +931,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             headTouchSensor.removeAllOnStateChangedListeners();
             headTouchSensor = null;
         }
+        if (chargingFlapSensor != null) {
+            chargingFlapSensor.removeAllOnStateChangedListeners();
+            chargingFlapSensor = null;
+        }
+        chargingFlapOpen = false;
         stopWakeWordListening();
         if (qiChatbot != null) {
             qiChatbot.removeAllOnBookmarkReachedListeners();
@@ -1038,6 +1072,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     @Override
+    public boolean isChargingFlapOpen() {
+        return chargingFlapOpen;
+    }
+
+    @Override
     public int getVolumePercent() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (am == null) return 80;
@@ -1093,6 +1132,11 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRemoteMove(final double xMeters, final double yMeters, final double thetaRadians) {
+        if (chargingFlapOpen) {
+            runOnUiThread(() -> appendToChat("SYSTEM",
+                    "[DALKOVE OVLADANI] Nelze jet – napájecí port (dvířka vzadu dole) je otevřený!"));
+            return;
+        }
         runOnUiThread(() -> appendToChat("SYSTEM",
                 String.format(Locale.US, "[DALKOVE OVLADANI] Pojezd: x=%.2fm, y=%.2fm, rot=%.2frad", xMeters, yMeters, thetaRadians)));
         if (qiContext == null) {
@@ -1104,15 +1148,27 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
                     currentGoToFuture.requestCancellation();
                 }
+                // Pokud jde o ciste otaceni na miste (x=0, y=0), pridame maly posun (12 cm) ve smeru otoceni,
+                // protoze GoTo v QiSDK jinak povazuje vzdalenost 0.0m za jiz splnenou a neotoci se!
+                double effX = xMeters;
+                double effY = yMeters;
+                if (Math.abs(effX) < 0.05 && Math.abs(effY) < 0.05 && Math.abs(thetaRadians) > 0.05) {
+                    effX = 0.12 * Math.cos(thetaRadians);
+                    effY = 0.12 * Math.sin(thetaRadians);
+                }
+
                 Actuation actuation = qiContext.getActuation();
                 Mapping mapping = qiContext.getMapping();
                 Frame robotFrame = actuation.robotFrame();
-                Transform transform = TransformBuilder.create().from2DTransform(xMeters, yMeters, thetaRadians);
+                Transform transform = TransformBuilder.create().from2DTransform(effX, effY, thetaRadians);
                 FreeFrame targetFrame = mapping.makeFreeFrame();
                 targetFrame.update(robotFrame, transform, 0L);
 
                 GoTo goTo = GoToBuilder.with(qiContext)
                         .withFrame(targetFrame.frame())
+                        .withPathPlanningPolicy(PathPlanningPolicy.STRAIGHT_LINES_ONLY)
+                        .withFinalOrientationPolicy(OrientationPolicy.ALIGN_X)
+                        .withMaxSpeed(0.55f)
                         .build();
                 currentGoToFuture = goTo.async().run();
             } catch (Exception e) {
@@ -1123,7 +1179,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRemoteJoystick(final double normX, final double normY, final double normTheta) {
-        if (qiContext == null) return;
+        if (qiContext == null || chargingFlapOpen) return;
         moveExecutor.execute(() -> {
             try {
                 Actuation actuation = qiContext.getActuation();
@@ -1142,6 +1198,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     return;
                 }
 
+                // Pri cistem otaceni joystickem do strany pridame maly dopredny vektor, aby GoTo okamzite zatacelo
+                if (Math.abs(targetX) < 0.08 && Math.abs(targetY) < 0.08 && Math.abs(targetTheta) >= 0.05) {
+                    targetX = 0.15 * Math.cos(targetTheta);
+                    targetY = 0.15 * Math.sin(targetTheta);
+                }
+
                 Transform transform = TransformBuilder.create().from2DTransform(targetX, targetY, targetTheta);
                 if (joystickTargetFrame == null) {
                     joystickTargetFrame = mapping.makeFreeFrame();
@@ -1151,6 +1213,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 if (joystickGoTo == null) {
                     joystickGoTo = GoToBuilder.with(qiContext)
                             .withFrame(joystickTargetFrame.frame())
+                            .withPathPlanningPolicy(PathPlanningPolicy.STRAIGHT_LINES_ONLY)
+                            .withFinalOrientationPolicy(OrientationPolicy.ALIGN_X)
+                            .withMaxSpeed(0.55f)
                             .build();
                 }
                 if (currentGoToFuture == null || currentGoToFuture.isDone()) {

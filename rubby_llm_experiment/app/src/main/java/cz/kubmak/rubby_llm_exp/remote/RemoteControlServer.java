@@ -32,6 +32,7 @@ public class RemoteControlServer {
     public interface RemoteCommandHandler {
         String getCurrentStateName();
         boolean hasRobotFocus();
+        boolean isChargingFlapOpen();
         int getVolumePercent();
         boolean isVisitorScreenActive();
         String getLastRubbyMessage();
@@ -240,6 +241,7 @@ public class RemoteControlServer {
                 "\"ok\":true," +
                 "\"state\":\"" + escapeJson(handler.getCurrentStateName()) + "\"," +
                 "\"robotFocus\":" + handler.hasRobotFocus() + "," +
+                "\"chargingFlapOpen\":" + handler.isChargingFlapOpen() + "," +
                 "\"volume\":" + handler.getVolumePercent() + "," +
                 "\"visitorScreen\":" + handler.isVisitorScreenActive() + "," +
                 "\"lastMessage\":\"" + escapeJson(handler.getLastRubbyMessage()) + "\"" +
@@ -357,7 +359,11 @@ public class RemoteControlServer {
                 "<div class='card'><div class='status-bar'>" +
                 "<h1>🤖 Rubby Dálkové Ovládání (ICUK)</h1>" +
                 "<span id='stBadge' class='badge'>Stav: ...</span>" +
-                "</div><div id='lastMsg' style='font-size:14px;color:#cbd5e1;margin-top:8px;'>Poslední odpověď: -</div>" +
+                "</div>" +
+                "<div id='flapWarn' style='display:none;background:#b91c1c;color:#fff;padding:12px;border-radius:8px;margin-top:10px;font-weight:bold;font-size:15px;border:2px solid #fca5a5;'>" +
+                "⚠️ POZOR: Napájecí port / dvířka vzadu dole jsou OTEVŘENÁ! Motory kol jsou zablokované a Rubby se nemůže pohybovat." +
+                "</div>" +
+                "<div id='lastMsg' style='font-size:14px;color:#cbd5e1;margin-top:8px;'>Poslední odpověď: -</div>" +
                 "<div style='display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;'>" +
                 "<button style='background:#0d9488;font-size:13px;' onclick=\"api('/api/listen')\">🎤 Zapnout MIC</button>" +
                 "<button style='background:#0369a1;font-size:13px;' onclick=\"api('/api/screen?mode=visitor')\">▶ Prezentace</button>" +
@@ -471,6 +477,7 @@ public class RemoteControlServer {
 
                 "function refreshStatus(){fetch('/api/status').then(r=>r.json()).then(d=>{" +
                 "document.getElementById('stBadge').innerText='Stav: '+d.state+(d.robotFocus?' (QiSDK)':' (Bez Focusu)');" +
+                "document.getElementById('flapWarn').style.display=d.chargingFlapOpen?'block':'none';" +
                 "if(d.lastMessage)document.getElementById('lastMsg').innerText='Poslední odpověď: '+d.lastMessage;" +
                 "}).catch(()=>{});}" +
                 "setInterval(refreshStatus,2000);refreshStatus();" +
