@@ -6,11 +6,11 @@ Tento projekt je inovativní Android aplikace (tzv. "wrapper") pro humanoidního
 
 - **Inteligentní mozek (Přepínání modelů):** Projekt v sobě integruje hned několik AI modelů s možností **dynamického přepínání za běhu** (pomocí UI dropdown menu). Podporuje:
   - **Google Gemini Flash** (oficiální API).
-  - Open-source modely zdarma přes **OpenRouter API** (skvělé pro vývoj a testování bez nákladů): automatický bezplatný router (*openrouter/free*), *Llama 3.1 8B*, *Qwen 3 8B* a *Mistral 7B*.
+  - Open-source modely zdarma přes **OpenRouter API** (skvělé pro vývoj a testování bez nákladů): automatický bezplatný router (*openrouter/free*), *Gemma 4 31B*, *Nemotron 3.5 Lightning* a *Nemotron 3 Ultra*.
 - **Plynulá čeština:** Nativní integrace českého rozpoznávání řeči (STT) s optimalizovaným rychlým startem naslouchání a syntézou hlasu (TTS).
-- **Wake Word Detekce:** Integrovaný systém **QiChat**, který lokálně naslouchá na jméno *"Rubby"* a jakmile je vysloveno, automaticky robota probudí do stavu naslouchání, aby byl hned připraven na dotaz.
+- **Wake Word Detekce:** Integrovaný systém **QiChat**, který lokálně naslouchá na jméno *"Rubby"* a jakmile je vysloveno, automaticky robota probudí s přátelským pozdravem do stavu naslouchání (odlišeným od pohlazení po hlavě).
 - **Obecné znalosti & Persona:** Rubby vystupuje jako maskot *Inovačního centra Ústeckého kraje (ICUK)*, ovšem díky chytře postavenému systémovému promptu naplno využívá svých obecných LLM znalostí a dokáže odpovědět na jakýkoliv dotaz i mimo své hlavní zacílení.
-- **Robotická gestikulace:** Během mluvení může LLM dynamicky spouštět animace robota přes speciální příkazové tagy v textu (které pak robot nečte nahlas, ale fyzicky vykoná).
+- **93 animací v 44 kategoriích:** Během mluvení může LLM dynamicky spouštět animace robota přes speciální příkazové tagy `[ANIMACE:kategorie]` (bowling, kytara, saxofon, kung-fu, zvířata, emoce, tance atd.). Kompletní přehled najdeš v souboru [**`ANIMACE.md`**](./ANIMACE.md).
 - **Konverzační paměť:** Pamatuje si posledních 10 výměn (turnů).
 - **Sledování spotřeby tokenů:** Po každé odpovědi se v chatu zobrazí kolik tokenů daný dotaz spotřeboval (vidí jen člověk na tabletu, robot to neříká nahlas).
 - **Debug logging:** Automaticky zapisuje logy do souboru `/sdcard/Android/data/cz.kubmak.rubby_llm_exp/files/RubbyLogs/` – dostupné i offline po faktu přes ADB nebo Device File Explorer.

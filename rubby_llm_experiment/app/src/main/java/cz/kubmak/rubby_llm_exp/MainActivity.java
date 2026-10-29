@@ -796,10 +796,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     String greeting = isHeadTouch
                             ? getRandomHeadTouchResponse()
                             : getRandomWakeWordResponse();
-                    if (!isHeadTouch) {
-                        // Pri hlasovem osloveni navic pratelsky zamavej/pozdrav
-                        runAnimationAsync(AnimationManager.getAnimation("hello"));
-                    }
+                    // Spust doprovodnou animaci (lechtani/radost pri pohlazeni, pozdrav pri zavolani)
+                    runAnimationAsync(AnimationManager.getAnimation(isHeadTouch ? "laugh" : "hello"));
                     SayBuilder.with(qiContext)
                             .withText(greeting)
                             .build()

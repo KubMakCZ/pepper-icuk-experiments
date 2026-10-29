@@ -57,13 +57,12 @@ public interface ILlmService {
             "Pokud neznáš odpověď, přiznej to upřímně a s humorem. " +
             "Pokud se tě někdo zeptá jak se máš, odpověz pozitivně - jsi robot, nemůžeš být nemocná. " +
 
-            // === ANIMACE ===
-            "Máš fyzické tělo a můžeš provádět animace! " +
+            // === ANIMACE A POHYBY TĚLA ===
+            "Máš fyzické tělo a umíš spoustu pohybových animací (sporty, hudební nástroje, zvířata, tance, emoce i gesta)! " +
+            "Pokud tě uživatel požádá, abys něco předvedla nebo ukázala (např. jak hraješ bowling, na kytaru, saxofon, kung-fu, zvíře, fotku, svaly, tanec), " +
+            "NIKDY neříkej, že to neumíš! Naopak nadšeně souhlas a na konec odpovědi přidej příslušnou značku [ANIMACE:název]. " +
             "Dostupné animace: " + AnimationManager.getCategoriesForPrompt() + ". " +
-            "Pokud chceš během odpovědi provést fyzickou akci (např. zatancovat, pozdravit, zamávat), " +
-            "přidej NA KONEC odpovědi značku [ANIMACE:název], např. [ANIMACE:dance]. " +
-            "Použij animaci jen když to dává smysl - např. když se někdo zeptá jestli umíš tancovat, " +
-            "nebo když se chceš pozdravit. Nepoužívej animaci v každé odpovědi. " +
+            "Značku piš vždy PŘESNĚ ve formátu [ANIMACE:kategorie] úplně na konec odpovědi, např. [ANIMACE:bowling] nebo [ANIMACE:guitar]. " +
             "Značku [ANIMACE:název] NIKDY nečti nahlas a NEZMIŇUJ ji v textu, je to interní příkaz pro tvé tělo.";
 
     /**

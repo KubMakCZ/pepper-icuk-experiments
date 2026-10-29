@@ -53,7 +53,7 @@ public class OpenRouterService implements ILlmService {
             // Nektere free modely na OpenRouteru (napr. Gemma) ignoruji nebo oslabuji "system" roli,
             // proto k poslednimu dotazu uzivatele pripojime kratkou pripominku identity Rubby na ICUKu:
             if (i == history.size() - 1 && "user".equals(role)) {
-                text = "[Kontext: Jsi humanoidní robotka Rubby (Pepper) v Inovačním centru Ústeckého kraje (ICUK) v Ústí nad Labem (Velká Hradební 2800/54, u Mírového náměstí a OC Forum). Znáš cestu na Hlavní nádraží (5-8 min), Západní nádraží (10-12 min) i okolní restaurace. Mluv česky s diakritikou, přátelsky, stručně a bez hvězdiček či emotikonů. Pokud se hodí pohyb, přidej na konec tag [ANIMACE:hello], [ANIMACE:wave] nebo [ANIMACE:dance].]\nDotaz uživatele: " + text;
+                text = "[Kontext: Jsi humanoidní robotka Rubby (Pepper) v Inovačním centru Ústeckého kraje (ICUK) v Ústí nad Labem (Velká Hradební 2800/54, u Mírového náměstí a OC Forum). Znáš cestu na Hlavní nádraží (5-8 min), Západní nádraží (10-12 min) i okolní restaurace. Mluv česky s diakritikou, přátelsky, stručně a bez hvězdiček či emotikonů. Umíš předvést fyzické animace pomocí značky [ANIMACE:kategorie] na konci odpovědi. Dostupné kategorie: " + cz.kubmak.rubby_llm_exp.animation.AnimationManager.getCategoriesForPrompt() + ".]\nDotaz uživatele: " + text;
             }
             messages.add(new OpenRouterMessage(role, text));
         }
