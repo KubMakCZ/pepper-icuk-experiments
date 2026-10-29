@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.RecognitionListener;
@@ -70,6 +71,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
+import cz.kubmak.rubby_llm_exp.animation.ShoulderLedManager;
 import cz.kubmak.rubby_llm_exp.conversation.ChatHistoryManager;
 import cz.kubmak.rubby_llm_exp.remote.RemoteControlServer;
 import cz.kubmak.rubby_llm_exp.util.FileLogger;
@@ -132,6 +134,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Future<Void> currentSayFuture;
     private FreeFrame joystickTargetFrame;
     private GoTo joystickGoTo;
+    private ShoulderLedManager shoulderLedManager;
 
     // Vzdalene ovladani (Web + REST API na portu 8080)
     private RemoteControlServer remoteControlServer;
@@ -160,6 +163,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
         setContentView(R.layout.activity_main);
         fileLogger = FileLogger.getInstance(this);
+        shoulderLedManager = new ShoulderLedManager(fileLogger);
 
         // Registrace QiSDK lifecycle - na ne-Pepper zarizeni se nic nestane
         try {
@@ -335,8 +339,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 .setItems(labels, (dialog, which) -> {
                     if (which >= 0 && which < keys.length) {
                         String selectedKey = keys[which];
-                        appendToChat("SYSTEM", "Spou\u0161t\u00edm uk\u00e1zkovou animaci: [" + selectedKey + "]");
-                        runAnimationAsync(AnimationManager.getAnimation(selectedKey));
+                        playStandaloneAnimation(selectedKey, false);
                     }
                 })
                 .setNegativeButton("Zav\u0159\u00edt", null)
@@ -638,7 +641,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     // ==================== TEXT-TO-SPEECH ====================
 
     private void speakResponse(String text, String animationCategory) {
+        final boolean isDisco = ShoulderLedManager.isDiscoCategory(animationCategory);
+        final boolean hasSpecificAnim = (animationCategory != null && AnimationManager.hasCategory(animationCategory));
         setState(ConversationState.SPEAKING);
+        if (isDisco && shoulderLedManager != null) {
+            shoulderLedManager.startDisco();
+        }
         updateStatus("Rubby mluvi...", true);
 
         if (qiContext != null) {
@@ -647,7 +655,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 try {
                     // Vyber animaci - specificka kategorie od LLM, nebo nahodna idle
                     int animRes;
-                    if (animationCategory != null && AnimationManager.hasCategory(animationCategory)) {
+                    if (hasSpecificAnim) {
                         animRes = AnimationManager.getAnimation(animationCategory);
                         fileLogger.i(TAG, "LLM pozadala animaci: " + animationCategory);
                     } else {
@@ -664,13 +672,25 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     currentSayFuture = say.async().run();
                     currentSayFuture.get();
 
-                    // Say uspesne dobehl
+                    // Pokud sla specificka (napr. tanecni/disco) animace, pockame az dobehne cela
+                    if (hasSpecificAnim && currentAnimateFuture != null && !currentAnimateFuture.isDone()) {
+                        currentAnimateFuture.get();
+                    }
+
+                    if (isDisco && shoulderLedManager != null) {
+                        shoulderLedManager.stopDisco();
+                    }
+
+                    // Say (i pripadna tanecni animace) uspesne dobehly
                     runOnUiThread(() -> {
                         setState(ConversationState.IDLE);
                         updateStatus("Rubby - Pripravena", true);
                     });
                 } catch (Exception e) {
                     fileLogger.e(TAG, "QiSDK Say chyba/zastaveno: " + e.getMessage());
+                    if (isDisco && shoulderLedManager != null) {
+                        shoulderLedManager.stopDisco();
+                    }
                     // Say selhalo nebo bylo zastaveno - rovnou odemkni UI
                     runOnUiThread(() -> {
                         setState(ConversationState.IDLE);
@@ -684,8 +704,13 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         }
     }
 
-    private void runAnimationAsync(int animRes) {
+    private void runAnimationAsync(final int animRes) {
         if (qiContext == null) return;
+        // QiSDK .build() nesmi byt nikdy volano na hlavnim UI vlakne!
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            moveExecutor.execute(() -> runAnimationAsync(animRes));
+            return;
+        }
         try {
             if (currentAnimateFuture != null && !currentAnimateFuture.isDone()) {
                 currentAnimateFuture.requestCancellation();
@@ -700,6 +725,87 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         } catch (Exception e) {
             fileLogger.w(TAG, "Animace se nezdarila (neni kriticke): " + e.getMessage());
         }
+    }
+
+    /**
+     * Samostatne prehrani animace (z weboveho ovladace nebo z popup menu na tabletu).
+     * Vzdy bezi na background vlakne (QiSDK zakazuje .build() na UI vlakne) a docasne
+     * pozastavi QiChat wake-word naslouchani, aby mel robot volne klouby pro animaci.
+     */
+    private void playStandaloneAnimation(final String category, final boolean fromRemote) {
+        runOnUiThread(() -> {
+            String prefix = fromRemote ? "[DALKOVE OVLADANI] " : "";
+            appendToChat("SYSTEM", prefix + "Spou\u0161t\u00edm animaci: [" + category + "]");
+            if (qiContext == null) {
+                appendToChat("SYSTEM", "Nelze p\u0159ehr\u00e1t animaci \u2013 Rubby nem\u00e1 Robot Focus.");
+                return;
+            }
+            final boolean isDisco = ShoulderLedManager.isDiscoCategory(category);
+            final boolean wasIdle = (currentState == ConversationState.IDLE);
+            if (wasIdle) {
+                setState(ConversationState.SPEAKING);
+                updateStatus("Rubby p\u0159edv\u00e1d\u00ed animaci [" + category + "]...", true);
+            }
+            if (isDisco && shoulderLedManager != null) {
+                shoulderLedManager.startDisco();
+            }
+
+            moveExecutor.execute(() -> {
+                try {
+                    if (currentAnimateFuture != null && !currentAnimateFuture.isDone()) {
+                        currentAnimateFuture.requestCancellation();
+                    }
+                    if (wasIdle) {
+                        // Kratka pauza, aby QiSDK uvolnilo QiChat wake-word pred zacatkem animace
+                        Thread.sleep(150);
+                    }
+                    if (qiContext == null) return;
+
+                    int animRes = AnimationManager.getAnimation(category);
+                    Animation animation = AnimationBuilder.with(qiContext)
+                            .withResources(animRes)
+                            .build();
+                    Animate animate = AnimateBuilder.with(qiContext)
+                            .withAnimation(animation)
+                            .build();
+                    final Future<Void> animFuture = animate.async().run();
+                    currentAnimateFuture = animFuture;
+
+                    animFuture.thenConsume(future -> {
+                        if (future.hasError()) {
+                            fileLogger.w(TAG, "Samostatna animace [" + category + "] chyba: " + future.getErrorMessage());
+                        } else {
+                            fileLogger.i(TAG, "Samostatna animace [" + category + "] dokoncena.");
+                        }
+                        if (isDisco && shoulderLedManager != null && currentAnimateFuture == animFuture) {
+                            shoulderLedManager.stopDisco();
+                        }
+                        runOnUiThread(() -> {
+                            // Vrat stav do IDLE pouze pokud tato animace nebyla nahrazena jinou a nebezi rec
+                            if (currentAnimateFuture == animFuture
+                                    && currentState == ConversationState.SPEAKING
+                                    && (currentSayFuture == null || currentSayFuture.isDone())) {
+                                setState(ConversationState.IDLE);
+                                updateStatus("Rubby - Pripravena", true);
+                            }
+                        });
+                    });
+                } catch (Exception e) {
+                    fileLogger.e(TAG, "Chyba pri spousteni animace [" + category + "]: " + e.getMessage());
+                    if (isDisco && shoulderLedManager != null) {
+                        shoulderLedManager.stopDisco();
+                    }
+                    runOnUiThread(() -> {
+                        appendToChat("SYSTEM", "Chyba animace [" + category + "]: " + e.getMessage());
+                        if (currentState == ConversationState.SPEAKING
+                                && (currentSayFuture == null || currentSayFuture.isDone())) {
+                            setState(ConversationState.IDLE);
+                            updateStatus("Rubby - Pripravena", true);
+                        }
+                    });
+                }
+            });
+        });
     }
 
     private void speakWithAndroidTts(String text) {
@@ -843,6 +949,10 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 break;
         }
 
+        if (shoulderLedManager != null) {
+            shoulderLedManager.onStateChanged(state);
+        }
+
         if (state == ConversationState.IDLE) {
             startWakeWordListening();
         } else {
@@ -856,6 +966,10 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     public void onRobotFocusGained(QiContext qiContext) {
         this.qiContext = qiContext;
         fileLogger.i(TAG, "Robot Focus GAINED");
+
+        if (shoulderLedManager != null) {
+            shoulderLedManager.init(qiContext);
+        }
 
         // Initialize Head Touch Sensor
         Touch touch = qiContext.getTouch();
@@ -940,6 +1054,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (qiChatbot != null) {
             qiChatbot.removeAllOnBookmarkReachedListeners();
             qiChatbot = null;
+        }
+        if (shoulderLedManager != null) {
+            shoulderLedManager.release();
         }
         joystickTargetFrame = null;
         joystickGoTo = null;
@@ -1124,10 +1241,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRemoteAnimate(final String category) {
-        runOnUiThread(() -> {
-            appendToChat("SYSTEM", "[DALKOVE OVLADANI] Spoustim animaci: [" + category + "]");
-            runAnimationAsync(AnimationManager.getAnimation(category));
-        });
+        playStandaloneAnimation(category, true);
     }
 
     @Override
@@ -1250,6 +1364,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             if (currentSayFuture != null && !currentSayFuture.isDone()) {
                 currentSayFuture.requestCancellation();
             }
+            if (shoulderLedManager != null) {
+                shoulderLedManager.stopDisco();
+            }
         } catch (Exception ignored) {}
         runOnUiThread(() -> {
             if (speechRecognizer != null && currentState == ConversationState.LISTENING) {
@@ -1318,6 +1435,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         }
         if (androidTts != null) {
             androidTts.shutdown();
+        }
+        if (shoulderLedManager != null) {
+            shoulderLedManager.shutdown();
         }
         executor.shutdown();
         moveExecutor.shutdown();
