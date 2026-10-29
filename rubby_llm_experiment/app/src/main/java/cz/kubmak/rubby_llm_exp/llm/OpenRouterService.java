@@ -1,10 +1,8 @@
 package cz.kubmak.rubby_llm_exp.llm;
 
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.llm.models.Content;
 import cz.kubmak.rubby_llm_exp.llm.models.OpenRouterMessage;
 import cz.kubmak.rubby_llm_exp.llm.models.OpenRouterRequest;
@@ -35,7 +33,7 @@ public class OpenRouterService implements ILlmService {
 
         this.api = retrofit.create(OpenRouterApiInterface.class);
     }
-    
+
     public void setModelName(String modelName) {
         this.modelName = modelName;
     }
@@ -48,23 +46,31 @@ public class OpenRouterService implements ILlmService {
         List<OpenRouterMessage> messages = new ArrayList<>();
         messages.add(new OpenRouterMessage("system", SYSTEM_PROMPT));
 
-        for (Content content : history) {
+        for (int i = 0; i < history.size(); i++) {
+            Content content = history.get(i);
             String role = content.getRole().equals("user") ? "user" : "assistant";
-            messages.add(new OpenRouterMessage(role, content.getTextContent()));
+            String text = content.getTextContent();
+            // Nektere free modely na OpenRouteru (napr. Gemma) ignoruji nebo oslabuji "system" roli,
+            // proto k poslednimu dotazu uzivatele pripojime kratkou pripominku identity Rubby na ICUKu:
+            if (i == history.size() - 1 && "user".equals(role)) {
+                text = "[Kontext: Jsi humanoidní robotka Rubby (Pepper) v Inovačním centru Ústeckého kraje (ICUK) v Ústí nad Labem (Velká Hradební 2800/54, u Mírového náměstí a OC Forum). Znáš cestu na Hlavní nádraží (5-8 min), Západní nádraží (10-12 min) i okolní restaurace. Mluv česky s diakritikou, přátelsky, stručně a bez hvězdiček či emotikonů. Pokud se hodí pohyb, přidej na konec tag [ANIMACE:hello], [ANIMACE:wave] nebo [ANIMACE:dance].]\nDotaz uživatele: " + text;
+            }
+            messages.add(new OpenRouterMessage(role, text));
         }
 
-        OpenRouterRequest request = new OpenRouterRequest(this.modelName, messages);
-        cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odesilam request pres OpenRouter s modelem " + this.modelName);
+        String activeModel = this.modelName;
+        cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odesilam request pres OpenRouter s modelem " + activeModel);
 
         Exception lastException = null;
 
         for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             try {
+                OpenRouterRequest request = new OpenRouterRequest(activeModel, messages);
                 String authHeader = "Bearer " + apiKey;
                 Response<OpenRouterResponse> response = api.generateContent(
-                        authHeader, 
-                        "https://github.com/kubmak/rubby_llm_exp", 
-                        "Rubby LLM Experiment", 
+                        authHeader,
+                        "https://github.com/kubmak/rubby_llm_exp",
+                        "Rubby LLM Experiment",
                         request
                 ).execute();
 
@@ -79,13 +85,20 @@ public class OpenRouterService implements ILlmService {
                         throw new Exception("OpenRouter API vratila prazdny text");
                     }
 
-                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odpoved OpenRouter: " + text);
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odpoved OpenRouter (" + activeModel + "): " + text);
                     return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, body.getTotalTokens());
                 }
 
                 int code = response.code();
                 String errorBody = response.errorBody() != null ? response.errorBody().string() : "neznama chyba";
                 cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).w(TAG, "API chyba " + code + " (pokus " + attempt + "/" + MAX_RETRIES + "): " + errorBody);
+
+                // Pokud konkretni free model uz neni dostupny (404 / 400), automaticky prepneme na openrouter/free
+                if ((code == 404 || code == 400) && !"openrouter/free".equals(activeModel) && attempt < MAX_RETRIES) {
+                    cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).i(TAG, "Model " + activeModel + " neni dostupny, prepinam automaticky na openrouter/free...");
+                    activeModel = "openrouter/free";
+                    continue;
+                }
 
                 if ((code == 429 || code == 503) && attempt < MAX_RETRIES) {
                     cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).i(TAG, "Cekam " + RETRY_DELAY_MS + "ms pred dalsim pokusem...");

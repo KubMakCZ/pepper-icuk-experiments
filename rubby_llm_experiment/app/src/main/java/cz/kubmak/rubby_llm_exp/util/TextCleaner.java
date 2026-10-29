@@ -31,6 +31,9 @@ public class TextCleaner {
         // Odstraneni animacnich tagu [ANIMACE:xxx]
         text = ANIMATION_TAG_PATTERN.matcher(text).replaceAll("");
 
+        // Odstraneni reasoning bloku (<think>...</think>) u nekterych OpenRouter modelu
+        text = text.replaceAll("(?i)<think>[\\s\\S]*?</think>", "");
+
         // Odstraneni code blocku (```...```) - musi byt pred inline kodem
         text = text.replaceAll("```[\\s\\S]*?```", "");
 

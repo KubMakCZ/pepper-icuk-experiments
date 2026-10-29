@@ -217,9 +217,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         String[] options = {
             "Gemini Flash (Google)",
             "Auto Free (OpenRouter)",
-            "Llama 3.1 8B (OpenRouter Free)",
-            "Qwen 3 8B (OpenRouter Free)",
-            "Mistral 7B (OpenRouter Free)"
+            "Gemma 4 31B (OpenRouter Free)",
+            "Nemotron 3.5 Lightning (OpenRouter Free)",
+            "Nemotron 3 Ultra (OpenRouter Free)"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, options);
@@ -242,9 +242,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                         appendToChat("SYSTEM", "Upozorneni: OpenRouter klic chybi.");
                     } else {
                         if (position == 1) ((OpenRouterService)openRouterService).setModelName("openrouter/free");
-                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("meta-llama/llama-3.1-8b-instruct:free");
-                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("qwen/qwen3-8b:free");
-                        else if (position == 4) ((OpenRouterService)openRouterService).setModelName("mistralai/mistral-7b-instruct:free");
+                        else if (position == 2) ((OpenRouterService)openRouterService).setModelName("google/gemma-4-31b-it:free");
+                        else if (position == 3) ((OpenRouterService)openRouterService).setModelName("nvidia/nemotron-3.5-lightning:free");
+                        else if (position == 4) ((OpenRouterService)openRouterService).setModelName("nvidia/nemotron-3-ultra-550b-a55b:free");
 
                         appendToChat("SYSTEM", "Prepina se na: OpenRouter (" + options[position] + ").");
                     }
@@ -694,10 +694,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 qiChatbot.addOnBookmarkReachedListener((bookmark) -> {
                     if ("wake_word_heard".equals(bookmark.getName())) {
                         fileLogger.i(TAG, "Wake word (Rubby) detected!");
-                        runOnUiThread(() -> {
-                            // Simulujeme dotyk hlavy - spusti poslouchani a zastavi chat
-                            onHeadTouched();
-                        });
+                        runOnUiThread(this::onWakeWordTriggered);
                     }
                 });
 
@@ -746,23 +743,42 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     private String getRandomHeadTouchResponse() {
-        // Pouzivame Unicode escape sekvence kvuli kodovani souboru
-        // \u00e9 = é, \u016f = ů, \u010d = č, \u0161 = š, \u00e1 = á atd.
+        // Reakce specificky na fyzicke pohlazeni po hlave ("pat pat")
         String[] responses = {
-            "Ano?",
-            "Copak?",
-            "Vrruum, tady jsem!",
             "Hi hi, to lecht\u00e1! Copak bys r\u00e1d?",
             "J\u00e9\u00e9, pat pat, poslouch\u00e1m t\u011b.",
-            "J\u016f\u016f\u016f, copak si p\u0159eje\u0161?",
+            "J\u016f\u016f\u016f, to je hezk\u00e9 pohlazen\u00ed! Copak si p\u0159eje\u0161?",
             "Hele, to je p\u0159\u00edjemn\u00e9! Co pot\u0159ebuje\u0161?",
             "\u00dat\u011bk, n\u011bkdo m\u011b pohladil! Co t\u011b tr\u00e1p\u00ed?",
-            "Hal\u00f3, hal\u00f3! Sly\u0161\u00edm t\u011b.",
+            "Haha, hlazen\u00ed po hlavi\u010dce m\u00e1m moc r\u00e1da! Pov\u00eddej.",
+        };
+        return responses[random.nextInt(responses.length)];
+    }
+
+    private String getRandomWakeWordResponse() {
+        // Reakce na hlasove osloveni jmenem ("Rubby", "Ahoj Rubby")
+        String[] responses = {
+            "Ano? Poslouch\u00e1m t\u011b!",
+            "Tady jsem! Copak pot\u0159ebuje\u0161?",
+            "Ahoj! S \u010d\u00edm ti m\u016f\u017eu pomoct?",
+            "Sly\u0161\u00edm t\u011b, pov\u00eddej!",
+            "Ano, to jsem j\u00e1, Rubby! Copak t\u011b zaj\u00edm\u00e1?",
+            "Hal\u00f3, hal\u00f3! Poslouch\u00e1m.",
+            "Jsem p\u0159ipraven\u00e1! Na co se chce\u0161 zeptat?",
+            "Copak? Pov\u00eddej, poslouch\u00e1m.",
         };
         return responses[random.nextInt(responses.length)];
     }
 
     private void onHeadTouched() {
+        triggerGreetingAndListen(true);
+    }
+
+    private void onWakeWordTriggered() {
+        triggerGreetingAndListen(false);
+    }
+
+    private void triggerGreetingAndListen(final boolean isHeadTouch) {
         if (currentState != ConversationState.IDLE) {
             return;
         }
@@ -777,13 +793,20 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 Thread.sleep(250);
 
                 if (qiContext != null) {
+                    String greeting = isHeadTouch
+                            ? getRandomHeadTouchResponse()
+                            : getRandomWakeWordResponse();
+                    if (!isHeadTouch) {
+                        // Pri hlasovem osloveni navic pratelsky zamavej/pozdrav
+                        runAnimationAsync(AnimationManager.getAnimation("hello"));
+                    }
                     SayBuilder.with(qiContext)
-                            .withText(getRandomHeadTouchResponse())
+                            .withText(greeting)
                             .build()
                             .run();
                 }
             } catch (Exception e) {
-                fileLogger.e(TAG, "Error in head touch response: " + e.getMessage());
+                fileLogger.e(TAG, "Error in greeting response: " + e.getMessage());
             } finally {
                 // Prejdi do poslouchani (mikrofon uz neni blokovan wake-wordem)
                 runOnUiThread(() -> {
