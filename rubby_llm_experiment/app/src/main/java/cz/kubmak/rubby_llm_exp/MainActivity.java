@@ -107,7 +107,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Button btnVisitorAnimations;
     private TextView tvVisitorStateTitle;
     private TextView tvVisitorStateSubtitle;
-    private TextView tvRemoteUrlVisitor;
 
     // LLM
     private ILlmService llmService;
@@ -224,7 +223,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         btnVisitorAnimations = findViewById(R.id.btnVisitorAnimations);
         tvVisitorStateTitle = findViewById(R.id.tvVisitorStateTitle);
         tvVisitorStateSubtitle = findViewById(R.id.tvVisitorStateSubtitle);
-        tvRemoteUrlVisitor = findViewById(R.id.tvRemoteUrlVisitor);
 
         // Odeslani zpravy tlacitkem
         btnSend.setOnClickListener(v -> {
@@ -251,7 +249,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
         // Prepinani mezi Admin (Test) a Navstevnickou (Prezentacni) obrazovkou
         btnSwitchToVisitor.setOnClickListener(v -> {
-            updateRemoteUrlLabels();
             adminContainer.setVisibility(View.GONE);
             visitorContainer.setVisibility(View.VISIBLE);
         });
@@ -284,9 +281,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         String urlText = "\uD83C\uDF10 Web ovlada\u010d: http://" + ip + ":" + RemoteControlServer.DEFAULT_PORT;
         if (tvRemoteUrlAdmin != null) {
             tvRemoteUrlAdmin.setText(urlText);
-        }
-        if (tvRemoteUrlVisitor != null) {
-            tvRemoteUrlVisitor.setText(urlText);
         }
     }
 

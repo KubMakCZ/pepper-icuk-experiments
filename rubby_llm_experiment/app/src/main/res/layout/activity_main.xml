@@ -239,7 +239,7 @@
         android:padding="20dp"
         android:visibility="gone">
 
-        <!-- Horni lista: Nazev ICUK + IP adresa dalkoveho ovladani + prepinani zpet do Admin/Test rezimu -->
+        <!-- Horni lista: Nazev ICUK + prepinani zpet do Admin/Test rezimu (bez IP adresy) -->
         <LinearLayout
             android:id="@+id/visitorHeader"
             android:layout_width="match_parent"
@@ -255,16 +255,6 @@
                 android:text="Inovační centrum Ústeckého kraje (ICUK)"
                 android:textColor="#B0BEC5"
                 android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvRemoteUrlVisitor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="14dp"
-                android:text="&#x1F310; Web ovladač: http://...:8080"
-                android:textColor="#90CAF9"
-                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <Button

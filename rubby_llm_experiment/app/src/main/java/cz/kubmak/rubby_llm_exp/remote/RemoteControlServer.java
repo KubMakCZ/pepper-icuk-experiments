@@ -270,20 +270,36 @@ public class RemoteControlServer {
     }
 
     public static String getLocalIpAddress() {
+        String wlanIp = null;
+        String fallbackIp = null;
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
                 NetworkInterface intf = interfaces.nextElement();
+                String ifName = intf.getName() != null ? intf.getName().toLowerCase() : "";
                 Enumeration<InetAddress> addrs = intf.getInetAddresses();
                 while (addrs.hasMoreElements()) {
                     InetAddress addr = addrs.nextElement();
                     if (!addr.isLoopbackAddress() && addr instanceof Inet4Address) {
-                        return addr.getHostAddress();
+                        String ip = addr.getHostAddress();
+                        FileLogger.getInstance(null).i("RubbyLLM", "Detekovane sitove rozhrani [" + ifName + "] -> IP: " + ip);
+                        // Ignoruj interni sit mezi tabletem a hlavou Peppera (198.18.0.x)
+                        if (ip != null && ip.startsWith("198.18.")) {
+                            continue;
+                        }
+                        // Uprednostni Wi-Fi rozhrani (wlan0)
+                        if (ifName.startsWith("wlan") || ifName.startsWith("ap")) {
+                            wlanIp = ip;
+                        } else if (fallbackIp == null) {
+                            fallbackIp = ip;
+                        }
                     }
                 }
             }
         } catch (Exception ignored) {}
-        return "127.0.0.1";
+        String selected = wlanIp != null ? wlanIp : (fallbackIp != null ? fallbackIp : "127.0.0.1");
+        FileLogger.getInstance(null).i("RubbyLLM", "Vybrana IP adresa pro Web ovladac: http://" + selected + ":" + DEFAULT_PORT);
+        return selected;
     }
 
     private String buildWebDashboardHtml() {
