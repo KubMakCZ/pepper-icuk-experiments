@@ -50,10 +50,14 @@ public class OpenRouterService implements ILlmService {
             Content content = history.get(i);
             String role = content.getRole().equals("user") ? "user" : "assistant";
             String text = content.getTextContent();
-            // Nektere free modely na OpenRouteru (napr. Gemma) ignoruji nebo oslabuji "system" roli,
-            // proto k poslednimu dotazu uzivatele pripojime kratkou pripominku identity Rubby na ICUKu:
+            // Nektere free modely na OpenRouteru (napr. Liquid LFM nebo Gemma) ignoruji "system" roli,
+            // proto k poslednimu dotazu uzivatele pripojime jasnou instrukci identity Rubby na ICUKu:
             if (i == history.size() - 1 && "user".equals(role)) {
-                text = "[Kontext: Jsi humanoidní robotka Rubby (Pepper) v Inovačním centru Ústeckého kraje (ICUK) v Ústí nad Labem (Velká Hradební 2800/54, u Mírového náměstí a OC Forum). Znáš cestu na Hlavní nádraží (5-8 min), Západní nádraží (10-12 min) i okolní restaurace. Mluv česky s diakritikou, přátelsky, stručně a bez hvězdiček či emotikonů. Umíš předvést fyzické animace pomocí značky [ANIMACE:kategorie] na konci odpovědi. Dostupné kategorie: " + cz.kubmak.rubby_llm_exp.animation.AnimationManager.getCategoriesForPrompt() + ".]\nDotaz uživatele: " + text;
+                text = "[DŮLEŽITÉ PRAVIDLO: Jsi humanoidní robotka Rubby (robot Pepper) a nacházíš se na ICUKu (Inovační centrum Ústeckého kraje) na ulici Velká Hradební v Ústí nad Labem. " +
+                       "NIKDY o sobě neříkej, že jsi LFM, Liquid Foundation Model, Liquid AI ani jazykový model! Vždy vystupuj výhradně jako robotka Rubby z ICUKu. " +
+                       "Mluv česky s diakritikou, přátelsky, stručně a bez hvězdiček či emotikonů. " +
+                       "Pokud tě uživatel žádá o předvedení pohybu, přidej na konec odpovědi značku [ANIMACE:kategorie]. Dostupné kategorie: " +
+                       cz.kubmak.rubby_llm_exp.animation.AnimationManager.getCategoriesForPrompt() + ".]\nDotaz uživatele: " + text;
             }
             messages.add(new OpenRouterMessage(role, text));
         }
@@ -84,6 +88,11 @@ public class OpenRouterService implements ILlmService {
                     if (text == null || text.isEmpty()) {
                         throw new Exception("OpenRouter API vratila prazdny text");
                     }
+
+                    // Pojistka proti hardcoded identite nekterych malych free modelu (napr. Liquid AI LFM)
+                    text = text.replaceAll("(?i)Liquid Foundation Model", "robotka Rubby")
+                               .replaceAll("(?i)\\bLFM\\b", "Rubby")
+                               .replaceAll("(?i)vytvořený týmem Liquid AI|vyvinutý týmem Liquid AI|od společnosti Liquid AI|týmem Liquid AI|Liquid AI", "z Inovačního centra Ústeckého kraje (ICUK)");
 
                     cz.kubmak.rubby_llm_exp.util.FileLogger.getInstance(null).d(TAG, "Odpoved OpenRouter (" + activeModel + "): " + text);
                     return new cz.kubmak.rubby_llm_exp.llm.models.LlmResult(text, body.getTotalTokens());
