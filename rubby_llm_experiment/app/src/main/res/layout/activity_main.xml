@@ -31,7 +31,7 @@
 
             <Button
                 android:id="@+id/btnMic"
-                android:layout_width="104dp"
+                android:layout_width="112dp"
                 android:layout_height="56dp"
                 android:text="&#x1F3A4; MIC"
                 android:textSize="15sp"
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:hint="Napis zpravu nebo klikni na mikrofon..."
+                android:hint="Napiš zprávu nebo klikni na mikrofon..."
                 android:textColorHint="#666680"
                 android:textColor="#e0e0e0"
                 android:textSize="16sp"
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="Rubby - Pripravena"
+                    android:text="Rubby - Připravena"
                     android:textColor="#ffffff"
                     android:textStyle="bold"
                     android:textSize="15sp" />
@@ -143,7 +143,7 @@
                     android:id="@+id/btnSwitchToVisitor"
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
-                    android:text="&#x1F441; PREZENTACE"
+                    android:text="&#x25B6; PREZENTACE"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
@@ -152,40 +152,57 @@
                     android:paddingEnd="12dp" />
             </LinearLayout>
 
-            <!-- Druhy radek: Slider hlasitosti (AudioManager STREAM_MUSIC) -->
+            <!-- Druhy radek: Velky slider hlasitosti (AudioManager STREAM_MUSIC) + IP adresa dalkoveho ovladani -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="58dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginTop="6dp"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp">
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:background="#16213e">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="&#x1F50A; Hlasitost:"
-                    android:textColor="#b0bec5"
-                    android:textSize="13sp" />
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
 
                 <SeekBar
                     android:id="@+id/seekBarVolume"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
                     android:max="15" />
 
                 <TextView
                     android:id="@+id/tvVolumePercent"
-                    android:layout_width="48dp"
+                    android:layout_width="56dp"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:text="80 %"
-                    android:textColor="#e0e0e0"
-                    android:textSize="13sp"
+                    android:textColor="#4FC3F7"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRemoteUrlAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="&#x1F310; Web ovladač: http://...:8080"
+                    android:textColor="#81C784"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -222,7 +239,7 @@
         android:padding="20dp"
         android:visibility="gone">
 
-        <!-- Horni lista: Nazev ICUK + prepinani zpet do Admin/Test rezimu -->
+        <!-- Horni lista: Nazev ICUK + IP adresa dalkoveho ovladani + prepinani zpet do Admin/Test rezimu -->
         <LinearLayout
             android:id="@+id/visitorHeader"
             android:layout_width="match_parent"
@@ -235,17 +252,28 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Inovacni centrum Usteckeho kraje (ICUK)"
+                android:text="Inovační centrum Ústeckého kraje (ICUK)"
                 android:textColor="#B0BEC5"
                 android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRemoteUrlVisitor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                android:text="&#x1F310; Web ovladač: http://...:8080"
+                android:textColor="#90CAF9"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnSwitchToAdmin"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:text="&#x2699; NASTAVENI / CHAT"
+                android:text="&#x2699; NASTAVENÍ / CHAT"
                 android:textSize="11sp"
+                android:textStyle="bold"
                 android:textColor="#ECEFF1"
                 android:background="#263238"
                 android:paddingStart="12dp"
@@ -288,7 +316,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="&#x1F7E2; PRIPRAVENA K ROZHOVORU"
+                android:text="&#x25CF; PŘIPRAVENA K ROZHOVORU"
                 android:textColor="#FFFFFF"
                 android:textSize="32sp"
                 android:textStyle="bold" />
@@ -299,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:gravity="center"
-                android:text="Oslov me jmenem &quot;Rubby&quot;, pohlad me po hlave nebo klepni na tlacitko mikrofonu dole!"
+                android:text="Oslov mě jménem „Rubby“, pohlaď mě po hlavě nebo klepni na tlačítko mikrofonu dole!"
                 android:textColor="#E0E0E0"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -329,7 +357,7 @@
                 android:id="@+id/btnVisitorAnimations"
                 android:layout_width="wrap_content"
                 android:layout_height="72dp"
-                android:text="&#x1F3AD;  CO VSECHNO UMIM?"
+                android:text="&#x1F3AD;  CO VŠECHNO UMÍM?"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"

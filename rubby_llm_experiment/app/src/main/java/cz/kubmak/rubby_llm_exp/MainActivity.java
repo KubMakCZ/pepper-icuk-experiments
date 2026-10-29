@@ -37,10 +37,18 @@ import com.aldebaran.qi.Future;
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks;
 import com.aldebaran.qi.sdk.builder.AnimateBuilder;
 import com.aldebaran.qi.sdk.builder.AnimationBuilder;
+import com.aldebaran.qi.sdk.builder.GoToBuilder;
 import com.aldebaran.qi.sdk.builder.SayBuilder;
+import com.aldebaran.qi.sdk.builder.TransformBuilder;
+import com.aldebaran.qi.sdk.object.actuation.Actuation;
 import com.aldebaran.qi.sdk.object.actuation.Animate;
 import com.aldebaran.qi.sdk.object.actuation.Animation;
+import com.aldebaran.qi.sdk.object.actuation.Frame;
+import com.aldebaran.qi.sdk.object.actuation.FreeFrame;
+import com.aldebaran.qi.sdk.object.actuation.GoTo;
+import com.aldebaran.qi.sdk.object.actuation.Mapping;
 import com.aldebaran.qi.sdk.object.conversation.Say;
+import com.aldebaran.qi.sdk.object.geometry.Transform;
 import com.aldebaran.qi.sdk.object.touch.Touch;
 import com.aldebaran.qi.sdk.object.touch.TouchSensor;
 
@@ -60,6 +68,7 @@ import java.util.concurrent.Executors;
 
 import cz.kubmak.rubby_llm_exp.animation.AnimationManager;
 import cz.kubmak.rubby_llm_exp.conversation.ChatHistoryManager;
+import cz.kubmak.rubby_llm_exp.remote.RemoteControlServer;
 import cz.kubmak.rubby_llm_exp.util.FileLogger;
 import cz.kubmak.rubby_llm_exp.conversation.ConversationState;
 import cz.kubmak.rubby_llm_exp.llm.GeminiService;
@@ -67,7 +76,7 @@ import cz.kubmak.rubby_llm_exp.llm.OpenRouterService;
 import cz.kubmak.rubby_llm_exp.llm.ILlmService;
 import cz.kubmak.rubby_llm_exp.util.TextCleaner;
 
-public class MainActivity extends RobotActivity implements RobotLifecycleCallbacks {
+public class MainActivity extends RobotActivity implements RobotLifecycleCallbacks, RemoteControlServer.RemoteCommandHandler {
 
     private static final String TAG = "RubbyLLM";
     private static final int PERMISSION_REQUEST_AUDIO = 1001;
@@ -89,6 +98,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Spinner spinnerLlm;
     private SeekBar seekBarVolume;
     private TextView tvVolumePercent;
+    private TextView tvRemoteUrlAdmin;
 
     // UI - Navstevnicka / Prezentacni obrazovka
     private View visitorContainer;
@@ -97,6 +107,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Button btnVisitorAnimations;
     private TextView tvVisitorStateTitle;
     private TextView tvVisitorStateSubtitle;
+    private TextView tvRemoteUrlVisitor;
 
     // LLM
     private ILlmService llmService;
@@ -112,6 +123,13 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private TouchSensor headTouchSensor;
     private QiChatbot qiChatbot;
     private Chat wakeWordChat;
+    private Future<Void> currentAnimateFuture;
+    private Future<Void> currentGoToFuture;
+    private Future<Void> currentSayFuture;
+
+    // Vzdalene ovladani (Web + REST API na portu 8080)
+    private RemoteControlServer remoteControlServer;
+    private volatile String lastRubbyMessage = "";
 
     // Android TTS fallback (kdyz neni QiSDK nebo neni focus)
     private TextToSpeech androidTts;
@@ -152,6 +170,13 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
         chatHistory = new ChatHistoryManager();
 
+        // Spusteni vestaveneho HTTP serveru pro vzdalene ovladani (port 8080)
+        remoteControlServer = new RemoteControlServer(RemoteControlServer.DEFAULT_PORT, this);
+        remoteControlServer.start();
+        updateRemoteUrlLabels();
+        String ip = RemoteControlServer.getLocalIpAddress();
+        appendToChat("SYSTEM", "Dalkove ovladani (Web + API): http://" + ip + ":" + RemoteControlServer.DEFAULT_PORT);
+
         // Android TTS jako fallback pro ne-Pepper zarizeni
         androidTts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
@@ -191,6 +216,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         spinnerLlm = findViewById(R.id.spinnerLlm);
         seekBarVolume = findViewById(R.id.seekBarVolume);
         tvVolumePercent = findViewById(R.id.tvVolumePercent);
+        tvRemoteUrlAdmin = findViewById(R.id.tvRemoteUrlAdmin);
 
         visitorContainer = findViewById(R.id.visitorContainer);
         btnSwitchToAdmin = findViewById(R.id.btnSwitchToAdmin);
@@ -198,6 +224,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         btnVisitorAnimations = findViewById(R.id.btnVisitorAnimations);
         tvVisitorStateTitle = findViewById(R.id.tvVisitorStateTitle);
         tvVisitorStateSubtitle = findViewById(R.id.tvVisitorStateSubtitle);
+        tvRemoteUrlVisitor = findViewById(R.id.tvRemoteUrlVisitor);
 
         // Odeslani zpravy tlacitkem
         btnSend.setOnClickListener(v -> {
@@ -224,10 +251,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
         // Prepinani mezi Admin (Test) a Navstevnickou (Prezentacni) obrazovkou
         btnSwitchToVisitor.setOnClickListener(v -> {
+            updateRemoteUrlLabels();
             adminContainer.setVisibility(View.GONE);
             visitorContainer.setVisibility(View.VISIBLE);
         });
         btnSwitchToAdmin.setOnClickListener(v -> {
+            updateRemoteUrlLabels();
             visitorContainer.setVisibility(View.GONE);
             adminContainer.setVisibility(View.VISIBLE);
         });
@@ -248,6 +277,17 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             appendToChat("SYSTEM", "Chat smazan. Muzete zacit novou konverzaci.");
             updateStatus("Rubby - Pripravena", true);
         });
+    }
+
+    private void updateRemoteUrlLabels() {
+        String ip = RemoteControlServer.getLocalIpAddress();
+        String urlText = "\uD83C\uDF10 Web ovlada\u010d: http://" + ip + ":" + RemoteControlServer.DEFAULT_PORT;
+        if (tvRemoteUrlAdmin != null) {
+            tvRemoteUrlAdmin.setText(urlText);
+        }
+        if (tvRemoteUrlVisitor != null) {
+            tvRemoteUrlVisitor.setText(urlText);
+        }
     }
 
     private void initVolumeControl() {
@@ -289,15 +329,15 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         final String[] labels = AnimationManager.getPopupLabels();
 
         new AlertDialog.Builder(this)
-                .setTitle("\uD83C\uDFAD Co vsechno Rubby umi predvest (44 kategorii / 93 animaci)")
+                .setTitle("\uD83C\uDFAD Co v\u0161echno Rubby um\u00ed p\u0159edv\u00e9st (44 kategori\u00ed / 93 animac\u00ed)")
                 .setItems(labels, (dialog, which) -> {
                     if (which >= 0 && which < keys.length) {
                         String selectedKey = keys[which];
-                        appendToChat("SYSTEM", "Spoustim ukazkovou animaci: [" + selectedKey + "]");
+                        appendToChat("SYSTEM", "Spou\u0161t\u00edm uk\u00e1zkovou animaci: [" + selectedKey + "]");
                         runAnimationAsync(AnimationManager.getAnimation(selectedKey));
                     }
                 })
-                .setNegativeButton("Zavrit", null)
+                .setNegativeButton("Zav\u0159\u00edt", null)
                 .show();
     }
 
@@ -615,11 +655,12 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     // Spust animaci paralelne (async)
                     runAnimationAsync(animRes);
 
-                    // Say synchronne - pocka az robot domluvi
+                    // Say async s cekanim, abychom ho mohli pripadne zastavit pres /api/stop
                     Say say = SayBuilder.with(qiContext)
                             .withText(text)
                             .build();
-                    say.run();
+                    currentSayFuture = say.async().run();
+                    currentSayFuture.get();
 
                     // Say uspesne dobehl
                     runOnUiThread(() -> {
@@ -627,8 +668,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                         updateStatus("Rubby - Pripravena", true);
                     });
                 } catch (Exception e) {
-                    fileLogger.e(TAG, "QiSDK Say chyba: " + e.getMessage());
-                    // Say selhalo - rovnou odemkni UI (nevolej Android TTS z executoru)
+                    fileLogger.e(TAG, "QiSDK Say chyba/zastaveno: " + e.getMessage());
+                    // Say selhalo nebo bylo zastaveno - rovnou odemkni UI
                     runOnUiThread(() -> {
                         setState(ConversationState.IDLE);
                         updateStatus("Rubby - Pripravena", true);
@@ -644,13 +685,16 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private void runAnimationAsync(int animRes) {
         if (qiContext == null) return;
         try {
+            if (currentAnimateFuture != null && !currentAnimateFuture.isDone()) {
+                currentAnimateFuture.requestCancellation();
+            }
             Animation animation = AnimationBuilder.with(qiContext)
                     .withResources(animRes)
                     .build();
             Animate animate = AnimateBuilder.with(qiContext)
                     .withAnimation(animation)
                     .build();
-            animate.async().run();
+            currentAnimateFuture = animate.async().run();
         } catch (Exception e) {
             fileLogger.w(TAG, "Animace se nezdarila (neni kriticke): " + e.getMessage());
         }
@@ -696,6 +740,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 break;
             case "Rubby":
                 prefix = "<< Rubby: ";
+                lastRubbyMessage = message;
                 break;
             default:
                 prefix = "[" + sender + "] ";
@@ -756,21 +801,22 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         btnClear.setEnabled(true);
 
         // Aktualizace barvy a popisku podle stavu (v Admin i Navstevnicke obrazovce)
+        // Pouzivame jen znaky podporovane na Androidu 6.0 (\u25CF, \uD83C\uDFA4, \u23F3, \uD83D\uDD0A)
         switch (state) {
             case IDLE:
                 btnMic.setText("\uD83C\uDFA4 MIC");
                 btnMic.setBackgroundColor(0xFF1565C0);
                 visitorContainer.setBackgroundColor(0xFF102A43);
-                tvVisitorStateTitle.setText("\uD83D\uDFE2 P\u0158IPRAVENA K ROZHOVORU");
+                tvVisitorStateTitle.setText("\u25CF  P\u0158IPRAVENA K ROZHOVORU");
                 tvVisitorStateSubtitle.setText("Oslov m\u011b jm\u00e9nem \u201eRubby\u201c, pohla\u010f m\u011b po hlav\u011b nebo klepni na tla\u010d\u00edtko mikrofonu dole!");
                 btnVisitorMic.setText("\uD83C\uDFA4  MLUVIT S RUBBY");
                 btnVisitorMic.setBackgroundColor(0xFF1565C0);
                 break;
             case LISTENING:
-                btnMic.setText("\uD83D\uDD34 POSLOUCH\u00c1M");
+                btnMic.setText("\uD83C\uDFA4 POSLOUCH\u00c1M");
                 btnMic.setBackgroundColor(0xFF2E7D32);
                 visitorContainer.setBackgroundColor(0xFF1B5E20);
-                tvVisitorStateTitle.setText("\uD83C\uDFA4 POSLOUCH\u00c1M T\u011a...");
+                tvVisitorStateTitle.setText("\uD83C\uDFA4  POSLOUCH\u00c1M T\u011a...");
                 tvVisitorStateSubtitle.setText("Mluv pros\u00edm z\u0159eteln\u011b \u010desky \u2013 zeptej se na cokoliv nebo mi \u0159ekni, co m\u00e1m p\u0159edv\u00e9st!");
                 btnVisitorMic.setText("\uD83C\uDFA4  POSLOUCH\u00c1M...");
                 btnVisitorMic.setBackgroundColor(0xFF2E7D32);
@@ -779,18 +825,18 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 btnMic.setText("\u23F3 P\u0158EM\u00dd\u0160L\u00cdM");
                 btnMic.setBackgroundColor(0xFFE65100);
                 visitorContainer.setBackgroundColor(0xFFB45309);
-                tvVisitorStateTitle.setText("\uD83E\uDDE0 P\u0158EM\u00dd\u0160L\u00cdM NAD ODPOV\u011aD\u00cd...");
+                tvVisitorStateTitle.setText("\u23F3  P\u0158EM\u00dd\u0160L\u00cdM NAD ODPOV\u011aD\u00cd...");
                 tvVisitorStateSubtitle.setText("Chvili\u010dku strpen\u00ed, pr\u00e1v\u011b zpracov\u00e1v\u00e1m tv\u016fj dotaz...");
-                btnVisitorMic.setText("\uD83E\uDDE0  P\u0158EM\u00dd\u0160L\u00cdM...");
+                btnVisitorMic.setText("\u23F3  P\u0158EM\u00dd\u0160L\u00cdM...");
                 btnVisitorMic.setBackgroundColor(0xFFE65100);
                 break;
             case SPEAKING:
-                btnMic.setText("\uD83D\uDDE3\uFE0F MLUV\u00cdM");
+                btnMic.setText("\uD83D\uDD0A MLUV\u00cdM");
                 btnMic.setBackgroundColor(0xFF283593);
                 visitorContainer.setBackgroundColor(0xFF1E3A8A);
-                tvVisitorStateTitle.setText("\uD83D\uDDE3\uFE0F RUBBY PR\u00c1V\u011a MLUV\u00cd / P\u0158EDV\u00c1D\u00cd");
+                tvVisitorStateTitle.setText("\uD83D\uDD0A  RUBBY PR\u00c1V\u011a MLUV\u00cd / P\u0158EDV\u00c1D\u00cd");
                 tvVisitorStateSubtitle.setText("Poslouchej a d\u00edvej se, co pr\u00e1v\u011b \u0159\u00edk\u00e1m a p\u0159edv\u00e1d\u00edm!");
-                btnVisitorMic.setText("\uD83D\uDDE3\uFE0F  RUBBY MLUV\u00cd...");
+                btnVisitorMic.setText("\uD83D\uDD0A  RUBBY MLUV\u00cd...");
                 btnVisitorMic.setBackgroundColor(0xFF283593);
                 break;
         }
@@ -980,10 +1026,171 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         }
     }
 
+    // ==================== VZDALENE OVLADANI (HTTP SERVER + API) ====================
+
+    @Override
+    public String getCurrentStateName() {
+        return currentState != null ? currentState.name() : "IDLE";
+    }
+
+    @Override
+    public boolean hasRobotFocus() {
+        return qiContext != null;
+    }
+
+    @Override
+    public int getVolumePercent() {
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (am == null) return 80;
+        int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int cur = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        return max > 0 ? Math.round((cur * 100f) / max) : 80;
+    }
+
+    @Override
+    public boolean isVisitorScreenActive() {
+        return visitorContainer != null && visitorContainer.getVisibility() == View.VISIBLE;
+    }
+
+    @Override
+    public String getLastRubbyMessage() {
+        return lastRubbyMessage != null ? lastRubbyMessage : "";
+    }
+
+    @Override
+    public void onRemotePrompt(final String prompt) {
+        runOnUiThread(() -> {
+            if (speechRecognizer != null && currentState == ConversationState.LISTENING) {
+                try {
+                    speechRecognizer.cancel();
+                } catch (Exception ignored) {}
+            }
+            appendToChat("SYSTEM", "[DALKOVE OVLADANI] Prijat AI prompt");
+            processUserInput(prompt);
+        });
+    }
+
+    @Override
+    public void onRemoteSay(final String text, final String animationCategory) {
+        runOnUiThread(() -> {
+            if (speechRecognizer != null && currentState == ConversationState.LISTENING) {
+                try {
+                    speechRecognizer.cancel();
+                } catch (Exception ignored) {}
+            }
+            String cleaned = TextCleaner.clean(text);
+            appendToChat("Rubby", cleaned);
+            speakResponse(cleaned, animationCategory);
+        });
+    }
+
+    @Override
+    public void onRemoteAnimate(final String category) {
+        runOnUiThread(() -> {
+            appendToChat("SYSTEM", "[DALKOVE OVLADANI] Spoustim animaci: [" + category + "]");
+            runAnimationAsync(AnimationManager.getAnimation(category));
+        });
+    }
+
+    @Override
+    public void onRemoteMove(final double xMeters, final double yMeters, final double thetaRadians) {
+        runOnUiThread(() -> appendToChat("SYSTEM",
+                String.format(Locale.US, "[DALKOVE OVLADANI] Pojezd: x=%.2fm, y=%.2fm, rot=%.2frad", xMeters, yMeters, thetaRadians)));
+        if (qiContext == null) {
+            fileLogger.w(TAG, "Nelze provest pojezd - neni QiContext");
+            return;
+        }
+        executor.execute(() -> {
+            try {
+                if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
+                    currentGoToFuture.requestCancellation();
+                }
+                Actuation actuation = qiContext.getActuation();
+                Mapping mapping = qiContext.getMapping();
+                Frame robotFrame = actuation.robotFrame();
+                Transform transform = TransformBuilder.create().from2DTransform(xMeters, yMeters, thetaRadians);
+                FreeFrame targetFrame = mapping.makeFreeFrame();
+                targetFrame.update(robotFrame, transform, 0L);
+
+                GoTo goTo = GoToBuilder.with(qiContext)
+                        .withFrame(targetFrame.frame())
+                        .build();
+                currentGoToFuture = goTo.async().run();
+            } catch (Exception e) {
+                fileLogger.e(TAG, "Chyba pri pojezdu GoTo: " + e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onRemoteStop() {
+        try {
+            if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
+                currentGoToFuture.requestCancellation();
+            }
+            if (currentAnimateFuture != null && !currentAnimateFuture.isDone()) {
+                currentAnimateFuture.requestCancellation();
+            }
+            if (currentSayFuture != null && !currentSayFuture.isDone()) {
+                currentSayFuture.requestCancellation();
+            }
+        } catch (Exception ignored) {}
+        runOnUiThread(() -> {
+            if (speechRecognizer != null && currentState == ConversationState.LISTENING) {
+                try {
+                    speechRecognizer.cancel();
+                } catch (Exception ignored) {}
+            }
+            if (androidTts != null && androidTtsReady) {
+                androidTts.stop();
+            }
+            setState(ConversationState.IDLE);
+            updateStatus("Rubby - Pripravena (Zastaveno)", true);
+            appendToChat("SYSTEM", "[DALKOVE OVLADANI] Pohyb a rec zastaveny.");
+        });
+    }
+
+    @Override
+    public void onRemoteStartListening() {
+        runOnUiThread(this::startSpeechRecognition);
+    }
+
+    @Override
+    public void onRemoteSetScreen(final boolean visitorMode) {
+        runOnUiThread(() -> {
+            if (visitorMode) {
+                adminContainer.setVisibility(View.GONE);
+                visitorContainer.setVisibility(View.VISIBLE);
+            } else {
+                visitorContainer.setVisibility(View.GONE);
+                adminContainer.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    @Override
+    public void onRemoteSetVolume(final int percent) {
+        runOnUiThread(() -> {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (am == null) return;
+            int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            int clamped = Math.max(0, Math.min(100, percent));
+            int targetVol = Math.round((clamped * max) / 100f);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, targetVol, 0);
+            if (seekBarVolume != null) {
+                seekBarVolume.setProgress(targetVol);
+            }
+            updateVolumeLabel(targetVol, max);
+        });
+    }
+
     // ==================== LIFECYCLE ====================
 
     @Override
     protected void onDestroy() {
+        if (remoteControlServer != null) {
+            remoteControlServer.stop();
+        }
         try {
             QiSDK.unregister(this, this);
         } catch (Exception e) {
