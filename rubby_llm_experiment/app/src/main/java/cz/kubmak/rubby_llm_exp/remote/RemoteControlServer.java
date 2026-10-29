@@ -33,6 +33,8 @@ public class RemoteControlServer {
         String getCurrentStateName();
         boolean hasRobotFocus();
         boolean isChargingFlapOpen();
+        boolean isFaceTrackingEnabled();
+        boolean isNarrowSpaceMode();
         int getVolumePercent();
         boolean isVisitorScreenActive();
         String getLastRubbyMessage();
@@ -47,6 +49,8 @@ public class RemoteControlServer {
         void onRemoteStartListening();
         void onRemoteSetScreen(boolean visitorMode);
         void onRemoteSetVolume(int percent);
+        void onRemoteSetFaceTracking(boolean enabled);
+        void onRemoteSetNarrowSpace(boolean narrow);
     }
 
     private final int port;
@@ -209,6 +213,14 @@ public class RemoteControlServer {
                 int percent = (int) parseDouble(params.get("percent"), 80);
                 handler.onRemoteSetVolume(percent);
                 sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"volume\":" + percent + "}");
+            } else if ("/api/awareness".equals(path)) {
+                boolean enabled = "true".equalsIgnoreCase(params.get("enabled")) || "1".equals(params.get("enabled"));
+                handler.onRemoteSetFaceTracking(enabled);
+                sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"faceTracking\":" + enabled + "}");
+            } else if ("/api/obstacles".equals(path)) {
+                boolean narrow = "true".equalsIgnoreCase(params.get("narrow")) || "1".equals(params.get("narrow"));
+                handler.onRemoteSetNarrowSpace(narrow);
+                sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"narrowSpace\":" + narrow + "}");
             } else {
                 sendResponse(out, "404 Not Found", "application/json; charset=utf-8", "{\"ok\":false,\"error\":\"Not found\"}");
             }
@@ -242,6 +254,8 @@ public class RemoteControlServer {
                 "\"state\":\"" + escapeJson(handler.getCurrentStateName()) + "\"," +
                 "\"robotFocus\":" + handler.hasRobotFocus() + "," +
                 "\"chargingFlapOpen\":" + handler.isChargingFlapOpen() + "," +
+                "\"faceTracking\":" + handler.isFaceTrackingEnabled() + "," +
+                "\"narrowSpace\":" + handler.isNarrowSpaceMode() + "," +
                 "\"volume\":" + handler.getVolumePercent() + "," +
                 "\"visitorScreen\":" + handler.isVisitorScreenActive() + "," +
                 "\"lastMessage\":\"" + escapeJson(handler.getLastRubbyMessage()) + "\"" +
@@ -371,13 +385,17 @@ public class RemoteControlServer {
                 "</div></div>" +
 
                 "<div class='card'><h2>🕹️ 1. Realtime Virtuální Joysticky (Drž a táhni prstem)</h2>" +
+                "<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;'>" +
+                "<button id='btnFaceTrack' style='background:#0284c7;font-size:13px;padding:10px;' onclick='toggleFaceTrack()'>👀 Sledování obličejů: ZAP</button>" +
+                "<button id='btnNarrowSpace' style='background:#475569;font-size:13px;padding:10px;' onclick='toggleNarrowSpace()'>🛡️ Odstup: BĚŽNÝ (35 cm)</button>" +
+                "</div>" +
                 "<div class='joy-wrap'>" +
                 "<div class='joy-box'>" +
-                "<div class='joy-label'>LEVÝ: Jízda + Zatáčení (1 prst)</div>" +
+                "<div class='joy-label'>LEVÝ: Pohyb (Dopředu / Dozadu / Do stran)</div>" +
                 "<div id='joyDrive' class='joy-zone'><div class='joy-CrossH'></div><div class='joy-CrossV'></div><div id='stickDrive' class='joy-stick'></div></div>" +
                 "</div>" +
                 "<div class='joy-box'>" +
-                "<div class='joy-label'>PRAVÝ: Úkroky do stran (Strafe)</div>" +
+                "<div class='joy-label'>PRAVÝ: Čisté otáčení (Doleva / Doprava)</div>" +
                 "<div id='joyStrafe' class='joy-zone' style='border-color:#a855f7;'><div class='joy-CrossH'></div><div class='joy-CrossV'></div><div id='stickStrafe' class='joy-stick' style='background:radial-gradient(circle,#c084fc 0%,#7e22ce 100%);'></div></div>" +
                 "</div>" +
                 "</div>" +
@@ -455,29 +473,49 @@ public class RemoteControlServer {
                 "window.addEventListener('mouseup',function(){if(active)end();});" +
                 "}" +
 
-                // Levy joystick: Nahoru/Dolu = Dopredu/Dozadu (x), Doleva/Doprava = Otaceni (theta)
-                "setupJoystick('joyDrive','stickDrive',function(nx,ny){" +
-                "var fwd=ny,rot=-nx;" +
-                "document.getElementById('joyReadout').innerText='Jízda: '+(fwd*100).toFixed(0)+'% | Otáčení: '+(rot*100).toFixed(0)+'%';" +
-                "fetch('/api/joystick?x='+fwd.toFixed(2)+'&y=0&theta='+rot.toFixed(2),{method:'POST'}).catch(()=>{});" +
-                "},function(){" +
+                "var curFaceTrack=true,curNarrowSpace=false;" +
+                "function toggleFaceTrack(){curFaceTrack=!curFaceTrack;api('/api/awareness?enabled='+curFaceTrack);}" +
+                "function toggleNarrowSpace(){curNarrowSpace=!curNarrowSpace;api('/api/obstacles?narrow='+curNarrowSpace);}" +
+                // Stav obou joysticku (levy = posun X/Y, pravy = rotace Theta)
+                "var joyMoveActive=false,joyRotActive=false,joyX=0,joyY=0,joyTh=0;" +
+                "function sendCombinedJoy(){" +
+                "if(!joyMoveActive && !joyRotActive){" +
                 "document.getElementById('joyReadout').innerText='Zastavuji pojezd...';" +
                 "fetch('/api/stop_move',{method:'POST'}).catch(()=>{});" +
+                "return;" +
+                "}" +
+                "document.getElementById('joyReadout').innerText='Dopředu: '+(joyX*100).toFixed(0)+'% | Bokem: '+(joyY*100).toFixed(0)+'% | Otáčení: '+(joyTh*100).toFixed(0)+'%';" +
+                "fetch('/api/joystick?x='+joyX.toFixed(2)+'&y='+joyY.toFixed(2)+'&theta='+joyTh.toFixed(2),{method:'POST'}).catch(()=>{});" +
+                "}" +
+
+                // Levy joystick: Ciste pohyb dopredu/dozadu (x) a do stran/ukroky (y)
+                "setupJoystick('joyDrive','stickDrive',function(nx,ny){" +
+                "joyMoveActive=true;joyX=ny;joyY=-nx;" +
+                "sendCombinedJoy();" +
+                "},function(){" +
+                "joyMoveActive=false;joyX=0;joyY=0;" +
+                "sendCombinedJoy();" +
                 "});" +
 
-                // Pravy joystick: Nahoru/Dolu = Dopredu/Dozadu (x), Doleva/Doprava = Ukrok bokem (y)
+                // Pravy joystick: Ciste otaceni na miste doleva/doprava (theta)
                 "setupJoystick('joyStrafe','stickStrafe',function(nx,ny){" +
-                "var fwd=ny,strafe=-nx;" +
-                "document.getElementById('joyReadout').innerText='Jízda: '+(fwd*100).toFixed(0)+'% | Úkrok: '+(strafe*100).toFixed(0)+'%';" +
-                "fetch('/api/joystick?x='+fwd.toFixed(2)+'&y='+strafe.toFixed(2)+'&theta=0',{method:'POST'}).catch(()=>{});" +
+                "joyRotActive=true;joyTh=-nx;" +
+                "sendCombinedJoy();" +
                 "},function(){" +
-                "document.getElementById('joyReadout').innerText='Zastavuji pojezd...';" +
-                "fetch('/api/stop_move',{method:'POST'}).catch(()=>{});" +
+                "joyRotActive=false;joyTh=0;" +
+                "sendCombinedJoy();" +
                 "});" +
 
                 "function refreshStatus(){fetch('/api/status').then(r=>r.json()).then(d=>{" +
                 "document.getElementById('stBadge').innerText='Stav: '+d.state+(d.robotFocus?' (QiSDK)':' (Bez Focusu)');" +
                 "document.getElementById('flapWarn').style.display=d.chargingFlapOpen?'block':'none';" +
+                "curFaceTrack=!!d.faceTracking;curNarrowSpace=!!d.narrowSpace;" +
+                "var bf=document.getElementById('btnFaceTrack');" +
+                "bf.innerText=curFaceTrack?'👀 Sledování obličejů: ZAP':'🔒 Hlava rovně (Focus VYP)';" +
+                "bf.style.background=curFaceTrack?'#0284c7':'#d97706';" +
+                "var bn=document.getElementById('btnNarrowSpace');" +
+                "bn.innerText=curNarrowSpace?'🪑 Úzký prostor: ZAP (8 cm)':'🛡️ Odstup: BĚŽNÝ (35 cm)';" +
+                "bn.style.background=curNarrowSpace?'#7c3aed':'#475569';" +
                 "if(d.lastMessage)document.getElementById('lastMsg').innerText='Poslední odpověď: '+d.lastMessage;" +
                 "}).catch(()=>{});}" +
                 "setInterval(refreshStatus,2000);refreshStatus();" +

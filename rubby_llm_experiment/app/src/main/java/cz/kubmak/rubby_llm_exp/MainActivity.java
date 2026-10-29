@@ -39,6 +39,7 @@ import com.aldebaran.qi.sdk.RobotLifecycleCallbacks;
 import com.aldebaran.qi.sdk.builder.AnimateBuilder;
 import com.aldebaran.qi.sdk.builder.AnimationBuilder;
 import com.aldebaran.qi.sdk.builder.GoToBuilder;
+import com.aldebaran.qi.sdk.builder.HolderBuilder;
 import com.aldebaran.qi.sdk.builder.SayBuilder;
 import com.aldebaran.qi.sdk.builder.TransformBuilder;
 import com.aldebaran.qi.sdk.object.actuation.Actuation;
@@ -52,6 +53,8 @@ import com.aldebaran.qi.sdk.object.actuation.OrientationPolicy;
 import com.aldebaran.qi.sdk.object.actuation.PathPlanningPolicy;
 import com.aldebaran.qi.sdk.object.conversation.Say;
 import com.aldebaran.qi.sdk.object.geometry.Transform;
+import com.aldebaran.qi.sdk.object.holder.AutonomousAbilitiesType;
+import com.aldebaran.qi.sdk.object.holder.Holder;
 import com.aldebaran.qi.sdk.object.power.FlapSensor;
 import com.aldebaran.qi.sdk.object.touch.Touch;
 import com.aldebaran.qi.sdk.object.touch.TouchSensor;
@@ -135,6 +138,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private FreeFrame joystickTargetFrame;
     private GoTo joystickGoTo;
     private ShoulderLedManager shoulderLedManager;
+    private Holder awarenessHolder;
+    private volatile boolean faceTrackingEnabled = true;
+    private volatile boolean narrowSpaceMode = false;
 
     // Vzdalene ovladani (Web + REST API na portu 8080)
     private RemoteControlServer remoteControlServer;
@@ -1058,6 +1064,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (shoulderLedManager != null) {
             shoulderLedManager.release();
         }
+        awarenessHolder = null;
         joystickTargetFrame = null;
         joystickGoTo = null;
         this.qiContext = null;
@@ -1194,6 +1201,16 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     }
 
     @Override
+    public boolean isFaceTrackingEnabled() {
+        return faceTrackingEnabled;
+    }
+
+    @Override
+    public boolean isNarrowSpaceMode() {
+        return narrowSpaceMode;
+    }
+
+    @Override
     public int getVolumePercent() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (am == null) return 80;
@@ -1296,11 +1313,26 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         if (qiContext == null || chargingFlapOpen) return;
         moveExecutor.execute(() -> {
             try {
+                // 1) Primarni prime rizeni rychlosti kol pres NAOqi ALMotion.moveToward(vx, vy, vtheta).
+                // Umoznuje ciste otaceni na miste (pravym joystickem) i okamzite pojezdy a ukroky (levym joystickem).
+                if (shoulderLedManager != null) {
+                    float vx = (float) Math.max(-1.0, Math.min(1.0, normX * 0.75));
+                    float vy = (float) Math.max(-1.0, Math.min(1.0, normY * 0.65));
+                    float vth = (float) Math.max(-1.0, Math.min(1.0, normTheta * 0.75));
+                    if (Math.abs(vx) < 0.04f && Math.abs(vy) < 0.04f && Math.abs(vth) < 0.04f) {
+                        shoulderLedManager.stopMove();
+                        return;
+                    }
+                    if (shoulderLedManager.moveToward(vx, vy, vth)) {
+                        return;
+                    }
+                }
+
+                // 2) Zalozni cesta pres QiSDK GoTo (pokud neni dostupny privatni ALMotion)
                 Actuation actuation = qiContext.getActuation();
                 Mapping mapping = qiContext.getMapping();
                 Frame robotFrame = actuation.robotFrame();
 
-                // Prepocet vychyleni virtualniho joysticku (-1..1) na plynuly cilovy vektor pred robotem
                 double targetX = normX * 1.0;
                 double targetY = normY * 0.8;
                 double targetTheta = normTheta * 1.2;
@@ -1312,7 +1344,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                     return;
                 }
 
-                // Pri cistem otaceni joystickem do strany pridame maly dopredny vektor, aby GoTo okamzite zatacelo
                 if (Math.abs(targetX) < 0.08 && Math.abs(targetY) < 0.08 && Math.abs(targetTheta) >= 0.05) {
                     targetX = 0.15 * Math.cos(targetTheta);
                     targetY = 0.15 * Math.sin(targetTheta);
@@ -1345,15 +1376,25 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     @Override
     public void onRemoteStopMove() {
-        try {
-            if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
-                currentGoToFuture.requestCancellation();
+        moveExecutor.execute(() -> {
+            if (shoulderLedManager != null) {
+                shoulderLedManager.stopMove();
             }
-        } catch (Exception ignored) {}
+            try {
+                if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
+                    currentGoToFuture.requestCancellation();
+                }
+            } catch (Exception ignored) {}
+        });
     }
 
     @Override
     public void onRemoteStop() {
+        moveExecutor.execute(() -> {
+            if (shoulderLedManager != null) {
+                shoulderLedManager.stopMove();
+            }
+        });
         try {
             if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
                 currentGoToFuture.requestCancellation();
@@ -1380,6 +1421,55 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             setState(ConversationState.IDLE);
             updateStatus("Rubby - Pripravena (Zastaveno)", true);
             appendToChat("SYSTEM", "[DALKOVE OVLADANI] Pohyb a rec zastaveny.");
+        });
+    }
+
+    @Override
+    public void onRemoteSetFaceTracking(final boolean enabled) {
+        this.faceTrackingEnabled = enabled;
+        if (shoulderLedManager != null) {
+            shoulderLedManager.setFaceTracking(enabled);
+        }
+        if (qiContext == null) return;
+        moveExecutor.execute(() -> {
+            try {
+                if (awarenessHolder == null) {
+                    awarenessHolder = HolderBuilder.with(qiContext)
+                            .withAutonomousAbilities(
+                                    AutonomousAbilitiesType.BASIC_AWARENESS,
+                                    AutonomousAbilitiesType.BACKGROUND_MOVEMENT
+                            )
+                            .build();
+                }
+                if (enabled) {
+                    awarenessHolder.async().release().get();
+                    runOnUiThread(() -> appendToChat("SYSTEM",
+                            "[DALKOVE OVLADANI] Sledování obličejů (Focus mód) ZAPNUTO – Rubby opět otáčí hlavu za lidmi."));
+                } else {
+                    awarenessHolder.async().hold().get();
+                    runOnUiThread(() -> appendToChat("SYSTEM",
+                            "[DALKOVE OVLADANI] Sledování obličejů VYPNUTO – hlava Rubby je uzamčena rovně pro jízdu."));
+                }
+            } catch (Exception e) {
+                fileLogger.w(TAG, "Chyba pri prepinani BasicAwareness Holderu: " + e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onRemoteSetNarrowSpace(final boolean narrow) {
+        this.narrowSpaceMode = narrow;
+        if (shoulderLedManager != null) {
+            shoulderLedManager.setNarrowSpaceMode(narrow);
+        }
+        runOnUiThread(() -> {
+            if (narrow) {
+                appendToChat("SYSTEM",
+                        "[DALKOVE OVLADANI] Režim ÚZKÝ PROSTOR zapnut (odstup snížen z 35 cm na 8 cm pro jízdu mezi židlemi a stolem).");
+            } else {
+                appendToChat("SYSTEM",
+                        "[DALKOVE OVLADANI] Režim ÚZKÝ PROSTOR vypnut (standardní bezpečnostní odstup 35 cm).");
+            }
         });
     }
 

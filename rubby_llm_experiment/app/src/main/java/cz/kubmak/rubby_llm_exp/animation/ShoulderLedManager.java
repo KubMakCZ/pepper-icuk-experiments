@@ -49,6 +49,8 @@ public class ShoulderLedManager {
     private final Random random = new Random();
 
     private volatile AnyObject alLedsService;
+    private volatile AnyObject alMotionService;
+    private volatile AnyObject alBasicAwarenessService;
     private Session privateSession;
     private SessionManager privateSessionManager;
     private Context appContext;
@@ -88,6 +90,15 @@ public class ShoulderLedManager {
                     s.connect(privateEndpoint).get();
                     privateSession = s;
                     alLedsService = s.service("ALLeds").get();
+                    try {
+                        alMotionService = s.service("ALMotion").get();
+                        fileLogger.i(TAG, "ALMotion sluzba uspesne pripojena (prime rizeni kol moveToward aktivni).");
+                    } catch (Exception me) {
+                        fileLogger.w(TAG, "Nelze pripojit ALMotion: " + me.getMessage());
+                    }
+                    try {
+                        alBasicAwarenessService = s.service("ALBasicAwareness").get();
+                    } catch (Exception ignored) {}
                     fileLogger.i(TAG, "ALLeds sluzba uspesne pripojena! Ovladani RGB ramen je aktivni.");
                     applyStateColor(lastState);
                     return;
@@ -102,7 +113,10 @@ public class ShoulderLedManager {
                             ledExecutor.execute(() -> {
                                 try {
                                     alLedsService = session.service("ALLeds").get();
-                                    fileLogger.i(TAG, "ALLeds sluzba pripojena pres SessionManager(true)!");
+                                    try {
+                                        alMotionService = session.service("ALMotion").get();
+                                    } catch (Exception ignored) {}
+                                    fileLogger.i(TAG, "ALLeds/ALMotion sluzba pripojena pres SessionManager(true)!");
                                     applyStateColor(lastState);
                                 } catch (Exception e) {
                                     fileLogger.w(TAG, "ALLeds pres SessionManager(true) selhalo: " + e.getMessage());
@@ -113,11 +127,13 @@ public class ShoulderLedManager {
                         @Override
                         public void onRobotLost() {
                             alLedsService = null;
+                            alMotionService = null;
                         }
 
                         @Override
                         public void onRobotAbsent() {
                             alLedsService = null;
+                            alMotionService = null;
                         }
                     });
                 }
@@ -134,6 +150,90 @@ public class ShoulderLedManager {
         stopDisco();
         stopThinkingPulse();
         alLedsService = null;
+        alMotionService = null;
+    }
+
+    /**
+     * Přímé plynulé řízení rychlosti kol přes NAOqi ALMotion.moveToward(vx, vy, vtheta).
+     * Umožňuje čisté otáčení na místě (vx=0, vy=0, vtheta!=0) i okamžité úkroky bez prodlevy GoTo.
+     * Vrací true, pokud je ALMotion připojen a příkaz byl proveden.
+     */
+    public boolean moveToward(float vx, float vy, float vtheta) {
+        AnyObject motion = alMotionService;
+        if (motion == null) return false;
+        try {
+            motion.call(Void.class, "moveToward", vx, vy, vtheta).get();
+            return true;
+        } catch (Exception e) {
+            fileLogger.w(TAG, "ALMotion.moveToward chyba: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Okamžité zastavení kol přes ALMotion.stopMove().
+     */
+    public void stopMove() {
+        AnyObject motion = alMotionService;
+        if (motion == null) return;
+        try {
+            motion.call(Void.class, "stopMove").get();
+        } catch (Exception e) {
+            fileLogger.w(TAG, "ALMotion.stopMove chyba: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Zapne nebo vypne sledování obličejů (ALBasicAwareness) a při vypnutí vyrovná hlavu rovně dopředu.
+     */
+    public void setFaceTracking(final boolean enabled) {
+        ledExecutor.execute(() -> {
+            try {
+                AnyObject awareness = alBasicAwarenessService;
+                if (awareness != null) {
+                    awareness.call(Void.class, "setEnabled", enabled).get();
+                    fileLogger.i(TAG, "ALBasicAwareness.setEnabled(" + enabled + ") nastaveno.");
+                }
+            } catch (Exception e) {
+                fileLogger.w(TAG, "ALBasicAwareness.setEnabled chyba: " + e.getMessage());
+            }
+            if (!enabled) {
+                AnyObject motion = alMotionService;
+                if (motion != null) {
+                    try {
+                        motion.call(Void.class, "setAngles", "HeadYaw", 0.0f, 0.25f).get();
+                        motion.call(Void.class, "setAngles", "HeadPitch", -0.08f, 0.25f).get();
+                    } catch (Exception e) {
+                        fileLogger.w(TAG, "ALMotion.setAngles(Head) chyba: " + e.getMessage());
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Přepne bezpečnostní odstup od překážek (židle, stoly) v ALMotion.
+     * Při narrow=true sníží odstup z 40 cm na 8 cm dopředu a 3 cm do stran, aby Pepper projela mezi židlemi.
+     */
+    public void setNarrowSpaceMode(final boolean narrow) {
+        ledExecutor.execute(() -> {
+            AnyObject motion = alMotionService;
+            if (motion == null) return;
+            try {
+                float ortho = narrow ? 0.08f : 0.35f;
+                float tang = narrow ? 0.03f : 0.10f;
+                motion.call(Void.class, "setOrthogonalSecurityDistance", ortho).get();
+                motion.call(Void.class, "setTangentialSecurityDistance", tang).get();
+                fileLogger.i(TAG, "ALMotion bezpecnostni odstup nastaven (narrow=" + narrow + "): ortho=" + ortho + "m, tang=" + tang + "m");
+            } catch (Exception e) {
+                fileLogger.w(TAG, "Nelze zmenit bezpecnostni odstup v ALMotion: " + e.getMessage());
+            }
+            try {
+                motion.call(Void.class, "setExternalCollisionProtectionEnabled", "Move", !narrow).get();
+            } catch (Exception ignored) {
+                // Na nekterych verzich NAOqi vyzaduje deaktivace kolizni ochrany vlastnicky souhlas v web nastaveni robota
+            }
+        });
     }
 
     public void shutdown() {
