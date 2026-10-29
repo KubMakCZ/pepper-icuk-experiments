@@ -125,6 +125,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     private Future<Void> currentAnimateFuture;
     private Future<Void> currentGoToFuture;
     private Future<Void> currentSayFuture;
+    private FreeFrame joystickTargetFrame;
+    private GoTo joystickGoTo;
 
     // Vzdalene ovladani (Web + REST API na portu 8080)
     private RemoteControlServer remoteControlServer;
@@ -137,8 +139,9 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     // Speech recognition
     private SpeechRecognizer speechRecognizer;
 
-    // Threading
+    // Threading (executor pro LLM a rec, moveExecutor pro nezavisly realtime pojezd)
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService moveExecutor = Executors.newSingleThreadExecutor();
 
     // Chat log text
     private final StringBuilder chatLogText = new StringBuilder();
@@ -904,6 +907,8 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             qiChatbot.removeAllOnBookmarkReachedListeners();
             qiChatbot = null;
         }
+        joystickTargetFrame = null;
+        joystickGoTo = null;
         this.qiContext = null;
         fileLogger.w(TAG, "Robot Focus LOST");
         runOnUiThread(() -> {
@@ -1094,7 +1099,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             fileLogger.w(TAG, "Nelze provest pojezd - neni QiContext");
             return;
         }
-        executor.execute(() -> {
+        moveExecutor.execute(() -> {
             try {
                 if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
                     currentGoToFuture.requestCancellation();
@@ -1114,6 +1119,58 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
                 fileLogger.e(TAG, "Chyba pri pojezdu GoTo: " + e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onRemoteJoystick(final double normX, final double normY, final double normTheta) {
+        if (qiContext == null) return;
+        moveExecutor.execute(() -> {
+            try {
+                Actuation actuation = qiContext.getActuation();
+                Mapping mapping = qiContext.getMapping();
+                Frame robotFrame = actuation.robotFrame();
+
+                // Prepocet vychyleni virtualniho joysticku (-1..1) na plynuly cilovy vektor pred robotem
+                double targetX = normX * 1.0;
+                double targetY = normY * 0.8;
+                double targetTheta = normTheta * 1.2;
+
+                if (Math.abs(targetX) < 0.05 && Math.abs(targetY) < 0.05 && Math.abs(targetTheta) < 0.05) {
+                    if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
+                        currentGoToFuture.requestCancellation();
+                    }
+                    return;
+                }
+
+                Transform transform = TransformBuilder.create().from2DTransform(targetX, targetY, targetTheta);
+                if (joystickTargetFrame == null) {
+                    joystickTargetFrame = mapping.makeFreeFrame();
+                }
+                joystickTargetFrame.update(robotFrame, transform, 0L);
+
+                if (joystickGoTo == null) {
+                    joystickGoTo = GoToBuilder.with(qiContext)
+                            .withFrame(joystickTargetFrame.frame())
+                            .build();
+                }
+                if (currentGoToFuture == null || currentGoToFuture.isDone()) {
+                    currentGoToFuture = joystickGoTo.async().run();
+                }
+            } catch (Exception e) {
+                fileLogger.w(TAG, "Chyba pri realtime joysticku: " + e.getMessage());
+                joystickTargetFrame = null;
+                joystickGoTo = null;
+            }
+        });
+    }
+
+    @Override
+    public void onRemoteStopMove() {
+        try {
+            if (currentGoToFuture != null && !currentGoToFuture.isDone()) {
+                currentGoToFuture.requestCancellation();
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -1198,6 +1255,7 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
             androidTts.shutdown();
         }
         executor.shutdown();
+        moveExecutor.shutdown();
 
         super.onDestroy();
     }

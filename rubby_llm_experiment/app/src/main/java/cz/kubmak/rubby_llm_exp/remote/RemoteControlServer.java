@@ -22,7 +22,7 @@ import cz.kubmak.rubby_llm_exp.util.FileLogger;
 
 /**
  * Vestaveny lehky HTTP server (port 8080) pro vzdalene ovladani Rubby z telefonu/notebooku
- * (webove rozhrani + REST API s CORS pro pripadnou Node.js aplikaci).
+ * (webove rozhrani s realtime virtualnim joystickem + REST API s CORS pro pripadnou Node.js aplikaci).
  */
 public class RemoteControlServer {
 
@@ -40,6 +40,8 @@ public class RemoteControlServer {
         void onRemoteSay(String text, String animationCategory);
         void onRemoteAnimate(String category);
         void onRemoteMove(double xMeters, double yMeters, double thetaRadians);
+        void onRemoteJoystick(double normX, double normY, double normTheta);
+        void onRemoteStopMove();
         void onRemoteStop();
         void onRemoteStartListening();
         void onRemoteSetScreen(boolean visitorMode);
@@ -182,6 +184,15 @@ public class RemoteControlServer {
                 double theta = parseDouble(params.get("theta"), 0.0);
                 handler.onRemoteMove(x, y, theta);
                 sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"action\":\"move\"}");
+            } else if ("/api/joystick".equals(path)) {
+                double x = parseDouble(params.get("x"), 0.0);
+                double y = parseDouble(params.get("y"), 0.0);
+                double theta = parseDouble(params.get("theta"), 0.0);
+                handler.onRemoteJoystick(x, y, theta);
+                sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"action\":\"joystick\"}");
+            } else if ("/api/stop_move".equals(path)) {
+                handler.onRemoteStopMove();
+                sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"action\":\"stop_move\"}");
             } else if ("/api/stop".equals(path)) {
                 handler.onRemoteStop();
                 sendResponse(out, "200 OK", "application/json; charset=utf-8", "{\"ok\":true,\"action\":\"stop\"}");
@@ -314,25 +325,32 @@ public class RemoteControlServer {
         }
 
         return "<!DOCTYPE html><html lang='cs'><head><meta charset='utf-8'>" +
-                "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>" +
+                "<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>" +
                 "<title>Rubby Dálkové Ovládání (ICUK)</title>" +
                 "<style>" +
-                "body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#f8fafc;margin:0;padding:12px;}" +
+                "body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#f8fafc;margin:0;padding:12px;overscroll-behavior:contain;}" +
                 "h1{font-size:20px;margin:0 0 8px 0;color:#38bdf8;}" +
                 ".card{background:#1e293b;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,0.3);}" +
-                ".card h2{font-size:16px;margin:0 0 10px 0;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;}" +
+                ".card h2{font-size:15px;margin:0 0 10px 0;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;}" +
                 ".status-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;}" +
                 ".badge{padding:6px 12px;border-radius:8px;font-weight:bold;background:#334155;}" +
                 "input[type=text],textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:16px;margin-bottom:8px;}" +
-                "button{border:none;border-radius:8px;padding:12px 16px;font-size:15px;font-weight:bold;color:#fff;cursor:pointer;touch-action:manipulation;}" +
+                "button{border:none;border-radius:8px;padding:12px 14px;font-size:14px;font-weight:bold;color:#fff;cursor:pointer;touch-action:manipulation;}" +
                 "button:active{opacity:0.8;transform:scale(0.98);}" +
                 ".btn-primary{background:#2563eb;width:100%;margin-bottom:8px;}" +
                 ".btn-green{background:#16a34a;width:100%;margin-bottom:8px;}" +
-                ".btn-stop{background:#dc2626;width:100%;font-size:17px;padding:14px;}" +
+                ".btn-stop{background:#dc2626;width:100%;font-size:16px;padding:14px;}" +
                 ".preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}" +
                 ".btn-preset{background:#4f46e5;font-size:13px;padding:10px;}" +
-                ".dpad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:10px;}" +
-                ".btn-move{background:#0284c7;padding:16px 8px;font-size:15px;}" +
+                ".joy-wrap{display:flex;flex-wrap:wrap;justify-content:space-around;align-items:center;gap:14px;margin:10px 0;user-select:none;-webkit-user-select:none;}" +
+                ".joy-box{display:flex;flex-direction:column;align-items:center;}" +
+                ".joy-label{font-size:13px;color:#cbd5e1;margin-bottom:6px;font-weight:bold;}" +
+                ".joy-zone{width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,#334155 0%,#0f172a 100%);border:3px solid #38bdf8;position:relative;touch-action:none;}" +
+                ".joy-CrossH{position:absolute;top:50%;left:10%;right:10%;height:1px;background:rgba(255,255,255,0.15);pointer-events:none;}" +
+                ".joy-CrossV{position:absolute;left:50%;top:10%;bottom:10%;width:1px;background:rgba(255,255,255,0.15);pointer-events:none;}" +
+                ".joy-stick{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#60a5fa 0%,#2563eb 100%);box-shadow:0 4px 10px rgba(0,0,0,0.5);position:absolute;top:53px;left:53px;pointer-events:none;transition:transform 0.05s linear;}" +
+                ".dpad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-top:12px;}" +
+                ".btn-move{background:#0284c7;padding:12px 6px;font-size:13px;}" +
                 ".anim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:6px;}" +
                 ".btn-anim{background:#334155;font-size:13px;padding:10px 6px;}" +
                 "</style></head><body>" +
@@ -342,11 +360,42 @@ public class RemoteControlServer {
                 "</div><div id='lastMsg' style='font-size:14px;color:#cbd5e1;margin-top:8px;'>Poslední odpověď: -</div>" +
                 "<div style='display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;'>" +
                 "<button style='background:#0d9488;font-size:13px;' onclick=\"api('/api/listen')\">🎤 Zapnout MIC</button>" +
-                "<button style='background:#0369a1;font-size:13px;' onclick=\"api('/api/screen?mode=visitor')\">👁️ Prezentace</button>" +
-                "<button style='background:#475569;font-size:13px;' onclick=\"api('/api/screen?mode=admin')\">⚙️ Admin/Chat</button>" +
+                "<button style='background:#0369a1;font-size:13px;' onclick=\"api('/api/screen?mode=visitor')\">▶ Prezentace</button>" +
+                "<button style='background:#475569;font-size:13px;' onclick=\"api('/api/screen?mode=admin')\">⚙ Admin/Chat</button>" +
                 "</div></div>" +
 
-                "<div class='card'><h2>🧠 1. Poslat AI Prompt (Rubby sama vymyslí a řekne odpověď)</h2>" +
+                "<div class='card'><h2>🕹️ 1. Realtime Virtuální Joysticky (Drž a táhni prstem)</h2>" +
+                "<div class='joy-wrap'>" +
+                "<div class='joy-box'>" +
+                "<div class='joy-label'>LEVÝ: Jízda + Zatáčení (1 prst)</div>" +
+                "<div id='joyDrive' class='joy-zone'><div class='joy-CrossH'></div><div class='joy-CrossV'></div><div id='stickDrive' class='joy-stick'></div></div>" +
+                "</div>" +
+                "<div class='joy-box'>" +
+                "<div class='joy-label'>PRAVÝ: Úkroky do stran (Strafe)</div>" +
+                "<div id='joyStrafe' class='joy-zone' style='border-color:#a855f7;'><div class='joy-CrossH'></div><div class='joy-CrossV'></div><div id='stickStrafe' class='joy-stick' style='background:radial-gradient(circle,#c084fc 0%,#7e22ce 100%);'></div></div>" +
+                "</div>" +
+                "</div>" +
+                "<div id='joyReadout' style='text-align:center;font-size:13px;color:#38bdf8;margin-bottom:8px;'>Joystick v klidu (pusť prst pro okamžité zastavení)</div>" +
+                "<button class='btn-stop' onclick=\"api('/api/stop')\">🛑 NOUZOVÝ STOP (Zastavit pohyb i řeč)</button>" +
+                "<details style='margin-top:10px;'><summary style='cursor:pointer;color:#94a3b8;font-size:13px;'>Zobrazit kroková tlačítka (přesné otočení 45° / 90°)</summary>" +
+                "<div class='dpad'>" +
+                "<button class='btn-move' onclick=\"move(0,0,0.785)\">↩️ Otočit L 45°</button>" +
+                "<button class='btn-move' onclick=\"move(0.45,0,0)\">⬆️ Dopředu 45cm</button>" +
+                "<button class='btn-move' onclick=\"move(0,0,-0.785)\">↪️ Otočit P 45°</button>" +
+                "<button class='btn-move' onclick=\"move(0,0.3,0)\">⬅️ Úkrok vlevo</button>" +
+                "<button class='btn-move' style='background:#dc2626;' onclick=\"api('/api/stop_move')\">⏹ Zastavit pojezd</button>" +
+                "<button class='btn-move' onclick=\"move(0,-0.3,0)\">➡️ Úkrok vpravo</button>" +
+                "<button class='btn-move' onclick=\"move(0,0,1.57)\">↩️ Otočit L 90°</button>" +
+                "<button class='btn-move' onclick=\"move(-0.35,0,0)\">⬇️ Couvnout 35cm</button>" +
+                "<button class='btn-move' onclick=\"move(0,0,-1.57)\">↪️ Otočit P 90°</button>" +
+                "</div></details>" +
+                "<div style='display:flex;align-items:center;gap:10px;margin-top:12px;'>" +
+                "<span>🔊 Hlasitost:</span>" +
+                "<input type='range' min='0' max='100' value='80' id='volRange' style='flex:1;height:28px;' onchange='setVol(this.value)'>" +
+                "<span id='volVal'>80%</span>" +
+                "</div></div>" +
+
+                "<div class='card'><h2>🧠 2. Poslat AI Prompt (Rubby sama vymyslí a řekne odpověď)</h2>" +
                 "<input id='inpPrompt' type='text' placeholder='Např.: Představ se divákům a řekni zahajovací řeč...'>" +
                 "<button class='btn-primary' onclick='sendPrompt()'>🧠 Odeslat prompt do AI (LLM)</button>" +
                 "<div class='preset-grid'>" +
@@ -356,39 +405,70 @@ public class RemoteControlServer {
                 "<button class='btn-preset' onclick=\"quickPrompt('Poděkuj publiku za pozornost, rozluč se a popřej jim šťastnou cestu.')\">🎉 Závěrečné poděkování</button>" +
                 "</div></div>" +
 
-                "<div class='card'><h2>🗣️ 2. Říct přesnou větu (Teleprompter bez AI prodlevy)</h2>" +
+                "<div class='card'><h2>🗣️ 3. Říct přesnou větu (Teleprompter bez AI prodlevy)</h2>" +
                 "<input id='inpSay' type='text' placeholder='Napiš přesný text, který má Rubby ihned vyslovit...'>" +
                 "<button class='btn-green' onclick='sendSay()'>🗣️ Říct přesně tento text hned</button>" +
                 "</div>" +
-
-                "<div class='card'><h2>🕹️ 3. Pojezd a otáčení po pódiu</h2>" +
-                "<div class='dpad'>" +
-                "<button class='btn-move' onclick=\"move(0,0,0.785)\">↩️ Otočit L 45°</button>" +
-                "<button class='btn-move' onclick=\"move(0.45,0,0)\">⬆️ Dopředu 45cm</button>" +
-                "<button class='btn-move' onclick=\"move(0,0,-0.785)\">↪️ Otočit P 45°</button>" +
-                "<button class='btn-move' onclick=\"move(0,0.3,0)\">⬅️ Úkrok vlevo</button>" +
-                "<button class='btn-stop' onclick=\"api('/api/stop')\">🛑 STOP</button>" +
-                "<button class='btn-move' onclick=\"move(0,-0.3,0)\">➡️ Úkrok vpravo</button>" +
-                "<button class='btn-move' onclick=\"move(0,0,1.57)\">↩️ Otočit L 90°</button>" +
-                "<button class='btn-move' onclick=\"move(-0.35,0,0)\">⬇️ Couvnout 35cm</button>" +
-                "<button class='btn-move' onclick=\"move(0,0,-1.57)\">↪️ Otočit P 90°</button>" +
-                "</div>" +
-                "<div style='display:flex;align-items:center;gap:10px;margin-top:8px;'>" +
-                "<span>🔊 Hlasitost:</span>" +
-                "<input type='range' min='0' max='100' value='80' id='volRange' style='flex:1;' onchange='setVol(this.value)'>" +
-                "<span id='volVal'>80%</span>" +
-                "</div></div>" +
 
                 "<div class='card'><h2>🎭 4. Okamžité spuštění animace (44 kategorií)</h2>" +
                 "<div class='anim-grid'>" + animButtons.toString() + "</div></div>" +
 
                 "<script>" +
-                "function api(url){fetch(url,{method:'POST'}).then(()=>refreshStatus());}" +
+                "function api(url){fetch(url,{method:'POST'}).then(()=>refreshStatus()).catch(()=>{});}" +
                 "function sendPrompt(){var v=document.getElementById('inpPrompt').value;if(v){api('/api/prompt?prompt='+encodeURIComponent(v));document.getElementById('inpPrompt').value='';}}" +
                 "function quickPrompt(t){api('/api/prompt?prompt='+encodeURIComponent(t));}" +
                 "function sendSay(){var v=document.getElementById('inpSay').value;if(v){api('/api/say?text='+encodeURIComponent(v));document.getElementById('inpSay').value='';}}" +
                 "function move(x,y,th){api('/api/move?x='+x+'&y='+y+'&theta='+th);}" +
                 "function setVol(v){document.getElementById('volVal').innerText=v+'%';api('/api/volume?percent='+v);}" +
+
+                // Virtual Joystick implementation
+                "function setupJoystick(zoneId,stickId,onMove,onRelease){" +
+                "var zone=document.getElementById(zoneId),stick=document.getElementById(stickId);" +
+                "var active=false,timer=null,curNx=0,curNy=0,maxR=53;" +
+                "function updatePos(clientX,clientY){" +
+                "var rect=zone.getBoundingClientRect();" +
+                "var cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;" +
+                "var dx=clientX-cx,dy=clientY-cy;" +
+                "var dist=Math.sqrt(dx*dx+dy*dy);" +
+                "if(dist>maxR){dx=dx*maxR/dist;dy=dy*maxR/dist;}" +
+                "stick.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)';" +
+                "curNx=dx/maxR;curNy=-dy/maxR;" + // curNy > 0 je dopredu (nahoru), curNx > 0 je doprava
+                "}" +
+                "function start(x,y){active=true;updatePos(x,y);onMove(curNx,curNy);" +
+                "if(timer)clearInterval(timer);" +
+                "timer=setInterval(function(){if(active)onMove(curNx,curNy);},300);" +
+                "}" +
+                "function end(){if(!active)return;active=false;if(timer){clearInterval(timer);timer=null;}" +
+                "stick.style.transform='translate(0px,0px)';curNx=0;curNy=0;onRelease();}" +
+                "zone.addEventListener('touchstart',function(e){e.preventDefault();var t=e.changedTouches[0];start(t.clientX,t.clientY);},{passive:false});" +
+                "zone.addEventListener('touchmove',function(e){e.preventDefault();if(!active)return;var t=e.changedTouches[0];updatePos(t.clientX,t.clientY);},{passive:false});" +
+                "zone.addEventListener('touchend',function(e){e.preventDefault();end();},{passive:false});" +
+                "zone.addEventListener('touchcancel',function(e){e.preventDefault();end();},{passive:false});" +
+                "zone.addEventListener('mousedown',function(e){e.preventDefault();start(e.clientX,e.clientY);});" +
+                "window.addEventListener('mousemove',function(e){if(active)updatePos(e.clientX,e.clientY);});" +
+                "window.addEventListener('mouseup',function(){if(active)end();});" +
+                "}" +
+
+                // Levy joystick: Nahoru/Dolu = Dopredu/Dozadu (x), Doleva/Doprava = Otaceni (theta)
+                "setupJoystick('joyDrive','stickDrive',function(nx,ny){" +
+                "var fwd=ny,rot=-nx;" +
+                "document.getElementById('joyReadout').innerText='Jízda: '+(fwd*100).toFixed(0)+'% | Otáčení: '+(rot*100).toFixed(0)+'%';" +
+                "fetch('/api/joystick?x='+fwd.toFixed(2)+'&y=0&theta='+rot.toFixed(2),{method:'POST'}).catch(()=>{});" +
+                "},function(){" +
+                "document.getElementById('joyReadout').innerText='Zastavuji pojezd...';" +
+                "fetch('/api/stop_move',{method:'POST'}).catch(()=>{});" +
+                "});" +
+
+                // Pravy joystick: Nahoru/Dolu = Dopredu/Dozadu (x), Doleva/Doprava = Ukrok bokem (y)
+                "setupJoystick('joyStrafe','stickStrafe',function(nx,ny){" +
+                "var fwd=ny,strafe=-nx;" +
+                "document.getElementById('joyReadout').innerText='Jízda: '+(fwd*100).toFixed(0)+'% | Úkrok: '+(strafe*100).toFixed(0)+'%';" +
+                "fetch('/api/joystick?x='+fwd.toFixed(2)+'&y='+strafe.toFixed(2)+'&theta=0',{method:'POST'}).catch(()=>{});" +
+                "},function(){" +
+                "document.getElementById('joyReadout').innerText='Zastavuji pojezd...';" +
+                "fetch('/api/stop_move',{method:'POST'}).catch(()=>{});" +
+                "});" +
+
                 "function refreshStatus(){fetch('/api/status').then(r=>r.json()).then(d=>{" +
                 "document.getElementById('stBadge').innerText='Stav: '+d.state+(d.robotFocus?' (QiSDK)':' (Bez Focusu)');" +
                 "if(d.lastMessage)document.getElementById('lastMsg').innerText='Poslední odpověď: '+d.lastMessage;" +
