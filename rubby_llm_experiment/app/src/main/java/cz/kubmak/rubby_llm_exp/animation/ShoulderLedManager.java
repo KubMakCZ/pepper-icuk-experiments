@@ -1,11 +1,15 @@
 package cz.kubmak.rubby_llm_exp.animation;
 
+import android.content.Context;
+
 import com.aldebaran.qi.AnyObject;
 import com.aldebaran.qi.Session;
+import com.aldebaran.qi.UserTokenAuthenticator;
 import com.aldebaran.qi.sdk.QiContext;
+import com.aldebaran.qi.sdk.core.SessionManager;
+import com.aldebaran.robotservice.IRobotService;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,6 +49,9 @@ public class ShoulderLedManager {
     private final Random random = new Random();
 
     private volatile AnyObject alLedsService;
+    private Session privateSession;
+    private SessionManager privateSessionManager;
+    private Context appContext;
     private final AtomicBoolean discoActive = new AtomicBoolean(false);
     private final AtomicBoolean thinkingPulseActive = new AtomicBoolean(false);
     private Thread discoThread;
@@ -56,21 +63,66 @@ public class ShoulderLedManager {
     }
 
     /**
-     * Inicializuje přístup k NAOqi službě ALLeds z aktivního QiContextu.
+     * Inicializuje přístup k NAOqi službě ALLeds přes privátní NAOqi Session (usePrivateDirectory = true).
      */
     public void init(final QiContext qiContext) {
+        if (qiContext == null) return;
+        this.appContext = qiContext.getApplicationContext();
+
         ledExecutor.execute(() -> {
             try {
-                Session session = extractSession(qiContext);
-                if (session != null && session.isConnected()) {
-                    alLedsService = session.service("ALLeds").get();
-                    fileLogger.i(TAG, "ALLeds sluzba uspesne pripojena (ovladani ramen aktivni).");
+                // 1) Nejrychlejší cesta: získat IRobotService ze stávajícího SessionManageru v QiContextu
+                // a připojit se na PrivateEndpoint (kde běží plný NAOqi ServiceDirectory včetně ALLeds)
+                IRobotService robotService = extractRobotService(qiContext);
+                if (robotService != null) {
+                    String privateEndpoint = robotService.getPrivateEndpoint();
+                    String privateToken = robotService.getPrivateToken();
+                    fileLogger.i(TAG, "Pripojuji ALLeds pres NAOqi PrivateEndpoint: " + privateEndpoint);
+                    if (privateSession != null && privateSession.isConnected()) {
+                        privateSession.close();
+                    }
+                    Session s = new Session();
+                    if (privateToken != null && !privateToken.isEmpty()) {
+                        s.setClientAuthenticator(new UserTokenAuthenticator("tablet", privateToken));
+                    }
+                    s.connect(privateEndpoint).get();
+                    privateSession = s;
+                    alLedsService = s.service("ALLeds").get();
+                    fileLogger.i(TAG, "ALLeds sluzba uspesne pripojena! Ovladani RGB ramen je aktivni.");
                     applyStateColor(lastState);
-                } else {
-                    fileLogger.w(TAG, "Nelze ziskat pripojenou Qi Session pro ALLeds.");
+                    return;
+                }
+
+                // 2) Záložní cesta přes SessionManager(true)
+                if (privateSessionManager == null && appContext != null) {
+                    privateSessionManager = new SessionManager(true);
+                    privateSessionManager.register(appContext, new SessionManager.Callback() {
+                        @Override
+                        public void onRobotReady(Session session) {
+                            ledExecutor.execute(() -> {
+                                try {
+                                    alLedsService = session.service("ALLeds").get();
+                                    fileLogger.i(TAG, "ALLeds sluzba pripojena pres SessionManager(true)!");
+                                    applyStateColor(lastState);
+                                } catch (Exception e) {
+                                    fileLogger.w(TAG, "ALLeds pres SessionManager(true) selhalo: " + e.getMessage());
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onRobotLost() {
+                            alLedsService = null;
+                        }
+
+                        @Override
+                        public void onRobotAbsent() {
+                            alLedsService = null;
+                        }
+                    });
                 }
             } catch (Exception e) {
-                fileLogger.w(TAG, "Incializace ALLeds selhala: " + e.getMessage());
+                fileLogger.w(TAG, "Inicializace ALLeds selhala: " + e.getMessage());
             }
         });
     }
@@ -272,9 +324,9 @@ public class ShoulderLedManager {
     }
 
     /**
-     * Pomocí reflexe získá připojený objekt com.aldebaran.qi.Session z QiContextu.
+     * Pomocí reflexe získá IRobotService ze SessionManageru uvnitř QiContextu.
      */
-    private Session extractSession(QiContext qiContext) {
+    private IRobotService extractRobotService(QiContext qiContext) {
         if (qiContext == null) return null;
         try {
             Field focusManagerField = QiContext.class.getDeclaredField("focusManager");
@@ -284,14 +336,12 @@ public class ShoulderLedManager {
 
             Field sessionManagerField = focusManager.getClass().getDeclaredField("sessionManager");
             sessionManagerField.setAccessible(true);
-            Object sessionManager = sessionManagerField.get(focusManager);
+            SessionManager sessionManager = (SessionManager) sessionManagerField.get(focusManager);
             if (sessionManager == null) return null;
 
-            Method getSessionMethod = sessionManager.getClass().getDeclaredMethod("getSession");
-            getSessionMethod.setAccessible(true);
-            return (Session) getSessionMethod.invoke(sessionManager);
+            return sessionManager.getRobotService();
         } catch (Exception e) {
-            fileLogger.w(TAG, "Nepodarilo se extrahovat Session z QiContextu: " + e.getMessage());
+            fileLogger.w(TAG, "Nepodarilo se extrahovat IRobotService z QiContextu: " + e.getMessage());
             return null;
         }
     }
