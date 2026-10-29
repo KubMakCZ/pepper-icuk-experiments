@@ -6,7 +6,7 @@ Tento projekt je inovativní Android aplikace (tzv. "wrapper") pro humanoidního
 
 - **Inteligentní mozek (Přepínání modelů):** Projekt v sobě integruje hned několik AI modelů s možností **dynamického přepínání za běhu** (pomocí UI dropdown menu). Podporuje:
   - **Google Gemini Flash** (oficiální API).
-  - Open-source modely zdarma přes **OpenRouter API** (skvělé pro vývoj a testování bez nákladů): *Gemma 2 9B*, *Llama 3.1 8B* a *Qwen 3 8B*.
+  - Open-source modely zdarma přes **OpenRouter API** (skvělé pro vývoj a testování bez nákladů): automatický bezplatný router (*openrouter/free*), *Llama 3.1 8B*, *Qwen 3 8B* a *Mistral 7B*.
 - **Plynulá čeština:** Nativní integrace českého rozpoznávání řeči (STT) s optimalizovaným rychlým startem naslouchání a syntézou hlasu (TTS).
 - **Wake Word Detekce:** Integrovaný systém **QiChat**, který lokálně naslouchá na jméno *"Rubby"* a jakmile je vysloveno, automaticky robota probudí do stavu naslouchání, aby byl hned připraven na dotaz.
 - **Obecné znalosti & Persona:** Rubby vystupuje jako maskot *Inovačního centra Ústeckého kraje (ICUK)*, ovšem díky chytře postavenému systémovému promptu naplno využívá svých obecných LLM znalostí a dokáže odpovědět na jakýkoliv dotaz i mimo své hlavní zacílení.
@@ -100,8 +100,8 @@ adb logcat RubbyLLM:D OpenRouterService:D GeminiService:D *:S
 
 ## 📍 Nastavení identity a chování
 
-Základní instrukce a osobnost robota se nastavují v souboru:
-`app/src/main/java/cz/kubmak/rubby_llm_exp/llm/GeminiService.java` a `OpenRouterService.java`.
+Základní instrukce a osobnost robota (`SYSTEM_PROMPT`) se nastavují centrálně v souboru:
+`app/src/main/java/cz/kubmak/rubby_llm_exp/llm/ILlmService.java`.
 
 - Kód zpracovává raw odpovědi z LLM, aby robot nečetl např. ztučněný markdown (`**`) nebo speciální tagy pro animace (např. `[ANIMACE:wave]`). Zajišťuje to utilita `TextCleaner.java`.
 
